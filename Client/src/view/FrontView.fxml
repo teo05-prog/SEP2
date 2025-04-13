@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="view.FrontViewController"
-            prefHeight="400.0" prefWidth="600.0">
+<VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: #cee0dc; -fx-padding: 30;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
 
-</AnchorPane>
+    <children>
+        <Label alignment="CENTER" style="-fx-text-fill: #2c3e50; -fx-font-size: 26px; -fx-font-weight: bold;" text="Welcome to VIArail!" />
+
+        <ImageView fitHeight="150.0" fitWidth="285.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../img/image.png" />
+            </image>
+        </ImageView>
+
+        <HBox alignment="CENTER" spacing="20.0">
+            <children>
+                <Button style="-fx-background-color: #40798c; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20; -fx-background-radius: 8;" text="Login" />
+                <Button style="-fx-background-color: #40798c; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20; -fx-background-radius: 8;" text="Register" />
+            </children>
+        </HBox>
+    </children>
+</VBox>
