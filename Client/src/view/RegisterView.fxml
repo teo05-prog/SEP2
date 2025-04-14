@@ -10,7 +10,8 @@
 
 <VBox alignment="CENTER" spacing="15.0" prefHeight="500.0" prefWidth="600.0"
       style="-fx-background-color: #cee0dc; -fx-padding: 40;"
-      xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+      xmlns="http://javafx.com/javafx/23.0.1"
+      fx:controller="view.RegisterViewController" xmlns:fx="http://javafx.com/fxml/1">
 
     <children>
         <Label text="Register for VIArail"
