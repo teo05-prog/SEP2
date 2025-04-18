@@ -49,7 +49,7 @@ public class ViewHandler
   private static void showFrontView() throws IOException
   {
     FrontViewController controller = new FrontViewController();
-    FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/front/Front.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/front/FrontView.fxml"));
 
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
@@ -61,7 +61,7 @@ public class ViewHandler
   {
     RegisterVM registerVM = new RegisterVM(authService);
     RegisterViewController controller = new RegisterViewController(registerVM);
-    FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/register/Register.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/register/RegisterView.fxml"));
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
     stage.setTitle("VIArail App");

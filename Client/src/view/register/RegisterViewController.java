@@ -12,7 +12,7 @@ import viewmodel.RegisterVM;
 
 public class RegisterViewController
 {
-  @FXML private RegisterVM viewModel;
+  private RegisterVM viewModel;
 
   @FXML private TextField nameInput;
   @FXML private DatePicker birthDateInput;
@@ -32,15 +32,15 @@ public class RegisterViewController
 
   public void initialize()
   {
-    nameInput.textProperty().bindBidirectional(viewModel.nameProperty());
-    birthDateInput.valueProperty().bindBidirectional(viewModel.birthDateProperty());
-    emailInput.textProperty().bindBidirectional(viewModel.emailProperty());
-    passwordInput.textProperty().bindBidirectional(viewModel.passwordProperty());
-    repeatPasswordInput.textProperty().bindBidirectional(viewModel.repeatPasswordProperty());
+    //nameInput.textProperty().bindBidirectional(viewModel.nameProperty());
+    //birthDateInput.valueProperty().bindBidirectional(viewModel.birthDateProperty());
+    //emailInput.textProperty().bindBidirectional(viewModel.emailProperty());
+    //passwordInput.textProperty().bindBidirectional(viewModel.passwordProperty());
+    //repeatPasswordInput.textProperty().bindBidirectional(viewModel.repeatPasswordProperty());
 
-    messageLabel.textProperty().bind(viewModel.messageProperty());
+    //messageLabel.textProperty().bind(viewModel.messageProperty());
 
-    buttonRegister.disableProperty().bind(viewModel.enableRegisterButtonProperty());
+    //buttonRegister.disableProperty().bind(viewModel.enableRegisterButtonProperty());
   }
 
   public void onRegister(ActionEvent e)
