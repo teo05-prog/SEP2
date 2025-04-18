@@ -3,21 +3,22 @@ package view;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.services.AuthenticationService;
+import model.services.AuthenticationServiceImpl;
 import view.front.FrontViewController;
 import view.register.RegisterViewController;
+import viewmodel.RegisterVM;
 
 import java.io.IOException;
 
 public class ViewHandler
 {
-  public class ViewType
+  public enum ViewType
   {
-    public static final int FRONT = 0;
-    public static final int REGISTER = 1;
-    public static final int LOGIN = 2;
-    public static final int LOGGEDIN = 3;
+    FRONT, REGISTER, LOGIN, LOGGEDIN
   }
 
+  private static AuthenticationService authService = new AuthenticationServiceImpl();
   private static Stage stage;
 
   public static void start(Stage s)
@@ -27,16 +28,16 @@ public class ViewHandler
     stage.show();
   }
 
-  public static void showView(int view)
+  public static void showView(ViewType view)
   {
     try
     {
       switch (view)
       {
-        case ViewType.FRONT -> showFrontView();
-        case ViewType.REGISTER -> showRegisterView();
-        case ViewType.LOGIN -> showLoginView();
-        case ViewType.LOGGEDIN -> showLoggedInView();
+        case FRONT -> showFrontView();
+        case REGISTER -> showRegisterView();
+        case LOGIN -> showLoginView();
+        case LOGGEDIN -> showLoggedInView();
       }
     }
     catch (Exception e)
@@ -48,8 +49,7 @@ public class ViewHandler
   private static void showFrontView() throws IOException
   {
     FrontViewController controller = new FrontViewController();
-    FXMLLoader fxmlLoader = new FXMLLoader(
-        ViewHandler.class.getResource("/view/front/Front.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/front/Front.fxml"));
 
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
@@ -59,9 +59,9 @@ public class ViewHandler
 
   private static void showRegisterView() throws IOException
   {
-    RegisterViewController controller = new RegisterViewController();
-    FXMLLoader fxmlLoader = new FXMLLoader(
-        ViewHandler.class.getResource("/view/register/Register.fxml"));
+    RegisterVM registerVM = new RegisterVM(authService);
+    RegisterViewController controller = new RegisterViewController(registerVM);
+    FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/register/Register.fxml"));
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
     stage.setTitle("VIArail App");
