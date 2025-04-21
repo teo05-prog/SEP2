@@ -12,7 +12,7 @@ import viewmodel.RegisterVM;
 
 public class RegisterViewController
 {
-  @FXML private RegisterVM viewModel;
+  private RegisterVM viewModel;
 
   @FXML private TextField nameInput;
   @FXML private DatePicker birthDateInput;
