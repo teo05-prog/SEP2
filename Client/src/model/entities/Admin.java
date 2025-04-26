@@ -16,7 +16,7 @@ public class Admin extends User
 
   public void setName(String name)
   {
-    super.Name(name);
+    super.setName(name);
   }
 
   public String getPassword()

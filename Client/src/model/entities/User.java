@@ -28,6 +28,9 @@ public class User
       {throw new IllegalArgumentException("Name must start with a letter");}
         this.name = name;
     }
+    public void setName(String name) {
+      this.name = name;
+    }
 
     public String getPassword() {
         return password;
