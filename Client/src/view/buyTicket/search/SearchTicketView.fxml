@@ -12,7 +12,6 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #cee0dc; -fx-padding: 40;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.buyTicket.search.SearchTicketController">
    <children>
       <ToolBar prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 10;">
