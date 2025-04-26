@@ -6,10 +6,9 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="500.0" prefWidth="600.0" spacing="15.0" style="-fx-background-color: #cee0dc; -fx-padding: 40;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.admin.main.MainAdminViewController">
+<VBox alignment="CENTER" prefHeight="500.0" prefWidth="600.0" spacing="15.0" style="-fx-background-color: #cee0dc; -fx-padding: 40;" stylesheets="@table-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.admin.modify.ModifyViewController">
 
     <children>
         <Label style="-fx-text-fill: #2c3e50; -fx-font-size: 24px; -fx-font-weight: bold;" text="Train Information" />
@@ -21,13 +20,13 @@
             </children>
         </HBox>
 
-        <TableView prefHeight="300.0" prefWidth="480.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-radius: 10; -fx-table-header-border-color: transparent; -fx-table-cell-border-color: transparent;">
+        <TableView fx:id="trainTable" prefHeight="300.0" prefWidth="480.0" styleClass="rounded-table">
             <columns>
-                <TableColumn prefWidth="75.0" text="From" style="-fx-background-color: #e8f4f2; -fx-text-fill: #2c3e50; -fx-font-weight: bold; -fx-padding: 5;" />
-                <TableColumn prefWidth="75.0" text="To" style="-fx-background-color: #e8f4f2; -fx-text-fill: #2c3e50; -fx-font-weight: bold; -fx-padding: 5;" />
-                <TableColumn prefWidth="75.0" text="Arrival" style="-fx-background-color: #e8f4f2; -fx-text-fill: #2c3e50; -fx-font-weight: bold; -fx-padding: 5;" />
-                <TableColumn prefWidth="75.0" text="Departure" style="-fx-background-color: #e8f4f2; -fx-text-fill: #2c3e50; -fx-font-weight: bold; -fx-padding: 5;" />
-                <TableColumn prefWidth="75.0" text="Seats" style="-fx-background-color: #e8f4f2; -fx-text-fill: #2c3e50; -fx-font-weight: bold; -fx-padding: 5;" />
+                <TableColumn prefWidth="75.0" text="From" />
+                <TableColumn prefWidth="75.0" text="To" />
+                <TableColumn prefWidth="75.0" text="Arrival" />
+                <TableColumn prefWidth="75.0" text="Departure" />
+                <TableColumn prefWidth="75.0" text="Seats" />
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
