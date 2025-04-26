@@ -11,7 +11,7 @@ public class Traveller extends User
   public Traveller(String name, String password, String email, MyDate birthDate)
   {
     super(name, password, email, birthDate);
-    tickets = new ArrayList<Ticket>();
+    tickets = new ArrayList<>();
   }
 
   public static boolean isAdmin()

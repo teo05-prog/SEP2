@@ -77,7 +77,13 @@ public class ViewHandler
 
   private static void showLoginView() throws IOException
   {
-    // to be added
+    FrontViewController controller = new FrontViewController();
+    FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/login/LoginView.fxml"));
+
+    fxmlLoader.setControllerFactory(ignore -> controller);
+    Scene scene = new Scene(fxmlLoader.load());
+    stage.setTitle("VIArail App");
+    stage.setScene(scene);
   }
 
   private static void showLoggedInAdminView() throws IOException
