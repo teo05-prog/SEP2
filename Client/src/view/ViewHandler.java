@@ -7,6 +7,8 @@ import model.services.AuthenticationService;
 import model.services.AuthenticationServiceImpl;
 import view.admin.main.MainAdminViewController;
 import view.admin.modify.ModifyViewController;
+import view.buyTicket.search.SearchTicketController;
+import view.buyTicket.trains.ChooseTrainController;
 import view.front.FrontViewController;
 import view.register.RegisterViewController;
 import viewmodel.RegisterVM;
@@ -17,7 +19,7 @@ public class ViewHandler
 {
   public enum ViewType
   {
-    FRONT, REGISTER, LOGIN, LOGGEDIN_ADMIN, LOGGEDIN_USER, ADMIN_ACCOUNT, USER_ACCOUNT, ADD_TRAIN, MODIFY_TRAIN
+    FRONT, REGISTER, LOGIN, LOGGEDIN_ADMIN, LOGGEDIN_USER, ADMIN_ACCOUNT, USER_ACCOUNT, ADD_TRAIN, MODIFY_TRAIN, CHOOSE_TRAIN
   }
 
   private static AuthenticationService authService = new AuthenticationServiceImpl();
@@ -45,6 +47,7 @@ public class ViewHandler
         case MODIFY_TRAIN -> showModifyTrainView();
         case LOGGEDIN_USER -> showLoggedInUserView();
         case USER_ACCOUNT -> showUserAccountView();
+        case CHOOSE_TRAIN -> showChooseTrainView();
       }
     }
     catch (Exception e)
@@ -120,7 +123,24 @@ public class ViewHandler
 
   private static void showLoggedInUserView() throws IOException
   {
-    // to be added
+    SearchTicketController controller = new SearchTicketController();
+    FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/buyTicket/search/SearchTicketView.fxml"));
+
+    fxmlLoader.setControllerFactory(ignore -> controller);
+    Scene scene = new Scene(fxmlLoader.load());
+    stage.setTitle("VIArail App");
+    stage.setScene(scene);
+  }
+
+  private static void showChooseTrainView() throws IOException
+  {
+    ChooseTrainController controller = new ChooseTrainController();
+    FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/buyTicket/trains/ChooseTrainView.fxml"));
+
+    fxmlLoader.setControllerFactory(ignore -> controller);
+    Scene scene = new Scene(fxmlLoader.load());
+    stage.setTitle("VIArail App");
+    stage.setScene(scene);
   }
 
   private static void showUserAccountView() throws IOException

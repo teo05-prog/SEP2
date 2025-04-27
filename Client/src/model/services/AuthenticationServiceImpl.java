@@ -12,6 +12,6 @@ public class AuthenticationServiceImpl implements AuthenticationService
   @Override public String register(User user)
   {
     users.add(user);
-    return "Ok";
+    return "success";
   }
 }

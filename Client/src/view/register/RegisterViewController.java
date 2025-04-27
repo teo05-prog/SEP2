@@ -41,6 +41,12 @@ public class RegisterViewController
     messageLabel.textProperty().bind(viewModel.messageProperty());
 
     buttonRegister.disableProperty().bind(viewModel.enableRegisterButtonProperty());
+
+    viewModel.registrationSucceededProperty().addListener(((observable, oldValue, newValue) -> {
+      if (newValue){
+        ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_USER);
+      }
+    }));
   }
 
   public void onRegister(ActionEvent e)

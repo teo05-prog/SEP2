@@ -21,6 +21,7 @@ public class RegisterVM
   private final BooleanProperty disableRegisterButton = new SimpleBooleanProperty(true);
 
   private final AuthenticationService authService;
+  private final BooleanProperty registrationSucceeded = new SimpleBooleanProperty(false);
 
   public RegisterVM(AuthenticationService authService)
   {
@@ -138,6 +139,10 @@ public class RegisterVM
     return disableRegisterButton;
   }
 
+  public BooleanProperty registrationSucceededProperty(){
+    return registrationSucceeded;
+  }
+
   public void registerUser()
   {
     if (!disableRegisterButton.get()){
@@ -149,11 +154,12 @@ public class RegisterVM
 
       if ("success".equalsIgnoreCase(result)){
         message.set("Successfully registered!");
+        registrationSucceeded.set(true);
       }else {
         message.set("Registration failed: Email might already be in use.");
+        registrationSucceeded.set(false);
       }
-    }else {
-      // the message is already set in validation()
     }
   }
+
 }
