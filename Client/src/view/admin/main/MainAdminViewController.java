@@ -7,9 +7,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import model.entities.Train;
 import view.ViewHandler;
+import viewmodel.MainAdminVM;
 
 public class MainAdminViewController
 {
+  private MainAdminVM viewModel;
+
   @FXML private ListView<Train> trainsListView;
 
   @FXML private Label messageLabel;
@@ -22,7 +25,13 @@ public class MainAdminViewController
 
   public void initialize()
   {
-    // Initialize if needed
+    messageLabel.textProperty().bind(viewModel.messageProperty());
+    //trainsListView.setItems(viewModel.getTrains());
+    removeButton.disableProperty().bind(viewModel.enableRemoveButtonProperty());
+    modifyButton.disableProperty().bind(viewModel.enableModifyButtonProperty());
+    trainsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+      viewModel.trainSelectedProperty().set(newValue != null);
+    });
   }
 
   public void onTrainsButton(ActionEvent e)
@@ -40,7 +49,7 @@ public class MainAdminViewController
   public void onAddButton(ActionEvent e)
   {
     if (e.getSource() == addButton)
-      ViewHandler.showView(ViewHandler.ViewType.ADD_TRAIN);
+      ViewHandler.showView(ViewHandler.ViewType.ADD_TRAIN); // to be implemented
   }
 
   public void onRemoveButton(ActionEvent e)
