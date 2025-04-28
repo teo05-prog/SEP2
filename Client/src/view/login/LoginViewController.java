@@ -4,25 +4,26 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import view.ViewHandler;
-import viewmodel.LogInVM;
+import viewmodel.LoginVM;
 
-public class LogInController
+public class LoginViewController
 {
- private LogInVM viewModel;
+  private LoginVM viewModel;
 
- @FXML private TextField emailInput;
- @FXML private PasswordField passwordInput;
- @FXML private CheckBox adminCheckBox;
+  @FXML private TextField emailInput;
+  @FXML private PasswordField passwordInput;
+  @FXML private CheckBox adminCheckBox;
 
- @FXML private Label messageLabel;
+  @FXML private Label messageLabel;
 
   @FXML private Button buttonRegister;
   @FXML private Button buttonLogin;
 
-  public LogInController(LogInVM vm)
+  public LoginViewController(LoginVM viewModel)
   {
-    this.viewModel = vm;
+    this.viewModel = viewModel;
   }
+
   public void initialize()
   {
     this.viewModel = viewModel;
@@ -35,28 +36,30 @@ public class LogInController
     buttonLogin.disableProperty().bind(viewModel.enableLoginButtonProperty());
 
     viewModel.loginSucceededProperty().addListener(((observable, oldValue, newValue) -> {
-      if (newValue) {
+      if (newValue)
+      {
         // Check if admin is selected and show appropriate view
-        if (adminCheckBox.isSelected()) {
+        if (adminCheckBox.isSelected())
+        {
           ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_ADMIN);
-        } else {
+        }
+        else
+        {
           ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_USER);
         }
       }
-
     }));
-
   }
+
   public void onRegister(ActionEvent e)
   {
     if (e.getSource() == buttonRegister)
       ViewHandler.showView(ViewHandler.ViewType.REGISTER);
   }
+
   public void onLogin(ActionEvent e)
   {
     if (e.getSource() == buttonLogin)
       viewModel.loginUser();
   }
-
-
 }

@@ -10,7 +10,9 @@ import view.admin.modify.ModifyViewController;
 import view.buyTicket.search.SearchTicketController;
 import view.buyTicket.trains.ChooseTrainController;
 import view.front.FrontViewController;
+import view.login.LoginViewController;
 import view.register.RegisterViewController;
+import viewmodel.LoginVM;
 import viewmodel.RegisterVM;
 
 import java.io.IOException;
@@ -80,7 +82,8 @@ public class ViewHandler
 
   private static void showLoginView() throws IOException
   {
-    FrontViewController controller = new FrontViewController();
+    LoginVM logInVM = new LoginVM(authService);
+    LoginViewController controller = new LoginViewController(logInVM);
     FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/login/LoginView.fxml"));
 
     fxmlLoader.setControllerFactory(ignore -> controller);
@@ -124,7 +127,8 @@ public class ViewHandler
   private static void showLoggedInUserView() throws IOException
   {
     SearchTicketController controller = new SearchTicketController();
-    FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/buyTicket/search/SearchTicketView.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(
+        ViewHandler.class.getResource("/view/buyTicket/search/SearchTicketView.fxml"));
 
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
@@ -135,7 +139,8 @@ public class ViewHandler
   private static void showChooseTrainView() throws IOException
   {
     ChooseTrainController controller = new ChooseTrainController();
-    FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/buyTicket/trains/ChooseTrainView.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(
+        ViewHandler.class.getResource("/view/buyTicket/trains/ChooseTrainView.fxml"));
 
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());

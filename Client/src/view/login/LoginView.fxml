@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="500.0" prefWidth="600.0" spacing="15.0" style="-fx-background-color: #cee0dc; -fx-padding: 40;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.login.LogInController">
+<VBox alignment="CENTER" prefHeight="500.0" prefWidth="600.0" spacing="15.0" style="-fx-background-color: #cee0dc; -fx-padding: 40;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.login.LoginViewController">
    <children>
       <Label style="-fx-text-fill: #2c3e50; -fx-font-size: 24px; -fx-font-weight: bold;" text="Sign in" />
       <VBox maxHeight="-Infinity" prefHeight="175.0" prefWidth="492.0" spacing="10.0" style="-fx-padding: 20; -fx-background-color: white; -fx-background-radius: 10;">
