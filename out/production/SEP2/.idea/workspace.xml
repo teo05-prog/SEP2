@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d363bb8e-7414-4319-af53-94beaef01d5d" name="Changes" comment="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;Client/src/viewmodel/LoginVM.java&#10;&#10;Took 18 seconds">
-      <change afterPath="$PROJECT_DIR$/Client/src/RunAdmin.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/src/RunTraveller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/MyApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/MyApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/view/ViewHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/view/ViewHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/view/admin/main/MainAdminViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/view/admin/main/MainAdminViewController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/view/buyTicket/search/SearchTicketView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/view/buyTicket/search/SearchTicketView.fxml" afterDir="false" />
+    <list default="true" id="d363bb8e-7414-4319-af53-94beaef01d5d" name="Changes" comment="Added the possibility to run admin or run traveller without going through login in order to be able to test for further sprints">
+      <change beforePath="$PROJECT_DIR$/out/production/SEP2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/SEP2/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,7 +13,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="23232" />
+    <option name="totalTimeSeconds" value="24250" />
     <option name="gitIntegration" value="true" />
     <option name="naggedAbout" value="1" />
   </component>
@@ -70,9 +65,10 @@
   "keyToString": {
     "Application.MyApplication.executor": "Run",
     "Application.RunAdmin.executor": "Run",
+    "Application.RunTraveller.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "Merging main",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "project.structure.last.edited": "Project",
@@ -102,9 +98,17 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="RunTraveller" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="RunTraveller" />
+      <module name="Client" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.RunAdmin" />
+        <item itemvalue="Application.RunTraveller" />
         <item itemvalue="Application.MyApplication" />
       </list>
     </recent_temporary>
@@ -302,7 +306,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745865211342</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Added the possibility to run admin or run traveller without going through login in order to be able to test for further sprints">
+      <option name="closed" value="true" />
+      <created>1745870480074</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1745870480074</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -317,8 +329,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Initial commit" />
-    <MESSAGE value="Hi !!!" />
     <MESSAGE value="Created MVVM structure for the first sprint&#10;&#10;Took 8 minutes" />
     <MESSAGE value="Created MVVM structure for the first sprint" />
     <MESSAGE value="Add MyDate class to model package&#10;&#10;Took 34 seconds" />
@@ -342,6 +352,8 @@
     <MESSAGE value="Implement login functionality and validation in AuthenticationService and LogInVM&#10;&#10;Took 47 minutes" />
     <MESSAGE value="helped Bianca finish LoginVM" />
     <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;Client/src/viewmodel/LoginVM.java&#10;&#10;Took 18 seconds" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;Client/src/viewmodel/LoginVM.java&#10;&#10;Took 18 seconds" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;Client/src/viewmodel/LoginVM.java&#10;&#10;Took 18 seconds&#10;&#10;Took 2 minutes" />
+    <MESSAGE value="Added the possibility to run admin or run traveller without going through login in order to be able to test for further sprints" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added the possibility to run admin or run traveller without going through login in order to be able to test for further sprints" />
   </component>
 </project>
