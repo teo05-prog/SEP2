@@ -1,19 +1,13 @@
 package viewmodel;
 
-import javafx.beans.Observable;
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableValue;
-import model.entities.Admin;
-import model.entities.MyDate;
-import model.entities.User;
 import model.services.AuthenticationService;
 import view.ViewHandler;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LogInVM
+public class LoginVM
 {
   private final StringProperty email = new SimpleStringProperty();
   private final StringProperty password = new SimpleStringProperty();
@@ -24,7 +18,7 @@ public class LogInVM
   private final AuthenticationService authService;
   private final BooleanProperty loginSucceeded = new SimpleBooleanProperty(false);
 
-  public LogInVM(AuthenticationService authService)
+  public LoginVM(AuthenticationService authService)
   {
     this.authService = authService;
     email.addListener(
