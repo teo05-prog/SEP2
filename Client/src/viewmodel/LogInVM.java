@@ -4,10 +4,12 @@ import javafx.beans.Observable;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 import model.entities.Admin;
+import model.entities.MyDate;
 import model.entities.User;
 import model.services.AuthenticationService;
 import view.ViewHandler;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,6 +120,7 @@ public class LogInVM
     String passwordValue = password.get();
     boolean isAdminValue = isAdmin.get();
 
+
     if (emailValue == null || emailValue.isEmpty()) {
       message.set("Email cannot be empty");
       return;
@@ -132,6 +135,7 @@ public class LogInVM
       email.set("");
       password.set("");
       ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_USER);
+
     } else if (loginSucceeded.get() && isAdminValue) {
       message.set("Login successful");
       email.set("");

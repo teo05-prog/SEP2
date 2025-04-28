@@ -25,6 +25,7 @@ public class LogInController
   }
   public void initialize()
   {
+    this.viewModel = viewModel;
     emailInput.textProperty().bindBidirectional(viewModel.emailProperty());
     passwordInput.textProperty().bindBidirectional(viewModel.passwordProperty());
     adminCheckBox.selectedProperty().bindBidirectional(viewModel.isAdminProperty());
