@@ -30,7 +30,7 @@
             <Insets />
          </opaqueInsets>
       </ToolBar>
-      <Label prefHeight="35.0" prefWidth="224.0" text="Find journey and price">
+      <Label prefHeight="35.0" prefWidth="240.0" text="Find journey and price">
          <VBox.margin>
             <Insets left="150.0" top="10.0" />
          </VBox.margin>

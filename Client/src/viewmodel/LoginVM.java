@@ -1,6 +1,10 @@
 package viewmodel;
 
+import javafx.beans.Observable;
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
+import model.entities.Admin;
+import model.entities.User;
 import model.services.AuthenticationService;
 import view.ViewHandler;
 
@@ -21,36 +25,44 @@ public class LoginVM
   public LoginVM(AuthenticationService authService)
   {
     this.authService = authService;
-    email.addListener(
-        (observable, oldValue, newValue) -> validate());
-    password.addListener(
-        (observable, oldValue, newValue) -> validate());
-    isAdmin.addListener(
-        (observable, oldValue, newValue) -> validate());
+    email.addListener((observable, oldValue, newValue) -> validate());
+    password.addListener((observable, oldValue, newValue) -> validate());
+    isAdmin.addListener((observable, oldValue, newValue) -> validate());
 
   }
-  public void validate(){
+
+  public void validate()
+  {
     List<String> errors = new ArrayList<>();
     // email validation
     String emailValue = email.get();
-    if (emailValue == null || emailValue.trim().isEmpty()) {
+    if (emailValue == null || emailValue.trim().isEmpty())
+    {
       errors.add("Email cannot be empty.");
-    } else {
+    }
+    else
+    {
       int atPos = emailValue.indexOf('@');
       int dotPos = emailValue.lastIndexOf('.');
 
-      if (atPos <= 0 || dotPos <= atPos + 1 || dotPos == emailValue.length() - 1) {
+      if (atPos <= 0 || dotPos <= atPos + 1 || dotPos == emailValue.length() - 1)
+      {
         errors.add("Email must contain '@' and a domain (e.g. 'user@domain.com').");
       }
     }
     // password validation
     String pwd = password.get();
-    if (pwd == null) {
+    if (pwd == null)
+    {
       errors.add("Password is required.");
-    } else {
-      if (pwd.length() < 8 || pwd.length() > 25) {
+    }
+    else
+    {
+      if (pwd.length() < 8 || pwd.length() > 25)
+      {
         errors.add("Password must be 8–25 characters long.");
-      } else
+      }
+      else
       {
         boolean hasNumber = false;
         boolean hasSymbol = false;
@@ -62,7 +74,6 @@ public class LoginVM
           else if (!Character.isLetter(c))
             hasSymbol = true;
         }
-
         if (!hasNumber)
         {
           errors.add("Password must contain at least one number.");
@@ -77,8 +88,8 @@ public class LoginVM
     // final validation result
     disableLoginButton.set(!errors.isEmpty());
     message.set(String.join("\n", errors));
-
   }
+
   public StringProperty emailProperty()
   {
     return email;
@@ -109,37 +120,38 @@ public class LoginVM
     return loginSucceeded;
   }
 
-  public void loginUser() {
+  public void loginUser()
+  {
     String emailValue = email.get();
     String passwordValue = password.get();
     boolean isAdminValue = isAdmin.get();
-
-
-    if (emailValue == null || emailValue.isEmpty()) {
+    if (emailValue == null || emailValue.isEmpty())
+    {
       message.set("Email cannot be empty");
       return;
     }
-    if (passwordValue == null || passwordValue.isEmpty()) {
+    if (passwordValue == null || passwordValue.isEmpty())
+    {
       message.set("Password cannot be empty");
       return;
     }
-
-    if (loginSucceeded.get()&& !isAdminValue) {
+    if (loginSucceeded.get() && !isAdminValue)
+    {
       message.set("Login successful");
       email.set("");
       password.set("");
       ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_USER);
-
-    } else if (loginSucceeded.get() && isAdminValue) {
+    }
+    else if (loginSucceeded.get() && isAdminValue)
+    {
       message.set("Login successful");
       email.set("");
       password.set("");
       ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_ADMIN);
-    } else {
+    }
+    else
+    {
       message.set("Login failed");
     }
-
   }
-
-
 }
