@@ -23,10 +23,31 @@ public class MainAdminViewController
   @FXML private Button removeButton;
   @FXML private Button modifyButton;
 
+  public MainAdminViewController()
+  {
+    this.viewModel = new MainAdminVM();
+  }
+
+  public void init(MainAdminVM viewModel)
+  {
+    if (viewModel != null) {
+      this.viewModel = viewModel;
+      bindProperties();
+    }
+  }
+
   public void initialize()
   {
+    if (viewModel == null) {
+      viewModel = new MainAdminVM();
+    }
+    bindProperties();trainsButton.setDisable(true);
+  }
+
+  private void bindProperties()
+  {
     messageLabel.textProperty().bind(viewModel.messageProperty());
-    //trainsListView.setItems(viewModel.getTrains());
+    // trainsListView.setItems(viewModel.getTrains());
     removeButton.disableProperty().bind(viewModel.enableRemoveButtonProperty());
     modifyButton.disableProperty().bind(viewModel.enableModifyButtonProperty());
     trainsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -59,7 +80,7 @@ public class MainAdminViewController
 
   public void onModifyButton(ActionEvent e)
   {
-    if (e.getSource() == addButton)
+    if (e.getSource() == modifyButton)
       ViewHandler.showView(ViewHandler.ViewType.MODIFY_TRAIN);
   }
 }

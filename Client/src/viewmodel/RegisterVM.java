@@ -34,44 +34,60 @@ public class RegisterVM
     repeatPassword.addListener((observable, oldValue, newValue) -> validate());
   }
 
-  private void validate(){
+  private void validate()
+  {
     List<String> errors = new ArrayList<>();
 
     // name validation
-    if (name.get() == null || name.get().trim().isEmpty()){
+    if (name.get() == null || name.get().trim().isEmpty())
+    {
       errors.add("Name cannot be empty.");
-    }else {
-      if (!Character.isLetter(name.get().charAt(0))){
+    }
+    else
+    {
+      if (!Character.isLetter(name.get().charAt(0)))
+      {
         errors.add("Name must start with a letter.");
       }
-      if (name.get().length()>70){
+      if (name.get().length() > 70)
+      {
         errors.add("Name cannot be longer than 70 characters.");
       }
     }
     // birthDate validation
-    if (birthDate.get() == null){
+    if (birthDate.get() == null)
+    {
       errors.add("Birthday is required");
     }
     // email validation
     String emailValue = email.get();
-    if (emailValue == null || emailValue.trim().isEmpty()) {
+    if (emailValue == null || emailValue.trim().isEmpty())
+    {
       errors.add("Email cannot be empty.");
-    } else {
+    }
+    else
+    {
       int atPos = emailValue.indexOf('@');
       int dotPos = emailValue.lastIndexOf('.');
 
-      if (atPos <= 0 || dotPos <= atPos + 1 || dotPos == emailValue.length() - 1) {
+      if (atPos <= 0 || dotPos <= atPos + 1 || dotPos == emailValue.length() - 1)
+      {
         errors.add("Email must contain '@' and a domain (e.g. 'user@domain.com').");
       }
     }
     //password validation
     String pwd = password.get();
-    if (pwd == null) {
+    if (pwd == null)
+    {
       errors.add("Password is required.");
-    } else {
-      if (pwd.length() < 8 || pwd.length() > 25) {
+    }
+    else
+    {
+      if (pwd.length() < 8 || pwd.length() > 25)
+      {
         errors.add("Password must be 8–25 characters long.");
-      } else
+      }
+      else
       {
         boolean hasNumber = false;
         boolean hasSymbol = false;
@@ -96,7 +112,8 @@ public class RegisterVM
       }
     }
     // repeat password validation
-    if (repeatPassword.get() == null || !repeatPassword.get().equals(password.get())){
+    if (repeatPassword.get() == null || !repeatPassword.get().equals(password.get()))
+    {
       errors.add("Repeat password must match the password.");
     }
     // final validation result
@@ -139,27 +156,31 @@ public class RegisterVM
     return disableRegisterButton;
   }
 
-  public BooleanProperty registrationSucceededProperty(){
+  public BooleanProperty registrationSucceededProperty()
+  {
     return registrationSucceeded;
   }
 
   public void registerUser()
   {
-    if (!disableRegisterButton.get()){
+    if (!disableRegisterButton.get())
+    {
       LocalDate localDate = birthDate.get();
-      MyDate myDate = new MyDate(localDate.getDayOfMonth(), localDate.getMonthValue(),localDate.getYear());
+      MyDate myDate = new MyDate(localDate.getDayOfMonth(), localDate.getMonthValue(), localDate.getYear());
 
-      User user = new User(name.get(),password.get(),email.get(), myDate);
+      User user = new User(name.get(), password.get(), email.get(), myDate);
       String result = authService.register(user);
 
-      if ("success".equalsIgnoreCase(result)){
+      if ("success".equalsIgnoreCase(result))
+      {
         message.set("Successfully registered!");
         registrationSucceeded.set(true);
-      }else {
+      }
+      else
+      {
         message.set("Registration failed: Email might already be in use.");
         registrationSucceeded.set(false);
       }
     }
   }
-
 }

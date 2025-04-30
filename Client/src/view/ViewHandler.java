@@ -10,8 +10,12 @@ import view.admin.modify.ModifyViewController;
 import view.buyTicket.search.SearchTicketController;
 import view.buyTicket.trains.ChooseTrainController;
 import view.front.FrontViewController;
+import view.login.LoginViewController;
 import view.register.RegisterViewController;
+import viewmodel.LoginVM;
+import viewmodel.MainAdminVM;
 import viewmodel.RegisterVM;
+import viewmodel.SearchTicketVM;
 
 import java.io.IOException;
 
@@ -80,7 +84,8 @@ public class ViewHandler
 
   private static void showLoginView() throws IOException
   {
-    FrontViewController controller = new FrontViewController();
+    LoginVM logInVM = new LoginVM(authService);
+    LoginViewController controller = new LoginViewController(logInVM);
     FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/login/LoginView.fxml"));
 
     fxmlLoader.setControllerFactory(ignore -> controller);
@@ -91,11 +96,15 @@ public class ViewHandler
 
   private static void showLoggedInAdminView() throws IOException
   {
+    MainAdminVM viewModel = new MainAdminVM();
     MainAdminViewController controller = new MainAdminViewController();
     FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/admin/main/MainAdminView.fxml"));
 
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
+
+    controller.init(viewModel);
+
     stage.setTitle("VIArail App");
     stage.setScene(scene);
   }
@@ -123,11 +132,16 @@ public class ViewHandler
 
   private static void showLoggedInUserView() throws IOException
   {
+    SearchTicketVM searchTicketVM = new SearchTicketVM();
     SearchTicketController controller = new SearchTicketController();
-    FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/buyTicket/search/SearchTicketView.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(
+        ViewHandler.class.getResource("/view/buyTicket/search/SearchTicketView.fxml"));
 
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
+
+    controller.init(searchTicketVM);
+
     stage.setTitle("VIArail App");
     stage.setScene(scene);
   }
@@ -135,7 +149,8 @@ public class ViewHandler
   private static void showChooseTrainView() throws IOException
   {
     ChooseTrainController controller = new ChooseTrainController();
-    FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/buyTicket/trains/ChooseTrainView.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(
+        ViewHandler.class.getResource("/view/buyTicket/trains/ChooseTrainView.fxml"));
 
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());

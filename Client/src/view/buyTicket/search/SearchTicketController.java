@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import org.w3c.dom.CDATASection;
 import viewmodel.SearchTicketVM;
 
 public class SearchTicketController
@@ -24,19 +23,36 @@ public class SearchTicketController
   @FXML private CheckBox bicycleCheckBox;
   @FXML private Button searchButton;
 
-  @FXML public void initialize(){
-    viewModel = new SearchTicketVM();
+  public SearchTicketController()
+  {
+    this.viewModel = new SearchTicketVM();
+  }
+
+  public void init(SearchTicketVM viewModel) {
+    if (viewModel != null) {
+      this.viewModel = viewModel;
+    }
+    // No need to call setupUI() here as it's already called in initialize()
+  }
+
+  @FXML public void initialize() {
+    if (viewModel == null) {
+      viewModel = new SearchTicketVM();
+    }
+    setupUI();
+  }
+
+  private void setupUI() {
     startButton.setDisable(true);
-    ObservableList<String > stations = FXCollections.observableArrayList(
-        "Copenhagen", "Aarhus", "Odense", "Aalborg", "Esbjerg"
-    );
+    ObservableList<String> stations = FXCollections.observableArrayList("Copenhagen", "Aarhus", "Odense", "Aalborg",
+        "Esbjerg");
     fromComboBox.setItems(stations);
     toComboBox.setItems(stations);
 
     ObservableList<String> times = FXCollections.observableArrayList();
-    for (int hour = 6; hour <= 22; hour++){
+    for (int hour = 6; hour <= 22; hour++) {
       times.add(String.format("%02d:00", hour));
-      times.add(String.format("%02d:00", hour));
+      times.add(String.format("%02d:30", hour)); // Fixed: This was "%02d:00" twice
     }
     timeComboBox.setItems(times);
     dateInput.setValue(java.time.LocalDate.now());
@@ -45,32 +61,35 @@ public class SearchTicketController
     bicycleCheckBox.setSelected(false);
   }
 
-  @FXML private void onSearchButton(){
-    if (fromComboBox.getValue() == null || toComboBox.getValue() == null ||
-    dateInput.getValue() == null || timeComboBox.getValue() == null){
+  @FXML private void onSearchButton()
+  {
+    if (fromComboBox.getValue() == null || toComboBox.getValue() == null || dateInput.getValue() == null
+        || timeComboBox.getValue() == null)
+    {
       messageLabel.setText("Please fill all fields.");
       return;
     }
-    viewModel.startTrainSearch(
-        fromComboBox.getValue(),
-        toComboBox.getValue(),
-        dateInput.getValue(),
-        timeComboBox.getValue(),
-        seatCheckBox.isSelected(),
-        bicycleCheckBox.isSelected()
-    );
+    viewModel.startTrainSearch(fromComboBox.getValue(), toComboBox.getValue(), dateInput.getValue(),
+        timeComboBox.getValue(), seatCheckBox.isSelected(), bicycleCheckBox.isSelected());
   }
 
-  @FXML private void onStartButton(){
+  @FXML private void onStartButton()
+  {
     // do nothing because we are already on Start page
   }
-  @FXML private void onPreviousButton(){
+
+  @FXML private void onPreviousButton()
+  {
     //later
   }
-  @FXML private void onUpcomingButton(){
+
+  @FXML private void onUpcomingButton()
+  {
     //later
   }
-  @FXML private void onMyAccountButton(){
+
+  @FXML private void onMyAccountButton()
+  {
     //later
   }
 }
