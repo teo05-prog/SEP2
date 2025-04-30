@@ -30,5 +30,6 @@
             <Insets left="400.0" top="10.0" />
          </VBox.margin>
       </Button>
+      <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="Button" />
    </children>
 </VBox>
