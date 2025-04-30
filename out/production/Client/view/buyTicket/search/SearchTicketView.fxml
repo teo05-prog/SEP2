@@ -90,7 +90,7 @@
                         <Insets bottom="4.0" />
                      </VBox.margin>
                   </Label>
-                  <DatePicker fx:id="dateInput" prefHeight="45.0" prefWidth="160.0" promptText="Date" />
+                  <DatePicker fx:id="datePicker" prefHeight="45.0" prefWidth="160.0" promptText="Date" />
                </children>
                <HBox.margin>
                   <Insets left="10.0" />
