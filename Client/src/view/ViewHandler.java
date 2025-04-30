@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.services.AuthenticationService;
 import model.services.AuthenticationServiceImpl;
+import view.admin.add.AddTrainViewController;
 import view.admin.main.MainAdminViewController;
 import view.admin.modify.ModifyViewController;
 import view.buyTicket.search.SearchTicketController;
@@ -12,10 +13,7 @@ import view.buyTicket.trains.ChooseTrainController;
 import view.front.FrontViewController;
 import view.login.LoginViewController;
 import view.register.RegisterViewController;
-import viewmodel.LoginVM;
-import viewmodel.MainAdminVM;
-import viewmodel.RegisterVM;
-import viewmodel.SearchTicketVM;
+import viewmodel.*;
 
 import java.io.IOException;
 
@@ -28,6 +26,8 @@ public class ViewHandler
 
   private static AuthenticationService authService = new AuthenticationServiceImpl();
   private static Stage stage;
+  private static ViewType previousView;
+  private static AddTrainVM addTrainVM;
 
   public static void start(Stage s)
   {
@@ -40,6 +40,7 @@ public class ViewHandler
   {
     try
     {
+      previousView = view;
       switch (view)
       {
         case FRONT -> showFrontView();
@@ -98,12 +99,18 @@ public class ViewHandler
   {
     MainAdminVM viewModel = new MainAdminVM();
     MainAdminViewController controller = new MainAdminViewController();
+
     FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/admin/main/MainAdminView.fxml"));
-
     fxmlLoader.setControllerFactory(ignore -> controller);
-    Scene scene = new Scene(fxmlLoader.load());
 
+    Scene scene = new Scene(fxmlLoader.load());
     controller.init(viewModel);
+
+    if (previousView == ViewType.ADD_TRAIN && addTrainVM != null && addTrainVM.isAddTrainSuccess())
+    {
+      controller.showAddTrainSuccess();
+      addTrainVM = null;
+    }
 
     stage.setTitle("VIArail App");
     stage.setScene(scene);
@@ -116,7 +123,17 @@ public class ViewHandler
 
   private static void showAddTrainView() throws IOException
   {
-    // to be added
+    AddTrainViewController controller = new AddTrainViewController();
+    AddTrainVM addTrainVM = new AddTrainVM();
+    FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/admin/add/AddTrainView.fxml"));
+
+    fxmlLoader.setControllerFactory(ignore -> controller);
+    Scene scene = new Scene(fxmlLoader.load());
+
+    controller.init(addTrainVM);
+
+    stage.setTitle("VIArail App");
+    stage.setScene(scene);
   }
 
   private static void showModifyTrainView() throws IOException

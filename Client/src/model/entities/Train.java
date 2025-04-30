@@ -46,4 +46,8 @@ public void removeCarriageById(int carriageId) {
     return string;
   }
 
+  public void remove()
+  {
+    // to be implemented with database
+  }
 }
