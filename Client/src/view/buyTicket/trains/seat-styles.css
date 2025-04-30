@@ -1,0 +1,14 @@
+.available {
+    -fx-background-color: transparent;
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+}
+
+.selected {
+    -fx-background-color: orange;
+}
+
+.booked {
+    -fx-background-color: gray;
+    -fx-text-fill: white;
+}
