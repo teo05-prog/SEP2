@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d363bb8e-7414-4319-af53-94beaef01d5d" name="Changes" comment="helped Bianca finish LoginVM">
-      <change beforePath="$PROJECT_DIR$/Client/src/viewmodel/LoginVM.java" beforeDir="false" />
+    <list default="true" id="b54283d4-56c2-4b95-9762-7c93b29c5b86" name="Changes" comment="Bind view model properties in LogInController and add validation checks in LogInVM">
+      <change beforePath="$PROJECT_DIR$/Client/src/viewmodel/LoginVM.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/viewmodel/LoginVM.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,74 +13,52 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="20550" />
+    <option name="totalTimeSeconds" value="13530" />
     <option name="gitIntegration" value="true" />
     <option name="naggedAbout" value="1" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JavaFXApplication" />
-        <option value="Interface" />
         <option value="FxmlFile" />
         <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="PREVIOUS_COMMIT_AUTHORS">
-      <list>
-        <option value="bianca0203 &lt;biancabuzdugan00@gmail.com&gt;" />
-        <option value="Tutel &lt;jas.lewek@gmail.com&gt;" />
-        <option value="Elizabeth1401 &lt;140805762+elizabeth1401@users.noreply.github.com&gt;" />
-      </list>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
     &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;teo05-prog&quot;
+    &quot;assignee&quot;: &quot;bianca0205&quot;
   }
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/teo05-prog/SEP2.git&quot;,
-    &quot;accountId&quot;: &quot;0f67eb8a-44ca-4392-88e2-8c6ca53db332&quot;
+    &quot;accountId&quot;: &quot;db058943-8d80-4d0c-bb6f-2656c22ce853&quot;
   }
 }</component>
-  <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: 7
-}</component>
-  <component name="ProjectId" id="2vUe0a35i9xSfbdPClvqbS1DwdS" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="2" id="Add" />
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2vUexMur85Igev3WidfQgIbSByN" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.MyApplication.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "Merging main",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.MyApplication.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Yuki\OneDrive - ViaUC\Documents\GitHub\SEP2\Client\src\view\register" />
-      <recent name="C:\Users\Yuki\OneDrive - ViaUC\Documents\GitHub\SEP2\Client\src\view\front" />
-    </key>
-  </component>
+}</component>
   <component name="RunManager">
     <configuration name="MyApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="MyApplication" />
@@ -98,189 +76,93 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="d363bb8e-7414-4319-af53-94beaef01d5d" name="Changes" comment="" />
-      <created>1744203858855</created>
+      <changelist id="b54283d4-56c2-4b95-9762-7c93b29c5b86" name="Changes" comment="" />
+      <created>1744204325937</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1744203858855</updated>
+      <updated>1744204325937</updated>
     </task>
-    <task id="LOCAL-00001" summary="Initial commit">
+    <task id="LOCAL-00001" summary="hello">
       <option name="closed" value="true" />
-      <created>1744203986297</created>
+      <created>1744204387744</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1744203986297</updated>
+      <updated>1744204387744</updated>
     </task>
-    <task id="LOCAL-00002" summary="Created MVVM structure for the first sprint">
+    <task id="LOCAL-00002" summary="Fix setName method in Admin and Traveller classes; add setName method in User class">
       <option name="closed" value="true" />
-      <created>1744370910752</created>
+      <created>1745675103425</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1744370910752</updated>
+      <updated>1745675103425</updated>
     </task>
-    <task id="LOCAL-00003" summary="Created MVVM structure for the first sprint">
+    <task id="LOCAL-00003" summary="Add SignIn.fxml for user authentication interface">
       <option name="closed" value="true" />
-      <created>1744370968368</created>
+      <created>1745697236985</created>
       <option name="number" value="00003" />
       <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
-      <updated>1744370968368</updated>
+      <updated>1745697236985</updated>
     </task>
-    <task id="LOCAL-00004" summary="Created fxml for front and register views">
+    <task id="LOCAL-00004" summary="Update LoginView.fxml to change controller and fix button IDs for login and registration">
       <option name="closed" value="true" />
-      <created>1744641345788</created>
+      <created>1745764818200</created>
       <option name="number" value="00004" />
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
-      <updated>1744641345788</updated>
+      <updated>1745764818200</updated>
     </task>
-    <task id="LOCAL-00005" summary="Connected the fxmls to the controllers">
+    <task id="LOCAL-00005" summary="Add LogInController for user authentication handling">
       <option name="closed" value="true" />
-      <created>1744641854186</created>
+      <created>1745764847260</created>
       <option name="number" value="00005" />
       <option name="presentableId" value="LOCAL-00005" />
       <option name="project" value="LOCAL" />
-      <updated>1744641854186</updated>
+      <updated>1745764847260</updated>
     </task>
-    <task id="LOCAL-00006" summary="Finished controller for login">
+    <task id="LOCAL-00006" summary="Add LogInVM for handling login logic and validation">
       <option name="closed" value="true" />
-      <created>1744974335089</created>
+      <created>1745765151203</created>
       <option name="number" value="00006" />
       <option name="presentableId" value="LOCAL-00006" />
       <option name="project" value="LOCAL" />
-      <updated>1744974335089</updated>
+      <updated>1745765151203</updated>
     </task>
-    <task id="LOCAL-00007" summary="Finished Register controller and added authentication service, also added empty methods in RegisterVM.">
+    <task id="LOCAL-00007" summary="Implement login functionality and validation in AuthenticationService and LogInVM">
       <option name="closed" value="true" />
-      <created>1744979258536</created>
+      <created>1745860982718</created>
       <option name="number" value="00007" />
       <option name="presentableId" value="LOCAL-00007" />
       <option name="project" value="LOCAL" />
-      <updated>1744979258536</updated>
+      <updated>1745860982718</updated>
     </task>
-    <task id="LOCAL-00008" summary="Changed the java version and hid some methods">
+    <task id="LOCAL-00008" summary="Bind view model properties in LogInController and add validation checks in LogInVM">
       <option name="closed" value="true" />
-      <created>1745223219254</created>
+      <created>1745864677085</created>
       <option name="number" value="00008" />
       <option name="presentableId" value="LOCAL-00008" />
       <option name="project" value="LOCAL" />
-      <updated>1745223219254</updated>
+      <updated>1745864677085</updated>
     </task>
-    <task id="LOCAL-00009" summary="Made views for modify train">
+    <task id="LOCAL-00009" summary="Bind view model properties in LogInController and add validation checks in LogInVM">
       <option name="closed" value="true" />
-      <created>1745665277800</created>
+      <created>1745864690523</created>
       <option name="number" value="00009" />
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
-      <updated>1745665277800</updated>
+      <updated>1745864690523</updated>
     </task>
-    <task id="LOCAL-00010" summary="Made views for modify train">
+    <task id="LOCAL-00010" summary="Bind view model properties in LogInController and add validation checks in LogInVM">
       <option name="closed" value="true" />
-      <created>1745666838039</created>
+      <created>1745865938165</created>
       <option name="number" value="00010" />
       <option name="presentableId" value="LOCAL-00010" />
       <option name="project" value="LOCAL" />
-      <updated>1745666838039</updated>
+      <updated>1745865938165</updated>
     </task>
-    <task id="LOCAL-00011" summary="Made views for modify train">
-      <option name="closed" value="true" />
-      <created>1745667652038</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1745667652038</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Made views for modify train">
-      <option name="closed" value="true" />
-      <created>1745668141130</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1745668141130</updated>
-    </task>
-    <task id="LOCAL-00013" summary="Finished views for admin: ModifyView.fxml and MainAdminView.fxml">
-      <option name="closed" value="true" />
-      <created>1745669167004</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1745669167004</updated>
-    </task>
-    <task id="LOCAL-00014" summary="Finished views for admin: ModifyView.fxml and MainAdminView.fxml">
-      <option name="closed" value="true" />
-      <created>1745669306313</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1745669306313</updated>
-    </task>
-    <task id="LOCAL-00015" summary="Finished views for admin: ModifyView.fxml and MainAdminView.fxml">
-      <option name="closed" value="true" />
-      <created>1745669457995</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1745669457995</updated>
-    </task>
-    <task id="LOCAL-00016" summary="Finished views for admin: ModifyView.fxml and MainAdminView.fxml&#10;&#10;Took 3 minutes">
-      <option name="closed" value="true" />
-      <created>1745670549309</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1745670549309</updated>
-    </task>
-    <task id="LOCAL-00017" summary="working register">
-      <option name="closed" value="true" />
-      <created>1745681725821</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1745681725821</updated>
-    </task>
-    <task id="LOCAL-00018" summary="working register">
-      <option name="closed" value="true" />
-      <created>1745682364892</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1745682364892</updated>
-    </task>
-    <task id="LOCAL-00019" summary="now opens login view">
-      <option name="closed" value="true" />
-      <created>1745700768814</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1745700768814</updated>
-    </task>
-    <task id="LOCAL-00020" summary="Merge remote-tracking branch 'origin/main'">
-      <option name="closed" value="true" />
-      <created>1745746126158</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1745746126158</updated>
-    </task>
-    <task id="LOCAL-00021" summary="finished modify and main for admin">
-      <option name="closed" value="true" />
-      <created>1745748063863</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1745748063863</updated>
-    </task>
-    <task id="LOCAL-00022" summary="helped Bianca finish LoginVM">
-      <option name="closed" value="true" />
-      <created>1745864445676</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1745864445676</updated>
-    </task>
-    <option name="localTasksCounter" value="23" />
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -295,30 +177,14 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Initial commit" />
-    <MESSAGE value="Hi !!!" />
-    <MESSAGE value="Created MVVM structure for the first sprint&#10;&#10;Took 8 minutes" />
-    <MESSAGE value="Created MVVM structure for the first sprint" />
-    <MESSAGE value="Add MyDate class to model package&#10;&#10;Took 34 seconds" />
-    <MESSAGE value="Created fxml for front and register views" />
-    <MESSAGE value="Connected the fxmls to the controllers" />
-    <MESSAGE value="Finished controller for login" />
-    <MESSAGE value="Finished Register controller and added authentication service, also added empty methods in RegisterVM." />
-    <MESSAGE value="Changed the java version and hid some methods" />
-    <MESSAGE value="Traveller, Admin, Ticket, MyDate" />
-    <MESSAGE value="Made views for modify train" />
-    <MESSAGE value="Made views for modify train&#10;&#10;Took 7 minutes" />
-    <MESSAGE value="Finished views for admin: ModifyView.fxml and MainAdminView.fxml&#10;&#10;Took 2 minutes" />
-    <MESSAGE value="Finished views for admin: ModifyView.fxml and MainAdminView.fxml" />
-    <MESSAGE value="Finished views for admin: ModifyView.fxml and MainAdminView.fxml&#10;&#10;Took 3 minutes" />
-    <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;Client/src/view/register/RegisterView.fxml&#10;&#10;Took 11 seconds" />
-    <MESSAGE value="working register" />
-    <MESSAGE value="Add SignIn.fxml for user authentication interface&#10;&#10;Took 30 minutes" />
-    <MESSAGE value="now opens login view" />
-    <MESSAGE value="Merge remote-tracking branch 'origin/main'" />
-    <MESSAGE value="finished modify and main for admin" />
-    <MESSAGE value="Implement login functionality and validation in AuthenticationService and LogInVM&#10;&#10;Took 47 minutes" />
-    <MESSAGE value="helped Bianca finish LoginVM" />
-    <option name="LAST_COMMIT_MESSAGE" value="helped Bianca finish LoginVM" />
+    <MESSAGE value="hello" />
+    <MESSAGE value="Fix setName method in Admin and Traveller classes; add setName method in User class" />
+    <MESSAGE value="Add SignIn.fxml for user authentication interface" />
+    <MESSAGE value="Update LoginView.fxml to change controller and fix button IDs for login and registration" />
+    <MESSAGE value="Add LogInController for user authentication handling" />
+    <MESSAGE value="Add LogInVM for handling login logic and validation" />
+    <MESSAGE value="Implement login functionality and validation in AuthenticationService and LogInVM" />
+    <MESSAGE value="Bind view model properties in LogInController and add validation checks in LogInVM" />
+    <option name="LAST_COMMIT_MESSAGE" value="Bind view model properties in LogInController and add validation checks in LogInVM" />
   </component>
 </project>
