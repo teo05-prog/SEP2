@@ -6,10 +6,14 @@ public class Train
 {
   private int trainId;
   private ArrayList<Carriage> carriages;
+  private Station from;
+  private Station to;
 
-  public Train(int trainId,ArrayList<Carriage> carriages) {
+  public Train(int trainId,ArrayList<Carriage> carriages, Station from, Station to) {
     this.trainId= trainId;
     this.carriages=new ArrayList<>();
+    this.from=from;
+    this.to=to;
   }
   public ArrayList<Carriage> getCarriages() {
     return carriages;
@@ -34,10 +38,24 @@ public void removeCarriageById(int carriageId) {
         }
     }
 }
+  public Station getFrom() {
+    return from;
+  }
+  public void setFrom(Station from) {
+    this.from = from;
+  }
+  public Station getTo() {
+    return to;
+  }
+  public void setTo(Station to) {
+    this.to = to;
+  }
   public String toString()
   {
     String string = "";
     string += "Train ID: " + trainId + "\n";
+    string += "From: " + from.getName() + "\n";
+    string += "To: " + to.getName() + "\n";
     for (int i=0;i<carriages.size();i++)
     {
       string += "Carriage ID: " + carriages.get(i).getCarriageId() + ", Seat: " + carriages.get(i).getSeats()+ "\n";
