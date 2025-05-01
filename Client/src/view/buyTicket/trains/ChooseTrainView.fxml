@@ -17,19 +17,18 @@
                   <Font name="System Bold" size="24.0" />
                </font>
             </Label>
-            <Label prefHeight="10.0" prefWidth="300.0" text="                                &lt;message&gt;">
+            <Label fx:id="messageLabel" prefHeight="10.0" prefWidth="300.0" text="                                &lt;message&gt;">
                <HBox.margin>
                   <Insets top="18.0" />
                </HBox.margin>
             </Label>
          </children>
       </HBox>
-      <ListView prefHeight="340.0" prefWidth="480.0" style="-fx-background-color: white; -fx-background-radius: 10;" />
-      <Button mnemonicParsing="false" style="-fx-background-color: #40798c; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 8 16;" text="Continue">
+      <ListView fx:id="trainListView" prefHeight="340.0" prefWidth="480.0" style="-fx-background-color: white; -fx-background-radius: 10;" />
+      <Button fx:id="continueButton" mnemonicParsing="false" onAction="#onContinueButton" style="-fx-background-color: #40798c; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 8 16;" text="Continue">
          <VBox.margin>
             <Insets left="400.0" top="10.0" />
          </VBox.margin>
       </Button>
-      <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="Button" />
    </children>
 </VBox>
