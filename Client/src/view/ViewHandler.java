@@ -193,7 +193,7 @@ public class ViewHandler
 
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
-    controller.init(seatSelectionVM);
+    controller.init(seatSelectionVM, searchTicketVM);
     stage.setTitle("VIArail App");
     stage.setScene(scene);
   }

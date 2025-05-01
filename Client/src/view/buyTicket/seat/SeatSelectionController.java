@@ -2,6 +2,7 @@ package view.buyTicket.seat;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import viewmodel.SearchTicketVM;
 import viewmodel.SeatSelectionVM;
 
 import java.util.List;
@@ -33,27 +34,30 @@ public class SeatSelectionController
 
   @FXML private Button continueButton;
 
+  private SearchTicketVM searchTicketVM;
+
   public SeatSelectionController()
   {
     this.viewModel = new SeatSelectionVM();
   }
 
-  public void init(SeatSelectionVM viewModel)
+  public void init(SeatSelectionVM viewModel, SearchTicketVM searchTicketVM)
   {
     if (viewModel != null)
     {
       this.viewModel = viewModel;
-      bindProperties();
     }
+    this.searchTicketVM = searchTicketVM;
+    bindProperties();
   }
 
   public void initialize()
   {
-    if (viewModel == null)
-    {
-      viewModel = new SeatSelectionVM();
-    }
-    bindProperties();
+//    if (viewModel == null)
+//    {
+//      viewModel = new SeatSelectionVM();
+//    }
+//    bindProperties();
   }
 
   private void bindProperties()
@@ -82,11 +86,25 @@ public class SeatSelectionController
   private void setupSeatButton (Button button, int seatNumber){
     if (viewModel.isSeatBooked(seatNumber)){
       button.setDisable(true);
+      return;
     }
+
+    boolean isSeat = seatNumber >= 1 && seatNumber <= 16;
+    boolean isBicycle = seatNumber >= 17 && seatNumber <= 18;
+
+    // restrict based on what user chose
+    boolean seatAllowed = searchTicketVM.seatProperty().get();
+    boolean bicycleAllowed = searchTicketVM.bicycleProperty().get();
+
+    if ((isSeat && !seatAllowed) || (isBicycle && !bicycleAllowed)){
+      button.setDisable(true); //not allowed based on traveller choice
+      return;
+    }
+
     // click toggles selection if seat is available
     button.setOnAction(e ->{
       viewModel.toggleSeatSelection(seatNumber);
-      updateSeatStyle(button, seatNumber);
+      refreshSeatButtons();
     });
 
     updateSeatStyle(button, seatNumber);
