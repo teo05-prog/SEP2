@@ -4,11 +4,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import view.ViewHandler;
-import viewmodel.MyAccountVM;
+import viewmodel.TravellerMyAccountVM;
 
-public class MyAccountViewController
+public class TravellerMyAccountViewController
 {
-  private MyAccountVM viewModel;
+  private TravellerMyAccountVM viewModel;
 
   @FXML private Button startButton;
   @FXML private Button previousButton;
@@ -18,7 +18,7 @@ public class MyAccountViewController
   @FXML private Label birthdayLabel;
   @FXML private Label emailLabel;
 
-  public void init(MyAccountVM viewModel)
+  public void init(TravellerMyAccountVM viewModel)
   {
     this.viewModel = viewModel;
     setupBindings();

@@ -3,13 +3,13 @@ package viewmodel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class MyAccountVM
+public class TravellerMyAccountVM
 {
   private final StringProperty name = new SimpleStringProperty();
   private final StringProperty birthday = new SimpleStringProperty();
   private final StringProperty email = new SimpleStringProperty();
 
-  public MyAccountVM()
+  public TravellerMyAccountVM()
   {
     // to be replaced with actual data loading
     loadUserData();
