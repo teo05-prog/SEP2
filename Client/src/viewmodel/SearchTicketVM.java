@@ -29,6 +29,10 @@ public class SearchTicketVM
     ViewHandler.showView(ViewHandler.ViewType.CHOOSE_TRAIN);
   }
 
+  public boolean isSeatOrBicycleSelected(){
+    return seat.get() || bicycle.get();
+  }
+
   public BooleanBinding inputValidProperty()
   {
     return inputValid;

@@ -34,6 +34,7 @@ public class SearchTicketController
     {
       this.viewModel = viewModel;
     }
+   setupUI();
     // No need to call setupUI() here as it's already called in initialize()
   }
 
@@ -43,7 +44,7 @@ public class SearchTicketController
     {
       viewModel = new SearchTicketVM();
     }
-    setupUI();
+//    setupUI();
   }
 
   private void setupUI()
@@ -74,6 +75,10 @@ public class SearchTicketController
     dateInput.setValue(java.time.LocalDate.now());
     // bind date
     viewModel.dateProperty().bindBidirectional(dateInput.valueProperty());
+
+    //bind seat and bicycle
+    viewModel.seatProperty().bindBidirectional(seatCheckBox.selectedProperty());
+    viewModel.bicycleProperty().bindBidirectional(bicycleCheckBox.selectedProperty());
 
     messageLabel.setText("");
     seatCheckBox.setSelected(false);

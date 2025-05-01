@@ -34,11 +34,8 @@ public class ChooseTrainVM
   }
 
   public void continueWithSelectedTrain(){
+    // later we will have a database
     if (selectedTrain.get() == null){
-      message.set("Please select a train before continuing.");
-    }else {
-      // navigate to seatSelectionView
-      ViewHandler.showView(ViewHandler.ViewType.SEAT_SELECTION);
-    }
+      message.set("Please select a train before continuing.");}
   }
 }
