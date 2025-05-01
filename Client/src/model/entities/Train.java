@@ -8,12 +8,16 @@ public class Train
   private ArrayList<Carriage> carriages;
   private Station from;
   private Station to;
+  private MyDate departureDate;
+  private MyDate departureTime;
 
-  public Train(int trainId,ArrayList<Carriage> carriages, Station from, Station to) {
+  public Train(int trainId,ArrayList<Carriage> carriages, Station from, Station to, MyDate departureDate, MyDate departureTime) {
     this.trainId= trainId;
     this.carriages=new ArrayList<>();
     this.from=from;
     this.to=to;
+    this.departureDate=departureDate;
+    this.departureTime=departureTime;
   }
   public ArrayList<Carriage> getCarriages() {
     return carriages;
@@ -49,6 +53,18 @@ public void removeCarriageById(int carriageId) {
   }
   public void setTo(Station to) {
     this.to = to;
+  }
+  public MyDate getDepartureDate() {
+    return departureDate;
+  }
+  public void setDepartureDate(MyDate departureDate) {
+    this.departureDate = departureDate;
+  }
+  public MyDate getDepartureTime() {
+    return departureTime;
+  }
+  public void setDepartureTime(MyDate departureTime) {
+    this.departureTime = departureTime;
   }
   public String toString()
   {
