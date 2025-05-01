@@ -4,6 +4,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import model.entities.Train;
 
 public class MainAdminVM
 {
@@ -36,5 +37,23 @@ public class MainAdminVM
   public BooleanProperty enableModifyButtonProperty()
   {
     return disableModifyButton;
+  }
+
+  public void removeTrain(Train selectedItem)
+  {
+    if (selectedItem != null)
+    {
+      selectedItem.remove();
+      message.set("Train removed successfully.");
+    }
+    else
+    {
+      message.set("No train selected.");
+    }
+  }
+
+  public void updateTrainsList()
+  {
+    // to be implemented
   }
 }

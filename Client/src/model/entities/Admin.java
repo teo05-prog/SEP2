@@ -2,11 +2,9 @@ package model.entities;
 
 public class Admin extends User
 {
-  private static final boolean isAdmin = true;
-
-  public Admin(String name, String password, String email, MyDate birthDate)
+  public Admin(String name, String password, String email)
   {
-    super(name, password, email, birthDate);
+    super(name, password, email);
   }
 
   public String getName()
@@ -39,19 +37,9 @@ public class Admin extends User
     super.setEmail(email);
   }
 
-  public MyDate getBirthDate()
-  {
-    return super.getBirthDate();
-  }
-
-  public void setBirthDate(MyDate birthDate)
-  {
-    super.setBirthDate(birthDate);
-  }
-
   public String toString()
   {
-    return "Admin " + super.toString();
+    return "Admin - " + super.toString();
   }
 
   public boolean equals(Object obj)
@@ -61,12 +49,6 @@ public class Admin extends User
     if (obj == null || getClass() != obj.getClass())
       return false;
 
-    Admin admin = (Admin) obj;
-    return isAdmin == Admin.isAdmin && super.equals(obj);
-  }
-
-  public boolean isAdmin()
-  {
-    return Admin.isAdmin;
+    return super.equals(obj);
   }
 }

@@ -8,18 +8,16 @@ public class MyDate
   private int month;
   private int year;
 
-  private int second;
   private int minute;
   private int hour;
 
-  public MyDate(int day, int month, int year, int hour, int minute, int second)
+  public MyDate(int day, int month, int year, int hour, int minute)
   {
     this.day = day;
     this.month = month;
     this.year = year;
     this.hour = hour;
     this.minute = minute;
-    this.second = second;
   }
 
   public MyDate(int year, int month, int day)
@@ -27,16 +25,6 @@ public class MyDate
     this.day = day;
     this.month = month;
     this.year = year;
-  }
-
-  public MyDate(MyDate date)
-  {
-    this.day = date.day;
-    this.month = date.month;
-    this.year = date.year;
-    this.hour = date.hour;
-    this.minute = date.minute;
-    this.second = date.second;
   }
 
   public int getDay()
@@ -67,16 +55,6 @@ public class MyDate
   public void setYear(int year)
   {
     this.year = year;
-  }
-
-  public int getSecond()
-  {
-    return second;
-  }
-
-  public void setSecond(int second)
-  {
-    this.second = second;
   }
 
   public int getMinute()
@@ -111,33 +89,20 @@ public class MyDate
 
   public boolean isBefore(MyDate other)
   {
-    if (other.year < year)
+    if (year < other.year)
     {
       return true;
     }
-    else if (other.month < month && other.year == year)
+    else if (year == other.year)
     {
-      return true;
-    }
-    else if (other.day < day && other.month == month && other.year == year)
-    {
-      return true;
-    }
-    else if (other.hour < hour && other.day == day && other.month == month
-        && other.year == year)
-    {
-      return true;
-    }
-    else if (other.minute < minute && other.hour == hour && other.day == day
-        && other.month == month && other.year == year)
-    {
-      return true;
-    }
-    else if (other.second < second && other.minute == minute
-        && other.hour == hour && other.day == day && other.month == month
-        && other.year == year)
-    {
-      return true;
+      if (month < other.month)
+      {
+        return true;
+      }
+      else if (month == other.month)
+      {
+        return day < other.day;
+      }
     }
     return false;
   }
@@ -150,13 +115,17 @@ public class MyDate
     }
     MyDate other = (MyDate) obj;
 
-    return day == other.day && month == other.month && year == other.year
-        && hour == other.hour && minute == other.minute
-        && second == other.second;
+    return day == other.day && month == other.month && year == other.year && hour == other.hour
+        && minute == other.minute;
   }
 
   public MyDate copy()
   {
-    return new MyDate(year, month, day, hour, minute, second);
+    return new MyDate(year, month, day, hour, minute);
+  }
+
+  public String toString()
+  {
+    return String.format("%02d/%02d/%04d %02d:%02d", day, month, year, hour, minute);
   }
 }
