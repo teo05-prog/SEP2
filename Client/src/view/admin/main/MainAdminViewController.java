@@ -30,7 +30,8 @@ public class MainAdminViewController
 
   public void init(MainAdminVM viewModel)
   {
-    if (viewModel != null) {
+    if (viewModel != null)
+    {
       this.viewModel = viewModel;
       bindProperties();
     }
@@ -38,10 +39,12 @@ public class MainAdminViewController
 
   public void initialize()
   {
-    if (viewModel == null) {
+    if (viewModel == null)
+    {
       viewModel = new MainAdminVM();
     }
-    bindProperties();trainsButton.setDisable(true);
+    bindProperties();
+    trainsButton.setDisable(true);
   }
 
   private void bindProperties()
@@ -55,10 +58,30 @@ public class MainAdminViewController
     });
   }
 
+  public void showAddTrainSuccess()
+  {
+    messageLabel.textProperty().unbind();
+    messageLabel.setText("Train added successfully!");
+
+    new Thread(() -> {
+      try
+      {
+        Thread.sleep(3000);
+        javafx.application.Platform.runLater(() -> {
+          messageLabel.setText("");
+          messageLabel.textProperty().bind(viewModel.messageProperty()); // Rebind
+        });
+      }
+      catch (InterruptedException e)
+      {
+        Thread.currentThread().interrupt();
+      }
+    }).start();
+  }
+
   public void onTrainsButton(ActionEvent e)
   {
-    if (e.getSource() == trainsButton)
-      ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_ADMIN);
+    // nothing happens, already on this view
   }
 
   public void onMyAccountButton(ActionEvent e)
@@ -70,11 +93,18 @@ public class MainAdminViewController
   public void onAddButton(ActionEvent e)
   {
     if (e.getSource() == addButton)
-      ViewHandler.showView(ViewHandler.ViewType.ADD_TRAIN); // to be implemented
+    {
+      ViewHandler.showView(ViewHandler.ViewType.ADD_TRAIN);
+    }
   }
 
   public void onRemoveButton(ActionEvent e)
   {
+    if (e.getSource() == removeButton)
+    {
+      viewModel.removeTrain(trainsListView.getSelectionModel().getSelectedItem()); // to be implemented
+      viewModel.updateTrainsList(); // refresh the list
+    }
     // remove selected train
   }
 

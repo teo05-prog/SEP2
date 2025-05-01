@@ -159,4 +159,9 @@ public class MyDate
   {
     return new MyDate(year, month, day, hour, minute, second);
   }
+
+  public String toString()
+  {
+    return String.format("%02d/%02d/%04d %02d:%02d:%02d", day, month, year, hour, minute, second);
+  }
 }
