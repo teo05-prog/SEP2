@@ -1,66 +1,65 @@
 package viewmodel;
 
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.*;
 import view.ViewHandler;
 
 import java.time.LocalDate;
 
 public class SearchTicketVM
 {
-  private String from;
-  private String to;
-  private LocalDate date;
-  private String  time;
-  private boolean seat;
-  private boolean bicycle;
+  private final StringProperty from = new SimpleStringProperty();
+  private final StringProperty to = new SimpleStringProperty();
+  private final ObjectProperty<LocalDate> date = new SimpleObjectProperty<>();
+  private final StringProperty time = new SimpleStringProperty();
+  private final BooleanProperty seat = new SimpleBooleanProperty();
+  private final BooleanProperty bicycle = new SimpleBooleanProperty();
 
-  public SearchTicketVM(){}
+  private final BooleanBinding inputValid;
 
-  public void startTrainSearch(String from, String to, LocalDate date, String time, boolean seat, boolean bicycle){
-    this.from = from;
-    this.to = to;
-    this.date = date;
-    this.time = time;
-    this.seat = seat;
-    this.bicycle = bicycle;
+  public SearchTicketVM()
+  {
+    inputValid = from.isNotEmpty().and(to.isNotEmpty()).and(date.isNotNull())
+        .and(time.isNotEmpty());
+  }
+
+  public void startTrainSearch()
+  {
     //navigate to the next page
-    if(isInputValid()){
-      ViewHandler.showView(ViewHandler.ViewType.CHOOSE_TRAIN);
-    }else {
-      System.out.println("Invalid input. Please check all fields.");
-    }
+    ViewHandler.showView(ViewHandler.ViewType.CHOOSE_TRAIN);
   }
-  public boolean isInputValid(){
-    return from !=null && !from.isEmpty()
-        && to != null && !to.isEmpty()
-        && date != null
-        && time != null && !time.isEmpty();
+
+  public BooleanBinding inputValidProperty()
+  {
+    return inputValid;
   }
-  public String getFrom()
+
+  public StringProperty fromProperty()
   {
     return from;
   }
 
-  public String getTo()
+  public StringProperty toProperty()
   {
     return to;
   }
 
-  public LocalDate getDate()
+  public ObjectProperty<LocalDate> dateProperty()
   {
     return date;
   }
 
-  public String getTime()
+  public StringProperty timeProperty()
   {
     return time;
   }
 
-  public boolean isSeat()
+  public BooleanProperty seatProperty()
   {
     return seat;
   }
 
-  public boolean isBicycle()
+  public BooleanProperty bicycleProperty()
   {
     return bicycle;
   }

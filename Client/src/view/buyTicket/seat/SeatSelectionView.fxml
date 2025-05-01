@@ -11,7 +11,6 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-
 <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #cee0dc; -fx-padding: 40;" stylesheets="@../trains/seat-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.buyTicket.seat.SeatSelectionController">
    <children>
       <GridPane prefHeight="400.0" prefWidth="250.0" style="-fx-background-color: white; -fx-background-radius: 10;">
@@ -30,84 +29,84 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="available" text="7" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Button fx:id="seatNumber7" mnemonicParsing="false" onAction="#onSeatNumber7Button" prefHeight="50.0" prefWidth="50.0" styleClass="available" text="7" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="available" text="3" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <Button fx:id="seatNumber3" mnemonicParsing="false" onAction="#onSeatNumber3Button" prefHeight="50.0" prefWidth="50.0" styleClass="available" text="3" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="available" text="5" GridPane.columnIndex="3" GridPane.rowIndex="1">
+            <Button fx:id="seatNumber5" mnemonicParsing="false" onAction="#onSeatNumber5Button" prefHeight="50.0" prefWidth="50.0" styleClass="available" text="5" GridPane.columnIndex="3" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="available" text="8" GridPane.rowIndex="2">
+            <Button fx:id="seatNumber8" mnemonicParsing="false" onAction="#onSeatNumber8Button" prefHeight="50.0" prefWidth="50.0" styleClass="available" text="8" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="booked" text="2" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <Button fx:id="seatNumber2" mnemonicParsing="false" onAction="#onSeatNumber2Button" prefHeight="50.0" prefWidth="50.0" styleClass="booked" text="2" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="booked" text="6" GridPane.columnIndex="2" GridPane.rowIndex="2">
+            <Button fx:id="seatNumber6" mnemonicParsing="false" onAction="#onSeatNumber6Button" prefHeight="50.0" prefWidth="50.0" styleClass="booked" text="6" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="available" text="4" GridPane.columnIndex="3" GridPane.rowIndex="2">
+            <Button fx:id="seatNumber4" mnemonicParsing="false" onAction="#onSeatNumber4Button" prefHeight="50.0" prefWidth="50.0" styleClass="available" text="4" GridPane.columnIndex="3" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="booked" text="9" GridPane.rowIndex="3">
+            <Button fx:id="seatNumber9" mnemonicParsing="false" onAction="#onSeatNumber9Button" prefHeight="50.0" prefWidth="50.0" styleClass="booked" text="9" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="booked" text="15" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="available" text="11" GridPane.columnIndex="2" GridPane.rowIndex="3">
+            <Button fx:id="seatNumber15" mnemonicParsing="false" onAction="#onSeatNumber15Button" prefHeight="50.0" prefWidth="50.0" styleClass="booked" text="15" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Button fx:id="seatNumber11" mnemonicParsing="false" onAction="#onSeatNumber11Button" prefHeight="50.0" prefWidth="50.0" styleClass="available" text="11" GridPane.columnIndex="2" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="booked" text="13" GridPane.columnIndex="3" GridPane.rowIndex="3">
+            <Button fx:id="seatNumber13" mnemonicParsing="false" onAction="#onSeatNumber13Button" prefHeight="50.0" prefWidth="50.0" styleClass="booked" text="13" GridPane.columnIndex="3" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="booked" text="16" GridPane.rowIndex="4">
+            <Button fx:id="seatNumber16" mnemonicParsing="false" onAction="#onSeatNumber16Button" prefHeight="50.0" prefWidth="50.0" styleClass="booked" text="16" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="booked" text="10" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="selected" text="14" GridPane.columnIndex="2" GridPane.rowIndex="4">
+            <Button fx:id="seatNumber10" mnemonicParsing="false" onAction="#onSeatNumber10Button" prefHeight="50.0" prefWidth="50.0" styleClass="booked" text="10" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Button fx:id="seatNumber14" mnemonicParsing="false" onAction="#onSeatNumber14Button" prefHeight="50.0" prefWidth="50.0" styleClass="selected" text="14" GridPane.columnIndex="2" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="available" text="12" GridPane.columnIndex="3" GridPane.rowIndex="4">
+            <Button fx:id="seatNumber12" mnemonicParsing="false" onAction="#onSeatNumber12Button" prefHeight="50.0" prefWidth="50.0" styleClass="available" text="12" GridPane.columnIndex="3" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="available" text="18" GridPane.rowIndex="5">
+            <Button fx:id="bicycleSeatNumber18" mnemonicParsing="false" onAction="#onBicycleSeatNumber18Button" prefHeight="50.0" prefWidth="50.0" styleClass="available" text="18" GridPane.rowIndex="5">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="available" text="17" GridPane.columnIndex="3" GridPane.rowIndex="5">
+            <Button fx:id="bicycleSeatNumber17" mnemonicParsing="false" onAction="#onBicycleSeatNumber17Button" prefHeight="50.0" prefWidth="50.0" styleClass="available" text="17" GridPane.columnIndex="3" GridPane.rowIndex="5">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="booked" text="1" GridPane.rowIndex="1">
+            <Button fx:id="seatNmber1" mnemonicParsing="false" onAction="#onSeatNumber1Button" prefHeight="50.0" prefWidth="50.0" styleClass="booked" text="1" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>
@@ -172,7 +171,7 @@
             </Label>
          </children>
       </VBox>
-      <Button mnemonicParsing="false" prefHeight="33.0" prefWidth="99.0" style="-fx-background-color: #40798c; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 8 16;" text="Continue">
+      <Button fx:id="continueButton" mnemonicParsing="false" onAction="#onContinueButton" prefHeight="33.0" prefWidth="99.0" style="-fx-background-color: #40798c; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 8 16;" text="Continue">
          <HBox.margin>
             <Insets left="5.0" top="380.0" />
          </HBox.margin>

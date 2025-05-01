@@ -28,34 +28,53 @@ public class SearchTicketController
     this.viewModel = new SearchTicketVM();
   }
 
-  public void init(SearchTicketVM viewModel) {
-    if (viewModel != null) {
+  public void init(SearchTicketVM viewModel)
+  {
+    if (viewModel != null)
+    {
       this.viewModel = viewModel;
     }
     // No need to call setupUI() here as it's already called in initialize()
   }
 
-  @FXML public void initialize() {
-    if (viewModel == null) {
+  @FXML public void initialize()
+  {
+    if (viewModel == null)
+    {
       viewModel = new SearchTicketVM();
     }
     setupUI();
   }
 
-  private void setupUI() {
+  private void setupUI()
+  {
     startButton.setDisable(true);
-    ObservableList<String> stations = FXCollections.observableArrayList("Copenhagen", "Aarhus", "Odense", "Aalborg",
-        "Esbjerg");
+    // disable the button until all required fields are filled
+    searchButton.disableProperty().bind(viewModel.inputValidProperty().not());
+    // should be changed
+    ObservableList<String> stations = FXCollections.observableArrayList(
+        "Copenhagen", "Aarhus", "Odense", "Aalborg", "Esbjerg");
     fromComboBox.setItems(stations);
     toComboBox.setItems(stations);
+    // bind from and to stations
+    viewModel.fromProperty().bindBidirectional(fromComboBox.valueProperty());
+    viewModel.toProperty().bindBidirectional(toComboBox.valueProperty());
 
     ObservableList<String> times = FXCollections.observableArrayList();
-    for (int hour = 6; hour <= 22; hour++) {
+    for (int hour = 6; hour <= 22; hour++)
+    {
       times.add(String.format("%02d:00", hour));
-      times.add(String.format("%02d:30", hour)); // Fixed: This was "%02d:00" twice
+      times.add(
+          String.format("%02d:30", hour)); // Fixed: This was "%02d:00" twice
     }
     timeComboBox.setItems(times);
+    //bind time
+    viewModel.timeProperty().bindBidirectional(timeComboBox.valueProperty());
+
     dateInput.setValue(java.time.LocalDate.now());
+    // bind date
+    viewModel.dateProperty().bindBidirectional(dateInput.valueProperty());
+
     messageLabel.setText("");
     seatCheckBox.setSelected(false);
     bicycleCheckBox.setSelected(false);
@@ -63,14 +82,8 @@ public class SearchTicketController
 
   @FXML private void onSearchButton()
   {
-    if (fromComboBox.getValue() == null || toComboBox.getValue() == null || dateInput.getValue() == null
-        || timeComboBox.getValue() == null)
-    {
-      messageLabel.setText("Please fill all fields.");
-      return;
-    }
-    viewModel.startTrainSearch(fromComboBox.getValue(), toComboBox.getValue(), dateInput.getValue(),
-        timeComboBox.getValue(), seatCheckBox.isSelected(), bicycleCheckBox.isSelected());
+    messageLabel.setText(" ");
+    viewModel.startTrainSearch();
   }
 
   @FXML private void onStartButton()
