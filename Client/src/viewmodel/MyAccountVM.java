@@ -1,20 +1,20 @@
 package viewmodel;
 
+import model.entities.Traveller;
+
 public class MyAccountVM
 {
-  private String name;
-  private String birthday;
-  private String email;
+  private Traveller traveller;
 
   public String getName(){
-    return name;
+    return traveller.getName();
   }
 
   public String getBirthday(){
-    return birthday;
+    return traveller.getBirthDate().toString();
   }
 
   public String getEmail(){
-    return email;
+    return traveller.getEmail();
   }
 }

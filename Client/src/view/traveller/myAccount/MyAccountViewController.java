@@ -1,7 +1,9 @@
 package view.traveller.myAccount;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import view.ViewHandler;
 import viewmodel.MyAccountVM;
 
 public class MyAccountViewController
@@ -44,15 +46,19 @@ public class MyAccountViewController
     updateLabel(nameLabel, viewModel.getName());
     updateLabel(birthdayLabel, viewModel.getBirthday());
     updateLabel(emailLabel, viewModel.getEmail());
+    messageLabel.setText("");
   }
 
   public void updateLabel(Label label, String text){
     label.setText(text);
   }
 
-  @FXML private void onStartButton()
+  @FXML private void onStartButton(ActionEvent e)
   {
-    //later
+    if (e.getSource() == startButton)
+    {
+      ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_USER);
+    }
   }
 
   @FXML private void onPreviousButton()
