@@ -1,20 +1,40 @@
 package viewmodel;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class MyAccountVM
 {
-  private String name;
-  private String birthday;
-  private String email;
+  private final StringProperty name = new SimpleStringProperty();
+  private final StringProperty birthday = new SimpleStringProperty();
+  private final StringProperty email = new SimpleStringProperty();
 
-  public String getName(){
+  public MyAccountVM()
+  {
+    // to be replaced with actual data loading
+    loadUserData();
+  }
+
+  private void loadUserData()
+  {
+    // to be replaced with actual data loading
+    name.set("John Doe");
+    birthday.set("01/01/1990");
+    email.set("john@example.com");
+  }
+
+  public StringProperty nameProperty()
+  {
     return name;
   }
 
-  public String getBirthday(){
+  public StringProperty birthdayProperty()
+  {
     return birthday;
   }
 
-  public String getEmail(){
+  public StringProperty emailProperty()
+  {
     return email;
   }
 }

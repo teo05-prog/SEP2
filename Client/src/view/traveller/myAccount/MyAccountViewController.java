@@ -14,43 +14,26 @@ public class MyAccountViewController
   @FXML private Button previousButton;
   @FXML private Button upcomingButton;
   @FXML private Button myAccountButton;
-  @FXML private Label messageLabel;
   @FXML private Label nameLabel;
   @FXML private Label birthdayLabel;
   @FXML private Label emailLabel;
 
-  public MyAccountViewController()
-  {
-    this.viewModel = new MyAccountVM();
-  }
-
   public void init(MyAccountVM viewModel)
   {
-    if (viewModel != null)
-    {
-      this.viewModel = viewModel;
-    }
+    this.viewModel = viewModel;
+    setupBindings();
   }
 
   @FXML public void initialize()
   {
-    if (viewModel == null)
-    {
-      viewModel = new MyAccountVM();
-    }
-    setupUI();
-  }
-
-  private void setupUI(){
     myAccountButton.setDisable(true);
-    updateLabel(nameLabel, viewModel.getName());
-    updateLabel(birthdayLabel, viewModel.getBirthday());
-    updateLabel(emailLabel, viewModel.getEmail());
-    messageLabel.setText("");
   }
 
-  public void updateLabel(Label label, String text){
-    label.setText(text);
+  private void setupBindings()
+  {
+    nameLabel.textProperty().bind(viewModel.nameProperty());
+    birthdayLabel.textProperty().bind(viewModel.birthdayProperty());
+    emailLabel.textProperty().bind(viewModel.emailProperty());
   }
 
   @FXML private void onStartButton(ActionEvent e)
