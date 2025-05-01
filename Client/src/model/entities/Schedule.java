@@ -4,46 +4,66 @@ import java.util.ArrayList;
 
 public class Schedule
 {
-  private String trainID;
-  private ArrayList<Station> stations;
-  private ArrayList<MyDate> arrivalDate;
-  private ArrayList<MyDate> departureDate;
+  private Station departureStation;
+  private Station arrivalStation;
 
-  public Schedule(String trainID)
+  private MyDate departureDate;
+  private MyDate arrivalDate;
+
+  private ArrayList<Seat> seats;
+
+  public Schedule(Station departureStation, Station arrivalStation, MyDate departureDate, MyDate arrivalDate)
   {
-    this.trainID = trainID;
-    this.stations = new ArrayList<>();
-    this.arrivalDate = new ArrayList<>();
-    this.departureDate = new ArrayList<>();
+    this.departureStation = departureStation;
+    this.arrivalStation = arrivalStation;
+    this.departureDate = departureDate;
+    this.arrivalDate = arrivalDate;
+    this.seats = new ArrayList<>();
   }
 
-  public ArrayList<Station> getStations()
-  {
-    return stations;
-  }
-
-  public ArrayList<MyDate> getArrivalDates()
-  {
-    return arrivalDate;
-  }
-
-  public ArrayList<MyDate> getDepartureDates()
+  public MyDate getDepartureDate()
   {
     return departureDate;
   }
 
-  public String getTrainID()
+  public MyDate getArrivalDate()
   {
-    return trainID;
+    return arrivalDate;
+  }
+
+  public Station getDepartureStation()
+  {
+    return departureStation;
+  }
+
+  public Station getArrivalStation()
+  {
+    return arrivalStation;
+  }
+
+  public ArrayList<Seat> getSeats()
+  {
+    return seats;
+  }
+
+  public int getNumberOfSeats()
+  {
+    return seats.size();
+  }
+
+  public void setNumberOfSeats(int seats)
+  {
+    if (seats > 16)
+    {
+      throw new IllegalArgumentException("Number of seats cannot exceed 16");
+    }
+    this.seats = new ArrayList<>(seats);
   }
 
   public String toString()
   {
-    for (int i = 0; i < stations.size(); i++)
-    {
-      System.out.println("Station: " + stations.get(i).getName() + ", Arrival: " + arrivalDate.get(i) + ", Departure: "
-          + departureDate.get(i));
-    }
-    return "";
+    return "Departure Station: " + departureStation.getName() + ", Arrival Station: " + arrivalStation.getName()
+        + ", Departure Date: " + departureDate.toString() + ", Arrival Date: " + arrivalDate.toString()
+        + ", Number of Seats: " + seats.size();
   }
 }

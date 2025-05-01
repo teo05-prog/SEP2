@@ -5,23 +5,34 @@ import java.util.List;
 
 public class Traveller extends User
 {
-  private static final boolean isAdmin = false;
+  private MyDate birthDate;
   private List<Ticket> tickets;
 
   public Traveller(String name, String password, String email, MyDate birthDate)
   {
-    super(name, password, email, birthDate);
+    super(name, password, email);
+    this.birthDate = birthDate;
     tickets = new ArrayList<>();
-  }
-
-  public static boolean isAdmin()
-  {
-    return isAdmin;
   }
 
   public void buyTicket(Ticket ticket)
   {
     tickets.add(ticket);
+  }
+
+  public List<Ticket> getTickets()
+  {
+    return tickets;
+  }
+
+  public MyDate getBirthDate()
+  {
+    return birthDate;
+  }
+
+  public void setBirthDate(MyDate birthDate)
+  {
+    this.birthDate = birthDate;
   }
 
   public String getName()
@@ -54,19 +65,9 @@ public class Traveller extends User
     super.setEmail(email);
   }
 
-  public MyDate getBirthDate()
-  {
-    return super.getBirthDate();
-  }
-
-  public void setBirthDate(MyDate birthDate)
-  {
-    super.setBirthDate(birthDate);
-  }
-
   public String toString()
   {
-    return "Traveller " + super.toString();
+    return "Traveller - " + super.toString();
   }
 
   public boolean equals(Object obj)
@@ -77,6 +78,6 @@ public class Traveller extends User
       return false;
 
     Traveller traveller = (Traveller) obj;
-    return isAdmin == Traveller.isAdmin && super.equals(obj);
+    return birthDate.equals(traveller.birthDate) && super.equals(obj);
   }
 }

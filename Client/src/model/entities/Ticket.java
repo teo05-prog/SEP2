@@ -3,38 +3,72 @@ package model.entities;
 public class Ticket
 {
   private int ticketID;
-  private String type;
+  private Bicycle bicycleSeat;
   private Seat seatId;
-  public Ticket(int ticketID, String type, Seat seatId)
+  private Train trainId;
+
+  public Ticket(int ticketID, Bicycle bicycleSeat, Seat seatId, Train trainId)
   {
     this.ticketID = ticketID;
-    this.type = type;
+    this.bicycleSeat = bicycleSeat;
     this.seatId = seatId;
-
+    this.trainId = trainId;
   }
+
+  public Ticket(int ticketID, Seat seatId)
+  {
+    this.ticketID = ticketID;
+    this.seatId = seatId;
+  }
+
+  public Ticket(int ticketID, Bicycle bicycleSeat)
+  {
+    this.ticketID = ticketID;
+    this.bicycleSeat = bicycleSeat;
+  }
+
+  public Ticket(int ticketID)
+  {
+    this.ticketID = ticketID;
+  }
+
   public int getTicketID()
   {
     return ticketID;
   }
+
   public void setTicketID(int ticketID)
   {
     this.ticketID = ticketID;
   }
-  public String getType()
-  {
-    return type;
-  }
-  public void setType(String type)
-  {
-    this.type = type;
-  }
+
   public Seat getSeatId()
   {
     return seatId;
   }
-  public String toString()
+
+  public void setSeatId(Seat seatId)
   {
-    return "Ticket ID: " + ticketID + ", Type: " + type + ", Seat ID: " + seatId.getSeatId();
+    this.seatId = seatId;
   }
 
+  public Bicycle getBicycleSeat()
+  {
+    return bicycleSeat;
+  }
+
+  public void setBicycleSeat(Bicycle bicycleSeat)
+  {
+    this.bicycleSeat = bicycleSeat;
+  }
+
+  public Train getTrainId()
+  {
+    return trainId;
+  }
+
+  public String toString()
+  {
+    return "Ticket ID: " + ticketID + ", Seat ID: " + seatId.getSeatId();
+  }
 }

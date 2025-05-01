@@ -2,6 +2,7 @@ package viewmodel;
 
 import javafx.beans.property.*;
 import model.entities.MyDate;
+import model.entities.Traveller;
 import model.entities.User;
 import model.services.AuthenticationService;
 
@@ -168,8 +169,8 @@ public class RegisterVM
       LocalDate localDate = birthDate.get();
       MyDate myDate = new MyDate(localDate.getDayOfMonth(), localDate.getMonthValue(), localDate.getYear());
 
-      User user = new User(name.get(), password.get(), email.get(), myDate);
-      String result = authService.register(user);
+      Traveller traveller = new Traveller(name.get(), password.get(), email.get(), myDate);
+      String result = authService.register(traveller);
 
       if ("success".equalsIgnoreCase(result))
       {

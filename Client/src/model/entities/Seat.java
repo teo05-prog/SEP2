@@ -1,34 +1,55 @@
 package model.entities;
 
-public class Seat {
-    private int seatId;
-    private boolean isReserved;
+public class Seat
+{
+  private int seatId;
+  private boolean isBooked;
 
+  public Seat(int seatId)
+  {
+    this.seatId = seatId;
+    this.isBooked = false;
+  }
 
-    public Seat(int seatId) {
-        this.seatId = seatId;
-        this.isReserved = false;
+  public int getSeatId()
+  {
+    return seatId;
+  }
+
+  public void setSeatId(int seatId)
+  {
+    this.seatId = seatId;
+  }
+
+  public boolean isBooked()
+  {
+    return isBooked;
+  }
+
+  public void setBooked()
+  {
+    isBooked = true;
+  }
+
+  public void setAvailable()
+  {
+    isBooked = false;
+  }
+
+  public void book()
+  {
+    if (!isBooked)
+    {
+      isBooked = true;
     }
-
-    public int getSeatId() {
-        return seatId;
+    else
+    {
+      System.out.println("Seat " + seatId + " is already reserved.");
     }
+  }
 
-    public void setSeatId(int seatId) {
-        this.seatId = seatId;
-    }
-
-    public boolean isReserved() {
-        return isReserved;
-    }
-
-    public void setReserved() {
-        isReserved = true;
-    }
-
-
-    @Override
-    public String toString() {
-        return "Seat ID: " + seatId + ", Reserved: " + isReserved  ;
-    }
+  @Override public String toString()
+  {
+    return "Seat ID: " + seatId + ", Booked: " + isBooked;
+  }
 }

@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import model.entities.Train;
+import model.entities.TrainList;
 
 public class MainAdminVM
 {
@@ -41,15 +42,15 @@ public class MainAdminVM
 
   public void removeTrain(Train selectedItem)
   {
-    if (selectedItem != null)
-    {
-      selectedItem.remove();
-      message.set("Train removed successfully.");
-    }
-    else
+    if (selectedItem == null)
     {
       message.set("No train selected.");
+      return;
     }
+    TrainList trainList = new TrainList();
+    trainList.removeTrain(selectedItem);
+    message.set("Train " + selectedItem.getTrainId() + " removed.");
+    trainSelected.set(false);
   }
 
   public void updateTrainsList()
