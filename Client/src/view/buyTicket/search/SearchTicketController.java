@@ -2,8 +2,10 @@ package view.buyTicket.search;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import view.ViewHandler;
 import viewmodel.SearchTicketVM;
 
 public class SearchTicketController
@@ -101,8 +103,11 @@ public class SearchTicketController
     //later
   }
 
-  @FXML private void onMyAccountButton()
+  @FXML private void onMyAccountButton(ActionEvent e)
   {
-    //later
+    if (e.getSource() == myAccountButton)
+    {
+      ViewHandler.showView(ViewHandler.ViewType.USER_ACCOUNT);
+    }
   }
 }

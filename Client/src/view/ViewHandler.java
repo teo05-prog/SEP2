@@ -14,6 +14,7 @@ import view.buyTicket.trains.ChooseTrainController;
 import view.front.FrontViewController;
 import view.login.LoginViewController;
 import view.register.RegisterViewController;
+import view.traveller.myAccount.MyAccountViewController;
 import viewmodel.*;
 
 import java.io.IOException;
@@ -191,6 +192,14 @@ public class ViewHandler
 
   private static void showUserAccountView() throws IOException
   {
-    // to be added
+    MyAccountViewController controller = new MyAccountViewController();
+    MyAccountVM myAccountVM = new MyAccountVM();
+    FXMLLoader fxmlLoader = new FXMLLoader(
+        ViewHandler.class.getResource("/view/traveller/myAccount/MyAccountView.fxml"));
+    fxmlLoader.setControllerFactory(ignore -> controller);
+    Scene scene = new Scene(fxmlLoader.load());
+    controller.init(myAccountVM);
+    stage.setTitle("VIArail App");
+    stage.setScene(scene);
   }
 }
