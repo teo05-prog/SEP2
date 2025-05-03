@@ -1,7 +1,5 @@
 package model.entities;
 
-import java.util.ArrayList;
-
 public class Schedule
 {
   private Station departureStation;
@@ -10,15 +8,12 @@ public class Schedule
   private MyDate departureDate;
   private MyDate arrivalDate;
 
-  private ArrayList<Seat> seats;
-
   public Schedule(Station departureStation, Station arrivalStation, MyDate departureDate, MyDate arrivalDate)
   {
     this.departureStation = departureStation;
     this.arrivalStation = arrivalStation;
     this.departureDate = departureDate;
     this.arrivalDate = arrivalDate;
-    this.seats = new ArrayList<>();
   }
 
   public MyDate getDepartureDate()
@@ -26,9 +21,19 @@ public class Schedule
     return departureDate;
   }
 
+  public void setDepartureDate(MyDate departureDate)
+  {
+    this.departureDate = departureDate;
+  }
+
   public MyDate getArrivalDate()
   {
     return arrivalDate;
+  }
+
+  public void setArrivalDate(MyDate arrivalDate)
+  {
+    this.arrivalDate = arrivalDate;
   }
 
   public Station getDepartureStation()
@@ -36,34 +41,24 @@ public class Schedule
     return departureStation;
   }
 
+  public void setDepartureStation(Station departureStation)
+  {
+    this.departureStation = departureStation;
+  }
+
   public Station getArrivalStation()
   {
     return arrivalStation;
   }
 
-  public ArrayList<Seat> getSeats()
+  public void setArrivalStation(Station arrivalStation)
   {
-    return seats;
-  }
-
-  public int getNumberOfSeats()
-  {
-    return seats.size();
-  }
-
-  public void setNumberOfSeats(int seats)
-  {
-    if (seats > 16)
-    {
-      throw new IllegalArgumentException("Number of seats cannot exceed 16");
-    }
-    this.seats = new ArrayList<>(seats);
+    this.arrivalStation = arrivalStation;
   }
 
   public String toString()
   {
     return "Departure Station: " + departureStation.getName() + ", Arrival Station: " + arrivalStation.getName()
-        + ", Departure Date: " + departureDate.toString() + ", Arrival Date: " + arrivalDate.toString()
-        + ", Number of Seats: " + seats.size();
+        + ", Departure Date: " + departureDate.toString() + ", Arrival Date: " + arrivalDate.toString();
   }
 }
