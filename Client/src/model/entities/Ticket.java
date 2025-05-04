@@ -8,9 +8,10 @@ public class Ticket
   private Train trainId;
   private MyDate departureTime;
   private MyDate arrivalTime;
+  private int price;
 
-  public Ticket(int ticketID, Bicycle bicycleSeat, Seat seatId, Train trainId,
-      MyDate departureTime, MyDate arrivalTime)
+  public Ticket(int ticketID, Bicycle bicycleSeat, Seat seatId, Train trainId, MyDate departureTime, MyDate arrivalTime,
+      int price)
   {
     this.ticketID = ticketID;
     this.bicycleSeat = bicycleSeat;
@@ -18,8 +19,8 @@ public class Ticket
     this.trainId = trainId;
     this.departureTime = departureTime;
     this.arrivalTime = arrivalTime;
+    this.price = price;
   }
-
 
   public Ticket(int ticketID, Seat seatId)
   {
@@ -67,18 +68,22 @@ public class Ticket
   {
     this.bicycleSeat = bicycleSeat;
   }
+
   public MyDate getDepartureTime()
   {
     return departureTime;
   }
+
   public void setDepartureTime(MyDate departureTime)
   {
     this.departureTime = departureTime;
   }
+
   public MyDate getArrivalTime()
   {
     return arrivalTime;
   }
+
   public void setArrivalTime(MyDate arrivalTime)
   {
     this.arrivalTime = arrivalTime;
@@ -89,9 +94,19 @@ public class Ticket
     return trainId;
   }
 
+  public int getPrice()
+  {
+    return price;
+  }
+
+  public void setPrice(int price)
+  {
+    this.price = price;
+  }
+
   public String toString()
   {
-    return "Ticket ID: " + ticketID + ", Seat ID: " + seatId.getSeatId() +
-        ", Departure Time: " + departureTime.toString() + ", Arrival Time: " + arrivalTime.toString();
+    return "Ticket ID: " + ticketID + ", Seat ID: " + seatId.getSeatId() + ", Departure Time: "
+        + departureTime.toString() + ", Arrival Time: " + arrivalTime.toString() + ", Price: " + price;
   }
 }
