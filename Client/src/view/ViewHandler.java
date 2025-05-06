@@ -8,9 +8,9 @@ import model.services.AuthenticationServiceImpl;
 import view.admin.add.AddTrainViewController;
 import view.admin.main.MainAdminViewController;
 import view.admin.modify.ModifyViewController;
-import view.buyTicket.search.SearchTicketController;
-import view.buyTicket.seat.SeatSelectionController;
-import view.buyTicket.trains.ChooseTrainController;
+import view.traveller.search.SearchTicketController;
+import view.traveller.seat.SeatSelectionController;
+import view.traveller.trains.ChooseTrainController;
 import view.front.FrontViewController;
 import view.login.LoginViewController;
 import view.register.RegisterViewController;
@@ -157,7 +157,8 @@ public class ViewHandler
     searchTicketVM = new SearchTicketVM();
     SearchTicketController controller = new SearchTicketController();
     FXMLLoader fxmlLoader = new FXMLLoader(
-        ViewHandler.class.getResource("/view/buyTicket/search/SearchTicketView.fxml"));
+        ViewHandler.class.getResource(
+            "/view/traveller/search/SearchTicketView.fxml"));
 
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
@@ -172,7 +173,8 @@ public class ViewHandler
   {
     ChooseTrainController controller = new ChooseTrainController();
     FXMLLoader fxmlLoader = new FXMLLoader(
-        ViewHandler.class.getResource("/view/buyTicket/trains/ChooseTrainView.fxml"));
+        ViewHandler.class.getResource(
+            "/view/traveller/trains/ChooseTrainView.fxml"));
 
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
@@ -189,7 +191,8 @@ public class ViewHandler
     SeatSelectionController controller = new SeatSelectionController();
     SeatSelectionVM seatSelectionVM = new SeatSelectionVM();
     FXMLLoader fxmlLoader = new FXMLLoader(
-        ViewHandler.class.getResource("/view/buyTicket/seat/SeatSelectionView.fxml"));
+        ViewHandler.class.getResource(
+            "/view/traveller/seat/SeatSelectionView.fxml"));
 
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
@@ -203,7 +206,8 @@ public class ViewHandler
     ChooseTrainController controller = new ChooseTrainController();
     // add view model
     FXMLLoader fxmlLoader = new FXMLLoader(
-        ViewHandler.class.getResource("/view/buyTicket/confirm/ConfirmTicketView.fxml"));
+        ViewHandler.class.getResource(
+            "/view/traveller/confirm/ConfirmTicketView.fxml"));
 
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
