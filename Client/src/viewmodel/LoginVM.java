@@ -1,9 +1,11 @@
 package viewmodel;
 
+import dtos.Request;
 import javafx.beans.Observable;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 import model.services.AuthenticationService;
+import network.ClientSocket;
 import view.ViewHandler;
 
 import java.util.ArrayList;
@@ -15,10 +17,12 @@ public class LoginVM
   private final StringProperty password = new SimpleStringProperty();
   private final StringProperty message = new SimpleStringProperty();
   private final BooleanProperty isAdmin = new SimpleBooleanProperty(false);
-  private final BooleanProperty disableLoginButton = new SimpleBooleanProperty(true);
+  private final BooleanProperty disableLoginButton = new SimpleBooleanProperty(
+      true);
 
   private final AuthenticationService authService;
-  private final BooleanProperty loginSucceeded = new SimpleBooleanProperty(false);
+  private final BooleanProperty loginSucceeded = new SimpleBooleanProperty(
+      false);
 
   public LoginVM(AuthenticationService authService)
   {
@@ -43,9 +47,11 @@ public class LoginVM
       int atPos = emailValue.indexOf('@');
       int dotPos = emailValue.lastIndexOf('.');
 
-      if (atPos <= 0 || dotPos <= atPos + 1 || dotPos == emailValue.length() - 1)
+      if (atPos <= 0 || dotPos <= atPos + 1
+          || dotPos == emailValue.length() - 1)
       {
-        errors.add("Email must contain '@' and a domain (e.g. 'user@domain.com').");
+        errors.add(
+            "Email must contain '@' and a domain (e.g. 'user@domain.com').");
       }
     }
     // password validation
@@ -150,6 +156,28 @@ public class LoginVM
     else
     {
       message.set("Login failed");
+    }
+    try
+    {
+      // create and send request
+      Request request = new Request("login", "attempt",
+          new String[] {emailValue, passwordValue,
+              String.valueOf(isAdminValue)});
+      Object response = ClientSocket.sentRequest(request);
+
+      //process server response
+      if (response instanceof Boolean && (Boolean) response){
+        message.set("Login successful");
+        email.set("");
+        password.set("");
+        loginSucceeded.set(true);
+      }else {
+        message.set("Login failed: invalid credentials");
+      }
+    }
+    catch (RuntimeException e)
+    {
+      message.set("Login failed: "+ e.getMessage());
     }
   }
 }
