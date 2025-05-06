@@ -8,6 +8,7 @@ import model.services.AuthenticationServiceImpl;
 import view.admin.add.AddTrainViewController;
 import view.admin.main.MainAdminViewController;
 import view.admin.modify.ModifyViewController;
+import view.admin.myAccount.AdminMyAccountViewController;
 import view.traveller.search.SearchTicketController;
 import view.traveller.seat.SeatSelectionController;
 import view.traveller.trains.ChooseTrainController;
@@ -123,7 +124,16 @@ public class ViewHandler
 
   private static void showAdminAccountView() throws IOException
   {
-    // to be added
+    AdminMyAccountViewController controller = new AdminMyAccountViewController();
+    AdminMyAccountVM myAccountVM = new AdminMyAccountVM();
+    FXMLLoader fxmlLoader = new FXMLLoader(
+        ViewHandler.class.getResource(
+            "/view/admin/myAccount/AdminMyAccountView.fxml"));
+    fxmlLoader.setControllerFactory(ignore -> controller);
+    Scene scene = new Scene(fxmlLoader.load());
+    controller.init(myAccountVM);
+    stage.setTitle("VIArail App");
+    stage.setScene(scene);
   }
 
   private static void showAddTrainView() throws IOException
