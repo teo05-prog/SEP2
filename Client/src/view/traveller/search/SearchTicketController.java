@@ -1,4 +1,4 @@
-package view.buyTicket.search;
+package view.traveller.search;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

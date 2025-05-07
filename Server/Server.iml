@@ -7,5 +7,7 @@
     </content>
     <orderEntry type="jdk" jdkName="liberica-21" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="Shared" />
+    <orderEntry type="module" module-name="Client" />
   </component>
 </module>

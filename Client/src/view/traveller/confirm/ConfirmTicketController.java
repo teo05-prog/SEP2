@@ -1,4 +1,4 @@
-package view.buyTicket.confirm;
+package view.traveller.confirm;
 
 public class ConfirmTicketController
 {

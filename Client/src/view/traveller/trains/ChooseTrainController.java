@@ -1,4 +1,4 @@
-package view.buyTicket.trains;
+package view.traveller.trains;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
