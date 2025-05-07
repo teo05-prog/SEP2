@@ -4,6 +4,7 @@ import javafx.beans.Observable;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 import model.services.AuthenticationService;
+import model.services.LoginRequest;
 import view.ViewHandler;
 
 import java.util.ArrayList;
@@ -15,10 +16,12 @@ public class LoginVM
   private final StringProperty password = new SimpleStringProperty();
   private final StringProperty message = new SimpleStringProperty();
   private final BooleanProperty isAdmin = new SimpleBooleanProperty(false);
-  private final BooleanProperty disableLoginButton = new SimpleBooleanProperty(true);
+  private final BooleanProperty disableLoginButton = new SimpleBooleanProperty(
+      true);
 
   private final AuthenticationService authService;
-  private final BooleanProperty loginSucceeded = new SimpleBooleanProperty(false);
+  private final BooleanProperty loginSucceeded = new SimpleBooleanProperty(
+      false);
 
   public LoginVM(AuthenticationService authService)
   {
@@ -43,9 +46,11 @@ public class LoginVM
       int atPos = emailValue.indexOf('@');
       int dotPos = emailValue.lastIndexOf('.');
 
-      if (atPos <= 0 || dotPos <= atPos + 1 || dotPos == emailValue.length() - 1)
+      if (atPos <= 0 || dotPos <= atPos + 1
+          || dotPos == emailValue.length() - 1)
       {
-        errors.add("Email must contain '@' and a domain (e.g. 'user@domain.com').");
+        errors.add(
+            "Email must contain '@' and a domain (e.g. 'user@domain.com').");
       }
     }
     // password validation
@@ -120,36 +125,50 @@ public class LoginVM
 
   public void loginUser()
   {
-    String emailValue = email.get();
-    String passwordValue = password.get();
-    boolean isAdminValue = isAdmin.get();
-    if (emailValue == null || emailValue.isEmpty())
+    if (!disableLoginButton.get())
     {
-      message.set("Email cannot be empty");
-      return;
-    }
-    if (passwordValue == null || passwordValue.isEmpty())
-    {
-      message.set("Password cannot be empty");
-      return;
-    }
-    if (loginSucceeded.get() && !isAdminValue)
-    {
-      message.set("Login successful");
-      email.set("");
-      password.set("");
-      ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_USER);
-    }
-    else if (loginSucceeded.get() && isAdminValue)
-    {
-      message.set("Login successful");
-      email.set("");
-      password.set("");
-      ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_ADMIN);
-    }
-    else
-    {
-      message.set("Login failed");
+      // Create a login request with the user credentials
+      LoginRequest request = new LoginRequest(email.get(), password.get());
+
+      // Call the authentication service to validate credentials
+      String result = authService.login(request);
+
+
+      if ("Ok".equals(result))
+      {
+        message.set("Login successful");
+        loginSucceeded.set(true);
+        email.set("");
+        password.set("");
+      }
+      else if ("Email not found.".equals(result))
+      {
+        message.set("Login failed: " + result);
+        loginSucceeded.set(false);
+      }
+      else if ("Incorrect password.".equals(result))
+      {
+        message.set("Login failed: " + result);
+        loginSucceeded.set(false);
+      }
+      else if ("User is not admin.".equals(result))
+      {
+        message.set("Login failed: " + result);
+        loginSucceeded.set(false);
+      }
+      else if ("User is admin.".equals(result))
+      {
+        message.set("Login successful");
+        loginSucceeded.set(true);
+        email.set("");
+        password.set("");
+      }
+      else
+      {
+        message.set("Login failed: " + result);
+        loginSucceeded.set(false);
+      }
+
     }
   }
 }
