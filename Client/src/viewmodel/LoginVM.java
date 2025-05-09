@@ -26,7 +26,6 @@ public class LoginVM
     email.addListener((observable, oldValue, newValue) -> validate());
     password.addListener((observable, oldValue, newValue) -> validate());
     isAdmin.addListener((observable, oldValue, newValue) -> validate());
-
   }
 
   public void validate()

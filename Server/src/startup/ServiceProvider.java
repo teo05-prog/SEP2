@@ -1,7 +1,7 @@
 package startup;
 
-import model.services.AuthenticationService;
-import model.services.AuthenticationServiceImpl;
+import dtos.AuthenticationService;
+import services.AuthenticationServiceImpl;
 import network.requestHandlers.*;
 import persistance.user.UserDAO;
 import persistance.user.UserPostgresDAO;

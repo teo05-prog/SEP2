@@ -1,9 +1,11 @@
 package viewmodel;
 
+import dtos.Request;
 import javafx.beans.property.*;
 import model.entities.MyDate;
-import model.services.AuthenticationService;
-import model.services.RegisterRequest;
+import dtos.AuthenticationService;
+import dtos.RegisterRequest;
+import network.ClientSocket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,13 +21,11 @@ public class RegisterVM
   private final StringProperty message = new SimpleStringProperty();
   private final BooleanProperty disableRegisterButton = new SimpleBooleanProperty(true);
 
-  private final AuthenticationService authService;
+
   private final BooleanProperty registrationSucceeded = new SimpleBooleanProperty(false);
 
-  public RegisterVM(AuthenticationService authService)
+  public RegisterVM()
   {
-    this.authService = authService;
-
     name.addListener(((observable, oldValue, newValue) -> validate()));
     birthDate.addListener((observable, oldValue, newValue) -> validate());
     email.addListener((observable, oldValue, newValue) -> validate());
@@ -171,16 +171,15 @@ public class RegisterVM
           birthDate.get() //convert LocalDate to String
       );
 
-      String result = authService.register(registerRequest);
+      // Wrap in a Request object
+      Request request = new Request("register", "create", registerRequest);
 
-      if ("success".equalsIgnoreCase(result))
-      {
-        message.set("Successfully registered!");
+      try {
+        Object response = ClientSocket.sentRequest(request); // should return "Registration successful"
+        message.set(response.toString());
         registrationSucceeded.set(true);
-      }
-      else
-      {
-        message.set("Registration failed: Email might already be in use.");
+      } catch (RuntimeException e) {
+        message.set("Registration failed: " + e.getMessage());
         registrationSucceeded.set(false);
       }
     }
