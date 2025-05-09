@@ -11,7 +11,6 @@ import java.util.List;
 
 public class LoginVM
 {
-  private final AuthenticationService authService;
   private final StringProperty email = new SimpleStringProperty();
   private final StringProperty password = new SimpleStringProperty();
   private final StringProperty message = new SimpleStringProperty();
@@ -22,9 +21,8 @@ public class LoginVM
   private final BooleanProperty loginSucceeded = new SimpleBooleanProperty(
       false);
 
-  public LoginVM(AuthenticationService authService)
+  public LoginVM()
   {
-    this.authService = authService;
     email.addListener((observable, oldValue, newValue) -> validate());
     password.addListener((observable, oldValue, newValue) -> validate());
     isAdmin.addListener((observable, oldValue, newValue) -> validate());

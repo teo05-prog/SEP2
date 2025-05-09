@@ -4,7 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import dtos.AuthenticationService;
-import model.services.AuthenticationServiceImpl;
+import services.AuthenticationServiceImpl;
 import view.admin.add.AddTrainViewController;
 import view.admin.main.MainAdminViewController;
 import view.admin.modify.ModifyViewController;
@@ -27,20 +27,6 @@ public class ViewHandler
     FRONT, REGISTER, LOGIN, LOGGEDIN_ADMIN, LOGGEDIN_USER, ADMIN_ACCOUNT, USER_ACCOUNT, ADD_TRAIN, MODIFY_TRAIN, CHOOSE_TRAIN, SEAT_SELECTION, CONFIRM_TICKET
   }
 
-  private static AuthenticationService authService;
-
-  static
-  {
-    try
-    {
-      authService = new AuthenticationServiceImpl();
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-      System.out.println("Error initializing AuthenticationService");
-    }
-  }
 
   private static Stage stage;
   private static ViewType previousView;
@@ -94,7 +80,7 @@ public class ViewHandler
 
   private static void showRegisterView() throws IOException
   {
-    RegisterVM registerVM = new RegisterVM(authService);
+    RegisterVM registerVM = new RegisterVM();
     RegisterViewController controller = new RegisterViewController(registerVM);
     FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/register/RegisterView.fxml"));
     fxmlLoader.setControllerFactory(ignore -> controller);
@@ -105,7 +91,7 @@ public class ViewHandler
 
   private static void showLoginView() throws IOException
   {
-    LoginVM logInVM = new LoginVM(authService);
+    LoginVM logInVM = new LoginVM();
     LoginViewController controller = new LoginViewController(logInVM);
     FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/login/LoginView.fxml"));
 
