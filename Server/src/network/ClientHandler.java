@@ -1,5 +1,7 @@
 package network;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import dtos.Request;
 import dtos.Response;
 import dtos.error.ErrorResponse;
@@ -12,9 +14,7 @@ import services.ServiceProvider;
 import utilities.LogLevel;
 import utilities.Logger;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -25,6 +25,7 @@ public class ClientHandler implements Runnable
   private final Socket clientSocket;
   private final ServiceProvider serviceProvider;
   private final Logger logger;
+  private final Gson gson = new GsonBuilder().create();
 
   public ClientHandler(Socket clientSocket, ServiceProvider serviceProvider)
   {
@@ -35,12 +36,9 @@ public class ClientHandler implements Runnable
 
   @Override public void run()
   {
-    try
+    try (BufferedReader incomingData = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+    PrintWriter outgoingData = new PrintWriter(clientSocket.getOutputStream(),true))
     {
-      ObjectInputStream incomingData = new ObjectInputStream(
-          clientSocket.getInputStream());
-      ObjectOutputStream outgoingData = new ObjectOutputStream(
-          clientSocket.getOutputStream());
       handleRequestWithErrorHandling(incomingData, outgoingData);
     }
     catch (IOException e)
@@ -53,14 +51,12 @@ public class ClientHandler implements Runnable
       {
         clientSocket.close();
       }
-      catch (IOException e)
-      {
-      }
+      catch (IOException ignore) {}
     }
   }
 
-  private void handleRequestWithErrorHandling(ObjectInputStream incomingData,
-      ObjectOutputStream outgoingData) throws IOException
+  private void handleRequestWithErrorHandling(BufferedReader incomingData,
+      PrintWriter outgoingData) throws IOException
   {
     try
     {
@@ -71,7 +67,7 @@ public class ClientHandler implements Runnable
       logger.log(e.getMessage(), LogLevel.INFO);
       ErrorResponse payload = new ErrorResponse(e.getMessage());
       Response error = new Response("ERROR", payload);
-      outgoingData.writeObject(error);
+      outgoingData.println(gson.toJson(error));
     }
     catch (ServerFailureException e)
     {
@@ -79,31 +75,32 @@ public class ClientHandler implements Runnable
           LogLevel.ERROR);
       ErrorResponse payload = new ErrorResponse(e.getMessage());
       Response error = new Response("SERVER_FAILURE", payload);
-      outgoingData.writeObject(error);
+      outgoingData.println(gson.toJson(error));
     }
     catch (ClassCastException e)
     {
       logger.log(e.getMessage(), LogLevel.INFO);
       ErrorResponse payload = new ErrorResponse("Invalid request");
       Response error = new Response("ERROR", payload);
-      outgoingData.writeObject(error);
+      outgoingData.println(gson.toJson(error));
     }
     catch (Exception e)
     {
       logger.log(Arrays.toString(e.getStackTrace()), LogLevel.ERROR);
       ErrorResponse payload = new ErrorResponse(e.getMessage());
       Response error = new Response("SERVER_FAILURE", payload);
-      outgoingData.writeObject(error);
+      outgoingData.println(gson.toJson(error));
     }
   }
 
-  private void handleRequest(ObjectInputStream incomingData,
-      ObjectOutputStream outgoingData)
+  private void handleRequest(BufferedReader incomingData,
+      PrintWriter outgoingData)
       throws IOException, ClassNotFoundException, SQLException
   {
-    Request request = (Request) incomingData.readObject();
+    String inputJson = incomingData.readLine();
+    Request request = gson.fromJson(inputJson, Request.class);
     logger.log("Incoming request: " + request.handler() + "/" + request.action()
-        + ". Body: " + request.payload(), LogLevel.INFO);
+        + ". Body: " + gson.toJson(request.payload()), LogLevel.INFO);
     RequestHandler handler = switch (request.handler())
     {
       case "login" -> serviceProvider.getLoginRequestHandler();
@@ -122,6 +119,6 @@ public class ClientHandler implements Runnable
 
     Object result = handler.handler(request.action(), request.payload());
     Response response = new Response("SUCCESS", result);
-    outgoingData.writeObject(response);
+    outgoingData.println(gson.toJson(response));
   }
 }

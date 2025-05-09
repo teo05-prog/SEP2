@@ -26,10 +26,25 @@ public class AuthenticationServiceImpl implements AuthenticationService
     return "";
   }
 
-  @Override public String register(User user)
+  @Override
+  public String register(RegisterRequest registerRequest)
   {
-    users.add(user);
-    return "success";
+    if (!registerRequest.getPassword().equals(registerRequest.getRepeatPassword())){
+      return "Passwords do not match";
+    }
+    for (User user: users){
+      if (user.getEmail().equals(registerRequest.getEmail())){
+        return "Email already registered";
+      }
+    }
+//    User user = new User(
+//        registerRequest.getName(),
+//        registerRequest.getEmail(),
+//        registerRequest.getPassword(),
+//        registerRequest.getBirthday()
+//    );
+//    users.add(user);
+    return "Success";
   }
 
 }

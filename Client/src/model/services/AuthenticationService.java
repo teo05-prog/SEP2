@@ -6,5 +6,5 @@ public interface AuthenticationService
 {
   public abstract String login(LoginRequest request);
 
-  public abstract String register(User user);
+  public abstract String register(RegisterRequest registerRequest);
 }

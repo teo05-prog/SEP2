@@ -3,26 +3,27 @@ package network.requestHandlers;
 import com.google.gson.Gson;
 import model.exceptions.ValidationException;
 import model.services.AuthenticationService;
-import model.services.LoginRequest;
+import model.services.RegisterRequest;
 
-public class LoginRequestHandler implements RequestHandler
+public class RegisterRequestHandler implements RequestHandler
 {
   private final AuthenticationService authService;
   private final Gson gson = new Gson();
 
-  public LoginRequestHandler(AuthenticationService authService){
+  public RegisterRequestHandler( AuthenticationService authService){
     this.authService = authService;
   }
 
   @Override
   public Object handler(String action, Object payload){
-    if ("auth".equals(action)){
-      //convert JSON payload to LoginRequest
-      LoginRequest loginRequest = gson.fromJson(gson.toJson(payload),LoginRequest.class);
+    if ("create".equals(action)){
 
-      String result = authService.login(loginRequest);
-      if ("Ok".equals(result)){
-        return "Login successful";
+      //convert JSON to RegisterRequest
+      RegisterRequest registerRequest = gson.fromJson(gson.toJson(payload), RegisterRequest.class);
+
+      String result = authService.register(registerRequest);
+      if ("Success".equals(result)){
+        return "Registration successful";
       }else {
         throw new ValidationException(result);
       }

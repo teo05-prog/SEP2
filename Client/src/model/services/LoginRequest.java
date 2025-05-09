@@ -2,9 +2,12 @@ package model.services;
 
 public class LoginRequest
 {
-  private final String email;
-  private final String password;
+  private  String email;
+  private  String password;
 
+  public LoginRequest(){
+    // no-args constructor for Gson
+  }
   public LoginRequest(String email, String password)
   {
     this.email = email;

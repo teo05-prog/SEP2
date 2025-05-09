@@ -5,6 +5,7 @@ import model.entities.MyDate;
 import model.entities.Traveller;
 import model.entities.User;
 import model.services.AuthenticationService;
+import model.services.RegisterRequest;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -166,11 +167,15 @@ public class RegisterVM
   {
     if (!disableRegisterButton.get())
     {
-      LocalDate localDate = birthDate.get();
-      MyDate myDate = new MyDate(localDate.getDayOfMonth(), localDate.getMonthValue(), localDate.getYear());
+      RegisterRequest registerRequest = new RegisterRequest(
+          name.get(),
+          email.get(),
+          password.get(),
+          repeatPassword.get(),
+          birthDate.get().toString() //convert LocalDate to String
+      );
 
-      Traveller traveller = new Traveller(name.get(), password.get(), email.get(), myDate);
-      String result = authService.register(traveller);
+      String result = authService.register(registerRequest);
 
       if ("success".equalsIgnoreCase(result))
       {
