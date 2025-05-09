@@ -2,9 +2,12 @@ package model.entities;
 
 public class Admin extends User
 {
+  private boolean isAdmin;
+
   public Admin(String name, String password, String email)
   {
     super(name, password, email);
+    this.isAdmin = true;
   }
 
   public String getName()
@@ -35,6 +38,16 @@ public class Admin extends User
   public void setEmail(String email)
   {
     super.setEmail(email);
+  }
+
+  public boolean isAdmin()
+  {
+    return isAdmin;
+  }
+
+  public void setAdmin(boolean isAdmin)
+  {
+    this.isAdmin = isAdmin;
   }
 
   public String toString()
