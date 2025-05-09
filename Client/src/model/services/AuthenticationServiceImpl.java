@@ -1,8 +1,5 @@
 package model.services;
 
-import dtos.AuthenticationService;
-import dtos.LoginRequest;
-import dtos.RegisterRequest;
 import dtos.error.TravellerRequest;
 import model.entities.User;
 import persistance.user.UserDAO;

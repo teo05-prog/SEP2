@@ -2,8 +2,8 @@ package viewmodel;
 
 import javafx.beans.property.*;
 import model.entities.MyDate;
-import dtos.AuthenticationService;
-import dtos.RegisterRequest;
+import model.services.AuthenticationService;
+import model.services.RegisterRequest;
 
 import java.util.ArrayList;
 import java.util.List;
