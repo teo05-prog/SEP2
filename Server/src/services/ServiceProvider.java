@@ -1,6 +1,5 @@
 package services;
 
-import model.services.AuthenticationServiceImpl;
 import network.requestHandlers.LoginRequestHandler;
 import network.requestHandlers.RequestHandler;
 import utilities.ConsoleLogger;

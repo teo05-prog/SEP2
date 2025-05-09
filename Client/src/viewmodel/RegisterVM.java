@@ -1,11 +1,10 @@
 package viewmodel;
 
+import dtos.Request;
 import javafx.beans.property.*;
-import model.entities.MyDate;
-import model.entities.Traveller;
-import model.entities.User;
-import model.services.AuthenticationService;
-import model.services.RegisterRequest;
+import dtos.AuthenticationService;
+import dtos.RegisterRequest;
+import network.ClientSocket;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,15 +19,15 @@ public class RegisterVM
   private final StringProperty password = new SimpleStringProperty();
   private final StringProperty repeatPassword = new SimpleStringProperty();
   private final StringProperty message = new SimpleStringProperty();
-  private final BooleanProperty disableRegisterButton = new SimpleBooleanProperty(true);
+  private final BooleanProperty disableRegisterButton = new SimpleBooleanProperty(
+      true);
 
-  private final AuthenticationService authService;
-  private final BooleanProperty registrationSucceeded = new SimpleBooleanProperty(false);
 
-  public RegisterVM(AuthenticationService authService)
+  private final BooleanProperty registrationSucceeded = new SimpleBooleanProperty(
+      false);
+
+  public RegisterVM()
   {
-    this.authService = authService;
-
     name.addListener(((observable, oldValue, newValue) -> validate()));
     birthDate.addListener((observable, oldValue, newValue) -> validate());
     email.addListener((observable, oldValue, newValue) -> validate());
@@ -72,9 +71,11 @@ public class RegisterVM
       int atPos = emailValue.indexOf('@');
       int dotPos = emailValue.lastIndexOf('.');
 
-      if (atPos <= 0 || dotPos <= atPos + 1 || dotPos == emailValue.length() - 1)
+      if (atPos <= 0 || dotPos <= atPos + 1
+          || dotPos == emailValue.length() - 1)
       {
-        errors.add("Email must contain '@' and a domain (e.g. 'user@domain.com').");
+        errors.add(
+            "Email must contain '@' and a domain (e.g. 'user@domain.com').");
       }
     }
     //password validation
@@ -114,7 +115,8 @@ public class RegisterVM
       }
     }
     // repeat password validation
-    if (repeatPassword.get() == null || !repeatPassword.get().equals(password.get()))
+    if (repeatPassword.get() == null || !repeatPassword.get()
+        .equals(password.get()))
     {
       errors.add("Repeat password must match the password.");
     }
@@ -167,24 +169,23 @@ public class RegisterVM
   {
     if (!disableRegisterButton.get())
     {
-      RegisterRequest registerRequest = new RegisterRequest(
-          name.get(),
-          email.get(),
-          password.get(),
-          repeatPassword.get(),
+      RegisterRequest registerRequest = new RegisterRequest(name.get(),
+          email.get(), password.get(), repeatPassword.get(),
           birthDate.get().toString() //convert LocalDate to String
       );
 
-      String result = authService.register(registerRequest);
+      Request request = new Request("register", "create", registerRequest);
 
-      if ("success".equalsIgnoreCase(result))
+      try
       {
-        message.set("Successfully registered!");
+        Object response = ClientSocket.sentRequest(
+            request); //will return "Registration successful"
+        message.set(response.toString());
         registrationSucceeded.set(true);
       }
-      else
+      catch (RuntimeException e)
       {
-        message.set("Registration failed: Email might already be in use.");
+        message.set("Registration failed: " + e.getMessage());
         registrationSucceeded.set(false);
       }
     }

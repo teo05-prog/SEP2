@@ -1,4 +1,4 @@
-package model.services;
+package dtos;
 
 public class RegisterRequest
 {

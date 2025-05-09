@@ -1,6 +1,4 @@
-package model.services;
-
-import model.entities.User;
+package dtos;
 
 public interface AuthenticationService
 {
