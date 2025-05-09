@@ -3,7 +3,7 @@ package view;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import model.services.AuthenticationService;
+import dtos.AuthenticationService;
 import model.services.AuthenticationServiceImpl;
 import view.admin.add.AddTrainViewController;
 import view.admin.main.MainAdminViewController;

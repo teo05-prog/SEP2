@@ -1,6 +1,6 @@
 package startup;
 
-import model.services.AuthenticationService;
+import dtos.AuthenticationService;
 import model.services.AuthenticationServiceImpl;
 import network.requestHandlers.*;
 import persistance.user.UserDAO;

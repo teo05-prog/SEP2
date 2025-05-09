@@ -2,8 +2,8 @@ package network.requestHandlers;
 
 import com.google.gson.Gson;
 import model.exceptions.ValidationException;
-import model.services.AuthenticationService;
-import model.services.LoginRequest;
+import dtos.AuthenticationService;
+import dtos.LoginRequest;
 
 public class LoginRequestHandler implements RequestHandler
 {
