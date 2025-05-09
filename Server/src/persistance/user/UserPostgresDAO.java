@@ -32,7 +32,7 @@ public class UserPostgresDAO implements UserDAO
         "postgres", "141220");
   }
 
-  @Override public Traveller createTraveller(String name, String email, String password, MyDate birthDate)
+  @Override public void createTraveller(String name, String email, String password, MyDate birthDate)
   {
     try (Connection connection = getConnection())
     {
@@ -48,7 +48,6 @@ public class UserPostgresDAO implements UserDAO
     {
       e.printStackTrace();
     }
-    return null;
   }
 
   @Override public User readByEmail(String email)

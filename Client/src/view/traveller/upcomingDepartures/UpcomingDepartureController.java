@@ -69,7 +69,7 @@ public class UpcomingDepartureController
   {
     if (e.getSource() == startButton)
     {
-      ViewHandler.showView(ViewHandler.ViewType.SEARCH_TICKET);
+      ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_USER);
     }
   }
 

@@ -1,3 +1,5 @@
+package startup;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 import view.ViewHandler;

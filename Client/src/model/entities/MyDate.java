@@ -145,6 +145,19 @@ public class MyDate
 
   public Date toSqlDate()
   {
-    return Date.valueOf(String.format("%04d-%02d-%02d", year, month, day));
+    if (year < 1900 || month < 1 || month > 12 || day < 1 || day > 31)
+    {
+      throw new IllegalArgumentException("Invalid date values: year=" + year + ", month=" + month + ", day=" + day);
+    }
+    String dateStr = String.format("%04d-%02d-%02d", year, month, day);
+    try
+    {
+      return java.sql.Date.valueOf(dateStr);
+    }
+    catch (IllegalArgumentException e)
+    {
+      throw new IllegalArgumentException(
+          "Cannot convert to SQL Date: " + dateStr + ". Please ensure the date is valid.");
+    }
   }
 }

@@ -7,6 +7,8 @@ public class UpcomingDeparturesVM
 {
   public ObservableList<Ticket> getUpcomingDepartures()
   {
-    //joih
+    //join the server and get the upcoming departures
+    //this is a placeholder, replace with actual server call
+    return null;
   }
 }

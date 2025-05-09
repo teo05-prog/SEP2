@@ -1,12 +1,11 @@
 package persistance.user;
 
 import model.entities.MyDate;
-import model.entities.Traveller;
 import model.entities.User;
 
 public interface UserDAO
 {
-  public Traveller createTraveller(String name, String email, String password, MyDate birthDate);
+  public void createTraveller(String name, String email, String password, MyDate birthDate);
 
   public User readByEmail(String email);
 

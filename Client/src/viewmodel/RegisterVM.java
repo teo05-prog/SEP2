@@ -3,7 +3,6 @@ package viewmodel;
 import dtos.Request;
 import javafx.beans.property.*;
 import model.entities.MyDate;
-import dtos.AuthenticationService;
 import dtos.RegisterRequest;
 import network.ClientSocket;
 
@@ -12,7 +11,6 @@ import java.util.List;
 
 public class RegisterVM
 {
-
   private final StringProperty name = new SimpleStringProperty();
   private final ObjectProperty<MyDate> birthDate = new SimpleObjectProperty<>();
   private final StringProperty email = new SimpleStringProperty();
@@ -20,7 +18,6 @@ public class RegisterVM
   private final StringProperty repeatPassword = new SimpleStringProperty();
   private final StringProperty message = new SimpleStringProperty();
   private final BooleanProperty disableRegisterButton = new SimpleBooleanProperty(true);
-
 
   private final BooleanProperty registrationSucceeded = new SimpleBooleanProperty(false);
 
@@ -53,11 +50,13 @@ public class RegisterVM
         errors.add("Name cannot be longer than 70 characters.");
       }
     }
+
     // birthDate validation
     if (birthDate.get() == null)
     {
       errors.add("Birthday is required");
     }
+
     // email validation
     String emailValue = email.get();
     if (emailValue == null || emailValue.trim().isEmpty())
@@ -74,6 +73,7 @@ public class RegisterVM
         errors.add("Email must contain '@' and a domain (e.g. 'user@domain.com').");
       }
     }
+
     //password validation
     String pwd = password.get();
     if (pwd == null)
@@ -107,14 +107,15 @@ public class RegisterVM
         {
           errors.add("Password must contain at least one symbol.");
         }
-
       }
     }
+
     // repeat password validation
     if (repeatPassword.get() == null || !repeatPassword.get().equals(password.get()))
     {
       errors.add("Repeat password must match the password.");
     }
+
     // final validation result
     disableRegisterButton.set(!errors.isEmpty());
     message.set(String.join("\n", errors));
@@ -160,26 +161,47 @@ public class RegisterVM
     return registrationSucceeded;
   }
 
+  // FIXED: Method to create a MyDate with the correct order of parameters
+  public void setBirthDate(int day, int month, int year) {
+    // Using the constructor where first param is year, second is month, third is day
+    MyDate date = new MyDate(year, month, day);
+    birthDate.set(date);
+    // Log the date for debugging
+    System.out.println("Setting birthdate: day=" + day + ", month=" + month + ", year=" + year);
+  }
+
   public void registerUser()
   {
     if (!disableRegisterButton.get())
     {
+      // Debug log before sending
+      MyDate date = birthDate.get();
+      if (date != null) {
+        System.out.println("Registering with birthdate: day=" + date.getDay() +
+            ", month=" + date.getMonth() +
+            ", year=" + date.getYear());
+      }
+
       RegisterRequest registerRequest = new RegisterRequest(
           name.get(),
           email.get(),
           password.get(),
-          birthDate.get() //convert LocalDate to String
+          birthDate.get()
       );
 
       // Wrap in a Request object
       Request request = new Request("register", "create", registerRequest);
 
-      try {
-        Object response = ClientSocket.sentRequest(request); // should return "Registration successful"
+      try
+      {
+        Object response = ClientSocket.sentRequest(request);
         message.set(response.toString());
-        registrationSucceeded.set(true);
-      } catch (RuntimeException e) {
-        message.set("Registration failed: " + e.getMessage());
+        registrationSucceeded.set(response.toString().equals("Success"));
+      }
+      catch (RuntimeException e)
+      {
+        String errorMsg = e.getMessage() != null ? e.getMessage() : "Unknown error occurred";
+        message.set("Registration failed: " + errorMsg);
         registrationSucceeded.set(false);
       }
     }
