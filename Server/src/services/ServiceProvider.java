@@ -2,14 +2,18 @@ package services;
 
 import network.requestHandlers.LoginRequestHandler;
 import network.requestHandlers.RequestHandler;
+import persistance.user.UserDAO;
 import utilities.ConsoleLogger;
 import utilities.LogLevel;
 import utilities.Logger;
 
 public class ServiceProvider
 {
+//  private final UserDAO userDAO;
+  //to do
   public RequestHandler getLoginRequestHandler(){
-    return new LoginRequestHandler(new AuthenticationServiceImpl());
+    return null;
+//    return new LoginRequestHandler(new AuthenticationServiceImpl());
   }
 
   public RequestHandler getRegisterRequestHandler(){
