@@ -1,11 +1,10 @@
 package viewmodel;
 
-import javafx.beans.Observable;
+import dtos.Request;
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableValue;
-import model.services.AuthenticationService;
-import model.services.LoginRequest;
-import view.ViewHandler;
+import dtos.AuthenticationService;
+import dtos.LoginRequest;
+import network.ClientSocket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,13 +18,11 @@ public class LoginVM
   private final BooleanProperty disableLoginButton = new SimpleBooleanProperty(
       true);
 
-  private final AuthenticationService authService;
   private final BooleanProperty loginSucceeded = new SimpleBooleanProperty(
       false);
 
-  public LoginVM(AuthenticationService authService)
+  public LoginVM()
   {
-    this.authService = authService;
     email.addListener((observable, oldValue, newValue) -> validate());
     password.addListener((observable, oldValue, newValue) -> validate());
     isAdmin.addListener((observable, oldValue, newValue) -> validate());
@@ -128,46 +125,23 @@ public class LoginVM
     if (!disableLoginButton.get())
     {
       // Create a login request with the user credentials
-      LoginRequest request = new LoginRequest(email.get(), password.get());
+      LoginRequest loginRequest = new LoginRequest(email.get(), password.get());
 
-      // Call the authentication service to validate credentials
-      String result = authService.login(request);
+      Request request = new Request("login","auth",loginRequest);
 
+      try{
+        Object response = ClientSocket.sentRequest(request);
 
-      if ("Ok".equals(result))
-      {
-        message.set("Login successful");
+        message.set(response.toString());
         loginSucceeded.set(true);
         email.set("");
         password.set("");
-      }
-      else if ("Email not found.".equals(result))
-      {
-        message.set("Login failed: " + result);
+      }catch (RuntimeException e){
+        message.set("Login failed: "+e.getMessage());
         loginSucceeded.set(false);
       }
-      else if ("Incorrect password.".equals(result))
-      {
-        message.set("Login failed: " + result);
-        loginSucceeded.set(false);
-      }
-      else if ("User is not admin.".equals(result))
-      {
-        message.set("Login failed: " + result);
-        loginSucceeded.set(false);
-      }
-      else if ("User is admin.".equals(result))
-      {
-        message.set("Login successful");
-        loginSucceeded.set(true);
-        email.set("");
-        password.set("");
-      }
-      else
-      {
-        message.set("Login failed: " + result);
-        loginSucceeded.set(false);
-      }
+
+     // we do not need to have validation here because it will be in the Server
 
     }
   }

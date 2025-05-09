@@ -1,4 +1,4 @@
-package model.services;
+package dtos;
 
 import model.entities.MyDate;
 
