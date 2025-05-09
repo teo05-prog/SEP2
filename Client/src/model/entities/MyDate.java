@@ -1,5 +1,6 @@
 package model.entities;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class MyDate
@@ -25,6 +26,19 @@ public class MyDate
     this.day = day;
     this.month = month;
     this.year = year;
+  }
+
+  public MyDate(Date sqlDate)
+  {
+    if (sqlDate != null)
+    {
+      LocalDate localDate = sqlDate.toLocalDate();
+      this.year = localDate.getYear();
+      this.month = localDate.getMonthValue();
+      this.day = localDate.getDayOfMonth();
+      this.hour = 0;
+      this.minute = 0;
+    }
   }
 
   public int getDay()
@@ -127,5 +141,10 @@ public class MyDate
   public String toString()
   {
     return String.format("%02d/%02d/%04d %02d:%02d", day, month, year, hour, minute);
+  }
+
+  public Date toSqlDate()
+  {
+    return Date.valueOf(String.format("%04d-%02d-%02d", year, month, day));
   }
 }

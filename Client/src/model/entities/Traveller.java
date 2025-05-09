@@ -67,7 +67,7 @@ public class Traveller extends User
 
   public String toString()
   {
-    return "Traveller - " + super.toString();
+    return "Traveller - " + super.toString() + ", Birth Date: " + birthDate.toString() + ", Tickets: " + tickets.toString();
   }
 
   public boolean equals(Object obj)

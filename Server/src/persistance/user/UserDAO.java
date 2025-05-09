@@ -1,0 +1,21 @@
+package persistance.user;
+
+import model.entities.MyDate;
+import model.entities.Admin;
+import model.entities.Traveller;
+import model.entities.User;
+
+public interface UserDAO
+{
+  public Admin createAdmin(String name, String email, String password);
+
+  public Traveller createTraveller(String name, String email, String password, MyDate birthDate);
+
+  public User readByEmail(String email);
+
+  public void deleteUser(String email);
+
+  public void updateAdmin(String name, String email, String password);
+
+  public void updateTraveller(String name, String email, String password, MyDate birthDate);
+}
