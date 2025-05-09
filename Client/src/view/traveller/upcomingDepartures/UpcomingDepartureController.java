@@ -9,7 +9,7 @@ import model.entities.Ticket;
 import view.ViewHandler;
 import viewmodel.UpcomingDeparturesVM;
 
-public class UpcomingDeparturesViewController
+public class UpcomingDepartureController
 {
   private UpcomingDeparturesVM viewModel;
 
@@ -19,7 +19,7 @@ public class UpcomingDeparturesViewController
   @FXML private Button myAccountButton;
   @FXML private ListView<Ticket> upcomingDeparturesListView;
 
-  public UpcomingDeparturesViewController()
+  public UpcomingDepartureController()
   {
     this.viewModel = new UpcomingDeparturesVM();
   }
