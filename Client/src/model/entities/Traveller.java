@@ -10,7 +10,7 @@ public class Traveller extends User
 
   public Traveller(String name, String password, String email, MyDate birthDate)
   {
-    super(name, password, email, registerRequest.getBirthday());
+    super(name, password, email);
     this.birthDate = birthDate;
     tickets = new ArrayList<>();
   }
