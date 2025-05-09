@@ -10,7 +10,7 @@ import model.exceptions.ServerFailureException;
 import model.exceptions.ValidationException;
 import network.exceptions.InvalidActionException;
 import network.requestHandlers.RequestHandler;
-import services.ServiceProvider;
+import startup.ServiceProvider;
 import utilities.LogLevel;
 import utilities.Logger;
 
@@ -22,22 +22,22 @@ import java.util.Arrays;
 public class ClientHandler implements Runnable
 {
 
-  private final Socket clientSocket;
+  private final Socket socket;
   private final ServiceProvider serviceProvider;
   private final Logger logger;
   private final Gson gson = new GsonBuilder().create();
 
-  public ClientHandler(Socket clientSocket, ServiceProvider serviceProvider)
+  public ClientHandler(Socket socket, ServiceProvider serviceProvider)
   {
-    this.clientSocket = clientSocket;
+    this.socket = socket;
     this.serviceProvider = serviceProvider;
     logger = serviceProvider.getLogger();
   }
 
   @Override public void run()
   {
-    try (BufferedReader incomingData = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-    PrintWriter outgoingData = new PrintWriter(clientSocket.getOutputStream(),true))
+    try (BufferedReader incomingData = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        PrintWriter outgoingData = new PrintWriter(socket.getOutputStream(), true))
     {
       handleRequestWithErrorHandling(incomingData, outgoingData);
     }
@@ -49,14 +49,15 @@ public class ClientHandler implements Runnable
     {
       try
       {
-        clientSocket.close();
+        socket.close();
       }
-      catch (IOException ignore) {}
+      catch (IOException ignore)
+      {
+      }
     }
   }
 
-  private void handleRequestWithErrorHandling(BufferedReader incomingData,
-      PrintWriter outgoingData) throws IOException
+  private void handleRequestWithErrorHandling(BufferedReader incomingData, PrintWriter outgoingData) throws IOException
   {
     try
     {
@@ -71,8 +72,7 @@ public class ClientHandler implements Runnable
     }
     catch (ServerFailureException e)
     {
-      logger.log(Arrays.toString(e.getStackTrace()) + "\n" + e.getMessage(),
-          LogLevel.ERROR);
+      logger.log(Arrays.toString(e.getStackTrace()) + "\n" + e.getMessage(), LogLevel.ERROR);
       ErrorResponse payload = new ErrorResponse(e.getMessage());
       Response error = new Response("SERVER_FAILURE", payload);
       outgoingData.println(gson.toJson(error));
@@ -93,14 +93,13 @@ public class ClientHandler implements Runnable
     }
   }
 
-  private void handleRequest(BufferedReader incomingData,
-      PrintWriter outgoingData)
-      throws IOException, ClassNotFoundException, SQLException
+  private void handleRequest(BufferedReader incomingData, PrintWriter outgoingData) throws Exception
   {
     String inputJson = incomingData.readLine();
     Request request = gson.fromJson(inputJson, Request.class);
-    logger.log("Incoming request: " + request.handler() + "/" + request.action()
-        + ". Body: " + gson.toJson(request.payload()), LogLevel.INFO);
+    logger.log(
+        "Incoming request: " + request.handler() + "/" + request.action() + ". Body: " + gson.toJson(request.payload()),
+        LogLevel.INFO);
     RequestHandler handler = switch (request.handler())
     {
       case "login" -> serviceProvider.getLoginRequestHandler();
@@ -113,8 +112,7 @@ public class ClientHandler implements Runnable
       case "mainAdmin" -> serviceProvider.getMainAdminRequestHandler();
       case "modify" -> serviceProvider.getModifyRequestHandler();
       case "myAccountTraveller" -> serviceProvider.getMyAccountRequestHandler();
-          default -> throw new IllegalStateException(
-          "Unexpected value: " + request.handler());
+      default -> throw new IllegalStateException("Unexpected value: " + request.handler());
     };
 
     Object result = handler.handler(request.action(), request.payload());

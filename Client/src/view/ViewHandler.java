@@ -27,7 +27,21 @@ public class ViewHandler
     FRONT, REGISTER, LOGIN, LOGGEDIN_ADMIN, LOGGEDIN_USER, ADMIN_ACCOUNT, USER_ACCOUNT, ADD_TRAIN, MODIFY_TRAIN, CHOOSE_TRAIN, SEAT_SELECTION, CONFIRM_TICKET
   }
 
-  private static AuthenticationService authService = new AuthenticationServiceImpl();
+  private static AuthenticationService authService;
+
+  static
+  {
+    try
+    {
+      authService = new AuthenticationServiceImpl();
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+      System.out.println("Error initializing AuthenticationService");
+    }
+  }
+
   private static Stage stage;
   private static ViewType previousView;
   private static AddTrainVM addTrainVM;
@@ -127,8 +141,7 @@ public class ViewHandler
     AdminMyAccountViewController controller = new AdminMyAccountViewController();
     AdminMyAccountVM myAccountVM = new AdminMyAccountVM();
     FXMLLoader fxmlLoader = new FXMLLoader(
-        ViewHandler.class.getResource(
-            "/view/admin/myAccount/AdminMyAccountView.fxml"));
+        ViewHandler.class.getResource("/view/admin/myAccount/AdminMyAccountView.fxml"));
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
     controller.init(myAccountVM);
@@ -167,8 +180,7 @@ public class ViewHandler
     searchTicketVM = new SearchTicketVM();
     SearchTicketController controller = new SearchTicketController();
     FXMLLoader fxmlLoader = new FXMLLoader(
-        ViewHandler.class.getResource(
-            "/view/traveller/search/SearchTicketView.fxml"));
+        ViewHandler.class.getResource("/view/traveller/search/SearchTicketView.fxml"));
 
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
@@ -183,8 +195,7 @@ public class ViewHandler
   {
     ChooseTrainController controller = new ChooseTrainController();
     FXMLLoader fxmlLoader = new FXMLLoader(
-        ViewHandler.class.getResource(
-            "/view/traveller/trains/ChooseTrainView.fxml"));
+        ViewHandler.class.getResource("/view/traveller/trains/ChooseTrainView.fxml"));
 
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
@@ -201,8 +212,7 @@ public class ViewHandler
     SeatSelectionController controller = new SeatSelectionController();
     SeatSelectionVM seatSelectionVM = new SeatSelectionVM();
     FXMLLoader fxmlLoader = new FXMLLoader(
-        ViewHandler.class.getResource(
-            "/view/traveller/seat/SeatSelectionView.fxml"));
+        ViewHandler.class.getResource("/view/traveller/seat/SeatSelectionView.fxml"));
 
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
@@ -216,8 +226,7 @@ public class ViewHandler
     ChooseTrainController controller = new ChooseTrainController();
     // add view model
     FXMLLoader fxmlLoader = new FXMLLoader(
-        ViewHandler.class.getResource(
-            "/view/traveller/confirm/ConfirmTicketView.fxml"));
+        ViewHandler.class.getResource("/view/traveller/confirm/ConfirmTicketView.fxml"));
 
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
@@ -230,8 +239,7 @@ public class ViewHandler
     TravellerMyAccountViewController controller = new TravellerMyAccountViewController();
     TravellerMyAccountVM myAccountVM = new TravellerMyAccountVM();
     FXMLLoader fxmlLoader = new FXMLLoader(
-        ViewHandler.class.getResource(
-            "/view/traveller/myAccount/TravellerMyAccountView.fxml"));
+        ViewHandler.class.getResource("/view/traveller/myAccount/TravellerMyAccountView.fxml"));
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
     controller.init(myAccountVM);

@@ -1,11 +1,12 @@
 package utilities;
 
-public class ConsoleLogger implements Logger
+public class ConsoleLogger extends Logger
 {
   private LogLevel logLevel;
 
   public ConsoleLogger(LogLevel logLevel)
   {
+    super(logLevel);
     this.logLevel = logLevel;
   }
 

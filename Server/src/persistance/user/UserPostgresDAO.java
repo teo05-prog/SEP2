@@ -11,7 +11,7 @@ public class UserPostgresDAO implements UserDAO
 {
   private static UserPostgresDAO instance;
 
-  private UserPostgresDAO() throws SQLException
+  public UserPostgresDAO() throws SQLException
   {
     DriverManager.registerDriver(new org.postgresql.Driver());
   }
@@ -30,24 +30,6 @@ public class UserPostgresDAO implements UserDAO
     return DriverManager.getConnection(
         "jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail",
         "postgres", "141220");
-  }
-
-  @Override public Admin createAdmin(String name, String email, String password)
-  {
-    try (Connection connection = getConnection())
-    {
-      String sql = "INSERT INTO users (name, email, password, isAdmin, birthday) VALUES (?, ?, ?, true, null)";
-      PreparedStatement statement = connection.prepareStatement(sql);
-      statement.setString(1, name);
-      statement.setString(2, email);
-      statement.setString(3, password);
-      statement.executeUpdate();
-    }
-    catch (SQLException e)
-    {
-      e.printStackTrace();
-    }
-    return null;
   }
 
   @Override public Traveller createTraveller(String name, String email, String password, MyDate birthDate)

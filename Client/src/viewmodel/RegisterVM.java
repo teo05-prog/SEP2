@@ -2,12 +2,9 @@ package viewmodel;
 
 import javafx.beans.property.*;
 import model.entities.MyDate;
-import model.entities.Traveller;
-import model.entities.User;
 import model.services.AuthenticationService;
 import model.services.RegisterRequest;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +12,7 @@ public class RegisterVM
 {
 
   private final StringProperty name = new SimpleStringProperty();
-  private final ObjectProperty<LocalDate> birthDate = new SimpleObjectProperty<>();
+  private final ObjectProperty<MyDate> birthDate = new SimpleObjectProperty<>();
   private final StringProperty email = new SimpleStringProperty();
   private final StringProperty password = new SimpleStringProperty();
   private final StringProperty repeatPassword = new SimpleStringProperty();
@@ -128,7 +125,7 @@ public class RegisterVM
     return name;
   }
 
-  public ObjectProperty<LocalDate> birthDateProperty()
+  public ObjectProperty<MyDate> birthDateProperty()
   {
     return birthDate;
   }
@@ -171,8 +168,7 @@ public class RegisterVM
           name.get(),
           email.get(),
           password.get(),
-          repeatPassword.get(),
-          birthDate.get().toString() //convert LocalDate to String
+          birthDate.get() //convert LocalDate to String
       );
 
       String result = authService.register(registerRequest);

@@ -1,4 +1,4 @@
-package model.services;
+package services;
 
 import model.entities.MyDate;
 
@@ -7,17 +7,18 @@ public class RegisterRequest
   private String name;
   private String email;
   private String password;
-  private MyDate birthday;
+  private MyDate birthDate;
 
-  public RegisterRequest(){
-    //no-args constructor for Gson
+  public RegisterRequest()
+  {
   }
 
-  public RegisterRequest(String name, String email, String password, MyDate birthday){
+  public RegisterRequest(String name, String email, String password, MyDate birthDate)
+  {
     this.name = name;
     this.email = email;
     this.password = password;
-    this.birthday = birthday;
+    this.birthDate = birthDate;
   }
 
   public String getName() {
@@ -44,11 +45,11 @@ public class RegisterRequest
     this.password = password;
   }
 
-  public MyDate getBirthday() {
-    return birthday;
+  public MyDate getBirthDate() {
+    return birthDate;
   }
 
-  public void setBirthday(MyDate birthday) {
-    this.birthday = birthday;
+  public void setBirthDate(MyDate birthDate) {
+    this.birthDate = birthDate;
   }
 }

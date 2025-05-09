@@ -9,6 +9,9 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.PasswordField;
 import view.ViewHandler;
 import viewmodel.RegisterVM;
+import model.entities.MyDate;
+
+import java.time.LocalDate;
 
 public class RegisterViewController
 {
@@ -33,7 +36,42 @@ public class RegisterViewController
   public void initialize()
   {
     nameInput.textProperty().bindBidirectional(viewModel.nameProperty());
-    birthDateInput.valueProperty().bindBidirectional(viewModel.birthDateProperty());
+
+    // Handle MyDate to LocalDate conversion with listeners instead of bidirectional binding
+    // Initial value from ViewModel to DatePicker
+    MyDate initialDate = viewModel.birthDateProperty().get();
+    if (initialDate != null)
+    {
+      LocalDate localDate = LocalDate.of(initialDate.getYear(), initialDate.getMonth(), initialDate.getDay());
+      birthDateInput.setValue(localDate);
+    }
+
+    // When DatePicker changes, update the ViewModel
+    birthDateInput.valueProperty().addListener((observable, oldValue, newValue) -> {
+      if (newValue != null)
+      {
+        MyDate myDate = new MyDate(newValue.getDayOfMonth(), newValue.getMonthValue(), newValue.getYear());
+        viewModel.birthDateProperty().set(myDate);
+      }
+      else
+      {
+        viewModel.birthDateProperty().set(null);
+      }
+    });
+
+    // When ViewModel changes, update the DatePicker
+    viewModel.birthDateProperty().addListener((observable, oldValue, newValue) -> {
+      if (newValue != null)
+      {
+        LocalDate localDate = LocalDate.of(newValue.getYear(), newValue.getMonth(), newValue.getDay());
+        birthDateInput.setValue(localDate);
+      }
+      else
+      {
+        birthDateInput.setValue(null);
+      }
+    });
+
     emailInput.textProperty().bindBidirectional(viewModel.emailProperty());
     passwordInput.textProperty().bindBidirectional(viewModel.passwordProperty());
     repeatPasswordInput.textProperty().bindBidirectional(viewModel.repeatPasswordProperty());
@@ -43,7 +81,8 @@ public class RegisterViewController
     buttonRegister.disableProperty().bind(viewModel.enableRegisterButtonProperty());
 
     viewModel.registrationSucceededProperty().addListener(((observable, oldValue, newValue) -> {
-      if (newValue){
+      if (newValue)
+      {
         ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_USER);
       }
     }));
