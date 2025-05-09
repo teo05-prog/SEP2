@@ -24,7 +24,7 @@ public class ViewHandler
 {
   public enum ViewType
   {
-    FRONT, REGISTER, LOGIN, LOGGEDIN_ADMIN, LOGGEDIN_USER, ADMIN_ACCOUNT, USER_ACCOUNT, ADD_TRAIN, MODIFY_TRAIN, CHOOSE_TRAIN, SEAT_SELECTION, CONFIRM_TICKET
+    FRONT, REGISTER, LOGIN, LOGGEDIN_ADMIN, LOGGEDIN_USER, ADMIN_ACCOUNT, USER_ACCOUNT, ADD_TRAIN, MODIFY_TRAIN, CHOOSE_TRAIN, SEAT_SELECTION, SEARCH_TICKET, CONFIRM_TICKET
   }
 
 
@@ -59,6 +59,7 @@ public class ViewHandler
         case CHOOSE_TRAIN -> showChooseTrainView();
         case SEAT_SELECTION -> showChooseSeatSelectionView();
         case CONFIRM_TICKET -> showChooseConfirmTicketView();
+        case SEARCH_TICKET -> showSearchTicketView();
       }
     }
     catch (Exception e)
@@ -229,6 +230,19 @@ public class ViewHandler
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
     controller.init(myAccountVM);
+    stage.setTitle("VIArail App");
+    stage.setScene(scene);
+  }
+  private static void showSearchTicketView() throws IOException
+  {
+    SearchTicketVM searchTicketVM = new SearchTicketVM();
+    SearchTicketController controller = new SearchTicketController();
+    FXMLLoader fxmlLoader = new FXMLLoader(
+        ViewHandler.class.getResource("/view/traveller/search/SearchTicketView.fxml"));
+
+    fxmlLoader.setControllerFactory(ignore -> controller);
+    Scene scene = new Scene(fxmlLoader.load());
+    controller.init(searchTicketVM);
     stage.setTitle("VIArail App");
     stage.setScene(scene);
   }
