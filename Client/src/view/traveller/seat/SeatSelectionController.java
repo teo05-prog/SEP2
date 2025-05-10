@@ -53,29 +53,29 @@ public class SeatSelectionController
 
   public void initialize()
   {
-//    if (viewModel == null)
-//    {
-//      viewModel = new SeatSelectionVM();
-//    }
-//    bindProperties();
+    //    if (viewModel == null)
+    //    {
+    //      viewModel = new SeatSelectionVM();
+    //    }
+    //    bindProperties();
   }
 
   private void bindProperties()
   {
     // collect all seat buttons into a list to avoid repeating code
-    allSeatButtons = List.of(seatNumber1, seatNumber2, seatNumber3, seatNumber4,
-        seatNumber5, seatNumber6, seatNumber7, seatNumber8, seatNumber9,
-        seatNumber10, seatNumber11, seatNumber12, seatNumber13, seatNumber14,
-        seatNumber15, seatNumber16, bicycleSeatNumber17, bicycleSeatNumber18);
+    allSeatButtons = List.of(seatNumber1, seatNumber2, seatNumber3, seatNumber4, seatNumber5, seatNumber6, seatNumber7,
+        seatNumber8, seatNumber9, seatNumber10, seatNumber11, seatNumber12, seatNumber13, seatNumber14, seatNumber15,
+        seatNumber16, bicycleSeatNumber17, bicycleSeatNumber18);
 
     // for each button assign logic for click
-    for(int i = 0; i< allSeatButtons.size(); i++){
-      int seatNumber = i+1;
+    for (int i = 0; i < allSeatButtons.size(); i++)
+    {
+      int seatNumber = i + 1;
       Button button = allSeatButtons.get(i);
       setupSeatButton(button, seatNumber);
     }
 
-    continueButton.setOnAction(e ->{
+    continueButton.setOnAction(e -> {
       // finalize selected seat
       viewModel.confirmBooking();
       // update UI to show booked
@@ -83,8 +83,10 @@ public class SeatSelectionController
     });
   }
 
-  private void setupSeatButton (Button button, int seatNumber){
-    if (viewModel.isSeatBooked(seatNumber)){
+  private void setupSeatButton(Button button, int seatNumber)
+  {
+    if (viewModel.isSeatBooked(seatNumber))
+    {
       button.setDisable(true);
       return;
     }
@@ -96,13 +98,14 @@ public class SeatSelectionController
     boolean seatAllowed = searchTicketVM.seatProperty().get();
     boolean bicycleAllowed = searchTicketVM.bicycleProperty().get();
 
-    if ((isSeat && !seatAllowed) || (isBicycle && !bicycleAllowed)){
+    if ((isSeat && !seatAllowed) || (isBicycle && !bicycleAllowed))
+    {
       button.setDisable(true); //not allowed based on traveller choice
       return;
     }
 
     // click toggles selection if seat is available
-    button.setOnAction(e ->{
+    button.setOnAction(e -> {
       viewModel.toggleSeatSelection(seatNumber);
       refreshSeatButtons();
     });
@@ -110,8 +113,10 @@ public class SeatSelectionController
     updateSeatStyle(button, seatNumber);
   }
 
-  private void updateSeatStyle(Button button, int seatNumber){
-    if (viewModel.isSeatBooked(seatNumber)){
+  private void updateSeatStyle(Button button, int seatNumber)
+  {
+    if (viewModel.isSeatBooked(seatNumber))
+    {
       // booked
       button.setStyle("-fx-background-color: #2c3e50; -fx-text-fill: white;");
       button.setDisable(true);
@@ -120,15 +125,19 @@ public class SeatSelectionController
     {
       //selected
       button.setStyle(" -fx-background-color: #a72608; -fx-text-fill: white;");
-    }else {
+    }
+    else
+    {
       // available
       button.setStyle("-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 2px;");
     }
   }
 
-  private void refreshSeatButtons(){
-    for (int i = 0; i < allSeatButtons.size(); i++){
-      updateSeatStyle(allSeatButtons.get(i), i+1);
+  private void refreshSeatButtons()
+  {
+    for (int i = 0; i < allSeatButtons.size(); i++)
+    {
+      updateSeatStyle(allSeatButtons.get(i), i + 1);
     }
   }
 

@@ -18,44 +18,54 @@ public class ChooseTrainController
   @FXML private ListView<Train> trainListView;
   @FXML private Button continueButton;
 
-  public ChooseTrainController(){
+  public ChooseTrainController()
+  {
     this.viewModel = new ChooseTrainVM();
   }
 
-  public void init(ChooseTrainVM viewModel, SearchTicketVM searchTicketVM){
-    if (viewModel != null){
+  public void init(ChooseTrainVM viewModel, SearchTicketVM searchTicketVM)
+  {
+    if (viewModel != null)
+    {
       this.viewModel = viewModel;
     }
     this.searchTicketVM = searchTicketVM;
     bindProperties();
   }
 
-  public void initialize(){
-    if (viewModel == null){
+  public void initialize()
+  {
+    if (viewModel == null)
+    {
       viewModel = new ChooseTrainVM();
     }
-//    bindProperties();
+    //    bindProperties();
   }
 
-  private void bindProperties(){
+  private void bindProperties()
+  {
     messageLabel.textProperty().bind(viewModel.messageProperty());
-//    trainListView.setItems(viewModel.getTrainList());
+    //    trainListView.setItems(viewModel.getTrainList());
     viewModel.selectedTrainProperty().bind(trainListView.getSelectionModel().selectedItemProperty());
 
-//    continueButton.disableProperty().bind(viewModel.selectedTrainProperty().isNull());
+    //    continueButton.disableProperty().bind(viewModel.selectedTrainProperty().isNull());
     continueButton.setOnAction(e -> onContinueButton());
   }
 
-  public void onContinueButton(){
+  public void onContinueButton()
+  {
     viewModel.continueWithSelectedTrain(); // record selected train
 
-//    if (viewModel.selectedTrainProperty().get() == null){
-//      return;
-//    }
+    //    if (viewModel.selectedTrainProperty().get() == null){
+    //      return;
+    //    }
 
-    if (searchTicketVM !=null && searchTicketVM.isSeatOrBicycleSelected()){
+    if (searchTicketVM != null && searchTicketVM.isSeatOrBicycleSelected())
+    {
       ViewHandler.showView(ViewHandler.ViewType.SEAT_SELECTION);
-    }else {
+    }
+    else
+    {
       ViewHandler.showView(ViewHandler.ViewType.CONFIRM_TICKET);
     }
   }

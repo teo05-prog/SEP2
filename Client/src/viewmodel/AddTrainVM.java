@@ -18,8 +18,9 @@ public class AddTrainVM
 
   public AddTrainVM()
   {
-    addButtonDisabled.bind(trainID.isEmpty().or(departureStations.isEmpty().or(arrivalStations.isEmpty())
-        .or(departureDate.isNull()).or(arrivalDate.isNull())));
+    addButtonDisabled.bind(trainID.isEmpty()
+        .or(departureStations.isEmpty().or(arrivalStations.isEmpty()).or(departureDate.isNull())
+            .or(arrivalDate.isNull())));
   }
 
   public StringProperty messageProperty()

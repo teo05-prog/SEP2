@@ -27,9 +27,8 @@ public class UserPostgresDAO implements UserDAO
 
   private static Connection getConnection() throws SQLException
   {
-    return DriverManager.getConnection(
-        "jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail",
-        "postgres", "141220");
+    return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail", "postgres",
+        "141220");
   }
 
   @Override public void createTraveller(String name, String email, String password, MyDate birthDate)
@@ -71,7 +70,7 @@ public class UserPostgresDAO implements UserDAO
         {
           Date sqlDate = resultSet.getDate("birthday");
           MyDate birthDate = sqlDate != null ? new MyDate(sqlDate) : null;
-          return new Traveller(name, password, email, birthDate);
+          return new Traveller(name, email, password, birthDate);
         }
       }
     }

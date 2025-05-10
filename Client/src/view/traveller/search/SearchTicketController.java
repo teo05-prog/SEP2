@@ -36,7 +36,7 @@ public class SearchTicketController
     {
       this.viewModel = viewModel;
     }
-   setupUI();
+    setupUI();
     // No need to call setupUI() here as it's already called in initialize()
   }
 
@@ -46,7 +46,7 @@ public class SearchTicketController
     {
       viewModel = new SearchTicketVM();
     }
-//    setupUI();
+    //    setupUI();
   }
 
   private void setupUI()
@@ -55,8 +55,8 @@ public class SearchTicketController
     // disable the button until all required fields are filled
     searchButton.disableProperty().bind(viewModel.inputValidProperty().not());
     // should be changed
-    ObservableList<String> stations = FXCollections.observableArrayList(
-        "Copenhagen", "Aarhus", "Odense", "Aalborg", "Esbjerg");
+    ObservableList<String> stations = FXCollections.observableArrayList("Copenhagen", "Aarhus", "Odense", "Aalborg",
+        "Esbjerg");
     fromComboBox.setItems(stations);
     toComboBox.setItems(stations);
     // bind from and to stations
@@ -67,8 +67,7 @@ public class SearchTicketController
     for (int hour = 6; hour <= 22; hour++)
     {
       times.add(String.format("%02d:00", hour));
-      times.add(
-          String.format("%02d:30", hour)); // Fixed: This was "%02d:00" twice
+      times.add(String.format("%02d:30", hour)); // Fixed: This was "%02d:00" twice
     }
     timeComboBox.setItems(times);
     //bind time

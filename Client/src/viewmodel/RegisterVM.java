@@ -161,35 +161,21 @@ public class RegisterVM
     return registrationSucceeded;
   }
 
-  // FIXED: Method to create a MyDate with the correct order of parameters
-  public void setBirthDate(int day, int month, int year) {
-    // Using the constructor where first param is year, second is month, third is day
+  public void setBirthDate(int day, int month, int year)
+  {
     MyDate date = new MyDate(year, month, day);
     birthDate.set(date);
-    // Log the date for debugging
-    System.out.println("Setting birthdate: day=" + day + ", month=" + month + ", year=" + year);
   }
 
   public void registerUser()
   {
     if (!disableRegisterButton.get())
     {
-      // Debug log before sending
       MyDate date = birthDate.get();
-      if (date != null) {
-        System.out.println("Registering with birthdate: day=" + date.getDay() +
-            ", month=" + date.getMonth() +
-            ", year=" + date.getYear());
-      }
 
-      RegisterRequest registerRequest = new RegisterRequest(
-          name.get(),
-          email.get(),
-          password.get(),
-          birthDate.get()
-      );
+      // Fixed order of parameters to match the constructor
+      RegisterRequest registerRequest = new RegisterRequest(name.get(), email.get(), password.get(), birthDate.get());
 
-      // Wrap in a Request object
       Request request = new Request("register", "create", registerRequest);
 
       try

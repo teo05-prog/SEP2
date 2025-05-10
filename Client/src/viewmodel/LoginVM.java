@@ -15,11 +15,9 @@ public class LoginVM
   private final StringProperty password = new SimpleStringProperty();
   private final StringProperty message = new SimpleStringProperty();
   private final BooleanProperty isAdmin = new SimpleBooleanProperty(false);
-  private final BooleanProperty disableLoginButton = new SimpleBooleanProperty(
-      true);
+  private final BooleanProperty disableLoginButton = new SimpleBooleanProperty(true);
 
-  private final BooleanProperty loginSucceeded = new SimpleBooleanProperty(
-      false);
+  private final BooleanProperty loginSucceeded = new SimpleBooleanProperty(false);
 
   public LoginVM()
   {
@@ -42,11 +40,9 @@ public class LoginVM
       int atPos = emailValue.indexOf('@');
       int dotPos = emailValue.lastIndexOf('.');
 
-      if (atPos <= 0 || dotPos <= atPos + 1
-          || dotPos == emailValue.length() - 1)
+      if (atPos <= 0 || dotPos <= atPos + 1 || dotPos == emailValue.length() - 1)
       {
-        errors.add(
-            "Email must contain '@' and a domain (e.g. 'user@domain.com').");
+        errors.add("Email must contain '@' and a domain (e.g. 'user@domain.com').");
       }
     }
     // password validation
@@ -126,21 +122,24 @@ public class LoginVM
       // Create a login request with the user credentials
       LoginRequest loginRequest = new LoginRequest(email.get(), password.get());
 
-      Request request = new Request("login","auth",loginRequest);
+      Request request = new Request("login", "auth", loginRequest);
 
-      try{
+      try
+      {
         Object response = ClientSocket.sentRequest(request);
 
         message.set(response.toString());
         loginSucceeded.set(true);
         email.set("");
         password.set("");
-      }catch (RuntimeException e){
-        message.set("Login failed: "+e.getMessage());
+      }
+      catch (RuntimeException e)
+      {
+        message.set("Login failed: " + e.getMessage());
         loginSucceeded.set(false);
       }
 
-     // we do not need to have validation here because it will be in the Server
+      // we do not need to have validation here because it will be in the Server
 
     }
   }

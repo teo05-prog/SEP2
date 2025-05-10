@@ -17,8 +17,7 @@ public class ClientSocket
   {
     try (Socket socket = new Socket("localhost", 4892);
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-        BufferedReader in = new BufferedReader(
-            new InputStreamReader(socket.getInputStream())))
+        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())))
     {
       //convert request to JSON and send
       String jsonRequest = gson.toJson(request);
@@ -35,10 +34,8 @@ public class ClientSocket
           return response.payload();
         }
         case "ERROR" -> throw new RuntimeException(
-            ((ErrorResponse) gson.fromJson(gson.toJson(response.payload()),
-                ErrorResponse.class)).errorMessage());
-        default -> throw new RuntimeException(
-            "Unknown server status: " + response.status());
+            ((ErrorResponse) gson.fromJson(gson.toJson(response.payload()), ErrorResponse.class)).errorMessage());
+        default -> throw new RuntimeException("Unknown server status: " + response.status());
       }
     }
     catch (IOException e)

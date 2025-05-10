@@ -15,11 +15,13 @@ public class ChooseTrainVM
   private final ObservableList<Train> trainList = FXCollections.observableArrayList();
   private final ObjectProperty<Train> selectedTrain = new SimpleObjectProperty<>();
 
-  public ChooseTrainVM(){
+  public ChooseTrainVM()
+  {
     //will call the service here
   }
 
-  public StringProperty messageProperty(){
+  public StringProperty messageProperty()
+  {
     return message;
   }
 
@@ -33,9 +35,12 @@ public class ChooseTrainVM
     return selectedTrain;
   }
 
-  public void continueWithSelectedTrain(){
+  public void continueWithSelectedTrain()
+  {
     // later we will have a database
-    if (selectedTrain.get() == null){
-      message.set("Please select a train before continuing.");}
+    if (selectedTrain.get() == null)
+    {
+      message.set("Please select a train before continuing.");
+    }
   }
 }

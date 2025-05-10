@@ -27,7 +27,6 @@ public class ViewHandler
     FRONT, REGISTER, LOGIN, LOGGEDIN_ADMIN, LOGGEDIN_USER, ADMIN_ACCOUNT, USER_ACCOUNT, ADD_TRAIN, MODIFY_TRAIN, CHOOSE_TRAIN, SEAT_SELECTION, CONFIRM_TICKET
   }
 
-
   private static Stage stage;
   private static ViewType previousView;
   private static AddTrainVM addTrainVM;

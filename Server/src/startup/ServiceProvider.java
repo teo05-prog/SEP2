@@ -12,7 +12,8 @@ import utilities.Logger;
 
 import java.sql.SQLException;
 
-public class ServiceProvider {
+public class ServiceProvider
+{
   private static ServiceProvider instance;
 
   // Logger
@@ -30,7 +31,8 @@ public class ServiceProvider {
   private final LoginRequestHandler loginRequestHandler;
 
   // Constructor
-  private ServiceProvider() throws SQLException {
+  private ServiceProvider() throws SQLException
+  {
     // Initialize Logger
     this.logger = new Logger(LogLevel.DEBUG);
 
@@ -46,71 +48,87 @@ public class ServiceProvider {
     this.loginRequestHandler = new LoginRequestHandler(authService);
   }
 
-  public static synchronized ServiceProvider getInstance() throws SQLException {
-    if (instance == null) {
+  public static synchronized ServiceProvider getInstance() throws SQLException
+  {
+    if (instance == null)
+    {
       instance = new ServiceProvider();
     }
     return instance;
   }
 
   // Getters for logger
-  public Logger getLogger() {
+  public Logger getLogger()
+  {
     return logger;
   }
 
   // Getters for DAOs
-  public UserDAO getUserDAO() {
+  public UserDAO getUserDAO()
+  {
     return userDAO;
   }
 
   // Getters for Services
-  public UserService getUserService() {
+  public UserService getUserService()
+  {
     return userService;
   }
 
-  public AuthenticationService getAuthService() {
+  public AuthenticationService getAuthService()
+  {
     return authService;
   }
 
   // Getters for Request Handlers
-  public RegisterRequestHandler getRegisterRequestHandler() {
+  public RegisterRequestHandler getRegisterRequestHandler()
+  {
     return registerRequestHandler;
   }
 
-  public LoginRequestHandler getLoginRequestHandler() {
+  public LoginRequestHandler getLoginRequestHandler()
+  {
     return loginRequestHandler;
   }
 
   // Stub methods for other handlers that may be implemented later
-  public RequestHandler getSearchRequestHandler() {
+  public RequestHandler getSearchRequestHandler()
+  {
     throw new UnsupportedOperationException("Search handler not implemented yet");
   }
 
-  public RequestHandler getTrainsRequestHandler() {
+  public RequestHandler getTrainsRequestHandler()
+  {
     throw new UnsupportedOperationException("Trains handler not implemented yet");
   }
 
-  public RequestHandler getSeatRequestHandler() {
+  public RequestHandler getSeatRequestHandler()
+  {
     throw new UnsupportedOperationException("Seat handler not implemented yet");
   }
 
-  public RequestHandler getConfirmRequestHandler() {
+  public RequestHandler getConfirmRequestHandler()
+  {
     throw new UnsupportedOperationException("Confirm handler not implemented yet");
   }
 
-  public RequestHandler getAddRequestHandler() {
+  public RequestHandler getAddRequestHandler()
+  {
     throw new UnsupportedOperationException("Add handler not implemented yet");
   }
 
-  public RequestHandler getMainAdminRequestHandler() {
+  public RequestHandler getMainAdminRequestHandler()
+  {
     throw new UnsupportedOperationException("MainAdmin handler not implemented yet");
   }
 
-  public RequestHandler getModifyRequestHandler() {
+  public RequestHandler getModifyRequestHandler()
+  {
     throw new UnsupportedOperationException("Modify handler not implemented yet");
   }
 
-  public RequestHandler getMyAccountRequestHandler() {
+  public RequestHandler getMyAccountRequestHandler()
+  {
     throw new UnsupportedOperationException("MyAccount handler not implemented yet");
   }
 }

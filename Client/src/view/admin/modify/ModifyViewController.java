@@ -50,19 +50,17 @@ public class ModifyViewController
     saveButton.disableProperty().bind(viewModel.getSaveButtonDisabledProperty());
   }
 
-  @FXML
-  private void onBack(ActionEvent e)
+  @FXML private void onBack(ActionEvent e)
   {
-    if(e.getSource() == backButton)
+    if (e.getSource() == backButton)
     {
       ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_ADMIN);
     }
   }
 
-  @FXML
-  private void onSave(ActionEvent e)
+  @FXML private void onSave(ActionEvent e)
   {
-    if(e.getSource() == saveButton)
+    if (e.getSource() == saveButton)
     {
       viewModel.saveChanges();
       ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_ADMIN);

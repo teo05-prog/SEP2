@@ -10,24 +10,29 @@ public class RegisterRequestHandler implements RequestHandler
   private final AuthenticationService authService;
   private final Gson gson = new Gson();
 
-  public RegisterRequestHandler( AuthenticationService authService){
+  public RegisterRequestHandler(AuthenticationService authService)
+  {
     this.authService = authService;
   }
 
-  @Override
-  public Object handler(String action, Object payload){
-    if ("create".equals(action)){
+  @Override public Object handler(String action, Object payload)
+  {
+    if ("create".equals(action))
+    {
 
       //convert JSON to RegisterRequest
       RegisterRequest registerRequest = gson.fromJson(gson.toJson(payload), RegisterRequest.class);
 
       String result = authService.register(registerRequest);
-      if ("Success".equals(result)){
+      if ("Success".equals(result))
+      {
         return "Registration successful";
-      }else {
+      }
+      else
+      {
         throw new ValidationException(result);
       }
     }
-    throw new IllegalArgumentException("Unknown action: "+action);
+    throw new IllegalArgumentException("Unknown action: " + action);
   }
 }

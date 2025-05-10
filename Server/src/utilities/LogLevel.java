@@ -2,8 +2,5 @@ package utilities;
 
 public enum LogLevel
 {
-  DEBUG,
-  INFO,
-  WARNING,
-  ERROR
+  DEBUG, INFO, WARNING, ERROR
 }

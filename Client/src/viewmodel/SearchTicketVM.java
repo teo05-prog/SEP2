@@ -19,8 +19,7 @@ public class SearchTicketVM
 
   public SearchTicketVM()
   {
-    inputValid = from.isNotEmpty().and(to.isNotEmpty()).and(date.isNotNull())
-        .and(time.isNotEmpty());
+    inputValid = from.isNotEmpty().and(to.isNotEmpty()).and(date.isNotNull()).and(time.isNotEmpty());
   }
 
   public void startTrainSearch()
@@ -29,7 +28,8 @@ public class SearchTicketVM
     ViewHandler.showView(ViewHandler.ViewType.CHOOSE_TRAIN);
   }
 
-  public boolean isSeatOrBicycleSelected(){
+  public boolean isSeatOrBicycleSelected()
+  {
     return seat.get() || bicycle.get();
   }
 

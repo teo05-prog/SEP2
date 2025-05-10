@@ -11,6 +11,7 @@ public class RunTraveller extends Application
     ViewHandler.start(primaryStage);
     ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_USER);
   }
+
   public static void main(String[] args)
   {
     launch();

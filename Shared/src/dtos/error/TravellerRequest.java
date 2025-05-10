@@ -8,7 +8,7 @@ public record TravellerRequest(String name, String email, String password, MyDat
 {
   @Override public String toString()
   {
-    return "UserRequest{" + "name='" + name + '\'' + ", email='" + email + '\''
-        + ", password='" + password + '\'' + '}' + ", birthDate='" + birthDate + '\'' + '}';
+    return "UserRequest{" + "name='" + name + '\'' + ", email='" + email + '\'' + ", password='" + password + '\'' + '}'
+        + ", birthDate='" + birthDate + '\'' + '}';
   }
 }

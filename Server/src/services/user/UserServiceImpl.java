@@ -17,7 +17,8 @@ public class UserServiceImpl implements UserService
   {
     Traveller traveller = new Traveller(request.name(), request.email(), request.password(), request.birthDate());
 
-    userDao.createTraveller(traveller.getName(), traveller.getEmail(), traveller.getPassword(), traveller.getBirthDate());
+    userDao.createTraveller(traveller.getName(), traveller.getEmail(), traveller.getPassword(),
+        traveller.getBirthDate());
   }
 
   @Override public void deleteTraveller(TravellerRequest request) throws Exception

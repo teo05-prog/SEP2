@@ -2,12 +2,14 @@ package dtos;
 
 public class LoginRequest
 {
-  private  String email;
-  private  String password;
+  private String email;
+  private String password;
 
-  public LoginRequest(){
+  public LoginRequest()
+  {
     // no-args constructor for Gson
   }
+
   public LoginRequest(String email, String password)
   {
     this.email = email;

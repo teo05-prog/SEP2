@@ -8,7 +8,7 @@ public class Traveller extends User
   private MyDate birthDate;
   private List<Ticket> tickets;
 
-  public Traveller(String name, String password, String email, MyDate birthDate)
+  public Traveller(String name, String email, String password, MyDate birthDate)
   {
     super(name, password, email);
     this.birthDate = birthDate;
@@ -67,7 +67,8 @@ public class Traveller extends User
 
   public String toString()
   {
-    return "Traveller - " + super.toString() + ", Birth Date: " + birthDate.toString() + ", Tickets: " + tickets.toString();
+    return "Traveller - " + super.toString() + ", Birth Date: " + birthDate.toString() + ", Tickets: "
+        + tickets.toString();
   }
 
   public boolean equals(Object obj)

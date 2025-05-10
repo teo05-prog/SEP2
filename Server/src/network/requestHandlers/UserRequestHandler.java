@@ -3,8 +3,6 @@ package network.requestHandlers;
 import dtos.error.TravellerRequest;
 import services.user.UserService;
 
-import java.sql.SQLException;
-
 public class UserRequestHandler implements RequestHandler
 {
   private final UserService userService;

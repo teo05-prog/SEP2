@@ -23,6 +23,7 @@ public class UpcomingDepartureController
   {
     this.viewModel = new UpcomingDeparturesVM();
   }
+
   public void init(UpcomingDeparturesVM viewModel)
   {
     if (viewModel != null)
@@ -32,6 +33,7 @@ public class UpcomingDepartureController
     setupUI();
     bindProperties();
   }
+
   @FXML public void initialize()
   {
     if (viewModel == null)
@@ -39,27 +41,33 @@ public class UpcomingDepartureController
       viewModel = new UpcomingDeparturesVM();
     }
   }
+
   private void setupUI()
   {
     upcomingButton.setDisable(true);
   }
-  public void bindProperties() {
+
+  public void bindProperties()
+  {
     // Bind the ListView to the upcoming departures
     upcomingDeparturesListView.setItems(viewModel.getUpcomingDepartures());
 
     // customize how tickets are displayed
     //can be deleted if you want the departures to be displayed as default))
-    upcomingDeparturesListView.setCellFactory(param -> new ListCell<Ticket>() {
-      @Override
-      protected void updateItem(Ticket ticket, boolean empty) {
+    upcomingDeparturesListView.setCellFactory(param -> new ListCell<Ticket>()
+    {
+      @Override protected void updateItem(Ticket ticket, boolean empty)
+      {
         super.updateItem(ticket, empty);
 
-        if (empty || ticket == null) {
+        if (empty || ticket == null)
+        {
           setText(null);
-        } else {
-          setText(ticket.getTrainId() + " - " +
-              "Departure: " + ticket.getDepartureTime().toString() +
-              " Arrival: " + ticket.getArrivalTime().toString());
+        }
+        else
+        {
+          setText(ticket.getTrainId() + " - " + "Departure: " + ticket.getDepartureTime().toString() + " Arrival: "
+              + ticket.getArrivalTime().toString());
         }
       }
     });

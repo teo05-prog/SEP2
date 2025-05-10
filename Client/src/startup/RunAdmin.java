@@ -11,6 +11,7 @@ public class RunAdmin extends Application
     ViewHandler.start(primaryStage);
     ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_ADMIN);
   }
+
   public static void main(String[] args)
   {
     launch();
