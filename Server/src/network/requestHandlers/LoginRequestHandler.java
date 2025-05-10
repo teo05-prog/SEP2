@@ -17,7 +17,7 @@ public class LoginRequestHandler implements RequestHandler
 
   @Override public Object handler(String action, Object payload)
   {
-    if ("login".equals(action))
+    if ("login".equals(action) || "auth".equals(action))
     {
       // Convert JSON to LoginRequest
       LoginRequest loginRequest = gson.fromJson(gson.toJson(payload), LoginRequest.class);

@@ -27,14 +27,13 @@ public class ClientSocket
       String jsonResponse = in.readLine();
       Response response = gson.fromJson(jsonResponse, Response.class);
 
-      switch (response.status())
-      {
-        case "SUCCESS" ->
-        {
+      switch (response.status()) {
+        case "SUCCESS" -> {
           return response.payload();
         }
         case "ERROR" -> throw new RuntimeException(
             ((ErrorResponse) gson.fromJson(gson.toJson(response.payload()), ErrorResponse.class)).errorMessage());
+        case "SERVER_FAILURE" -> throw new RuntimeException("Server failed to process request. Please try again later.");
         default -> throw new RuntimeException("Unknown server status: " + response.status());
       }
     }
