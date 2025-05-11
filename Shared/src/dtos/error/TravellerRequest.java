@@ -11,4 +11,24 @@ public record TravellerRequest(String name, String email, String password, MyDat
     return "UserRequest{" + "name='" + name + '\'' + ", email='" + email + '\'' + ", password='" + password + '\'' + '}'
         + ", birthDate='" + birthDate + '\'' + '}';
   }
+
+  public String getName()
+  {
+    return name;
+  }
+
+  public String getEmail()
+  {
+    return email;
+  }
+
+  public String getPassword()
+  {
+    return password;
+  }
+
+  public MyDate getBirthDate()
+  {
+    return birthDate;
+  }
 }
