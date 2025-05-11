@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="TOP_CENTER" prefHeight="500.0" prefWidth="600.0" spacing="15.0" style="-fx-background-color: #cee0dc; -fx-padding: 40;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.admin.myAccount.AdminMyAccountViewController">
+
+    <children>
+        <ToolBar prefHeight="40.0" prefWidth="480.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 10;">
+            <items>
+                <Button fx:id="trainsButton" mnemonicParsing="false" onAction="#onTrainsButton" style="-fx-background-color: #40798c; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 6 12;" text="Trains" />
+                <Button fx:id="myAccountButton" mnemonicParsing="false" onAction="#onMyAccountButton" style="-fx-background-color: #40798c; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 6 12;" text="MyAccount" />
+            </items>
+        </ToolBar>
+      <Label style="-fx-text-fill: #2c3e50;" text="Personal information">
+         <font>
+            <Font name="System Bold Italic" size="22.0" />
+         </font></Label>
+      <VBox prefHeight="288.0" prefWidth="520.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+         <children>
+            <HBox prefHeight="293.0" prefWidth="520.0">
+               <children>
+                  <VBox prefHeight="288.0" prefWidth="83.0" spacing="10.0">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="38.0" text="Name:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                        <Label layoutX="15.0" layoutY="35.0" prefHeight="25.0" prefWidth="41.0" text="E-mail:">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                     </children>
+                     <HBox.margin>
+                        <Insets left="10.0" right="5.0" />
+                     </HBox.margin>
+                     <padding>
+                        <Insets left="5.0" top="10.0" />
+                     </padding>
+                  </VBox>
+                  <VBox prefHeight="288.0" prefWidth="415.0" spacing="10.0">
+                     <children>
+                        <Label fx:id="nameLabel" prefHeight="25.0" prefWidth="410.0" text="[name]" />
+                        <Label fx:id="emailLabel" layoutX="10.0" layoutY="55.0" prefHeight="25.0" prefWidth="410.0" text="[email]" />
+                     </children>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </HBox>
+         </children></VBox>
+    </children>
+
+</VBox>
