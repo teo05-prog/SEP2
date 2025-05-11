@@ -1,10 +1,10 @@
 package services.user;
 
-import dtos.error.TravellerRequest;
+import dtos.RegisterRequest;
 
 public interface UserService
 {
-  void createTraveller(TravellerRequest request) throws Exception;
+  void createTraveller(RegisterRequest request) throws Exception;
 
-  void deleteTraveller(TravellerRequest request) throws Exception;
+  void deleteTraveller(RegisterRequest request) throws Exception;
 }

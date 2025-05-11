@@ -9,5 +9,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="Shared" />
     <orderEntry type="module" module-name="Server" />
+    <orderEntry type="library" name="org.postgresql" level="project" />
+    <orderEntry type="library" name="gson-2.11.0" level="project" />
+    <orderEntry type="library" name="postgresql" level="project" />
   </component>
 </module>

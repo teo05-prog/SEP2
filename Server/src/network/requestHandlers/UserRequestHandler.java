@@ -1,6 +1,6 @@
 package network.requestHandlers;
 
-import dtos.error.TravellerRequest;
+import dtos.RegisterRequest;
 import services.user.UserService;
 
 public class UserRequestHandler implements RequestHandler
@@ -16,8 +16,8 @@ public class UserRequestHandler implements RequestHandler
   {
     switch (action)
     {
-      case "create" -> userService.createTraveller((TravellerRequest) payload);
-      case "delete" -> userService.deleteTraveller((TravellerRequest) payload);
+      case "create" -> userService.createTraveller((RegisterRequest) payload);
+      case "delete" -> userService.deleteTraveller((RegisterRequest) payload);
       default -> throw new IllegalArgumentException("Invalid action: " + action);
     }
     return null;
