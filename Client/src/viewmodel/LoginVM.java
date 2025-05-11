@@ -1,11 +1,14 @@
 package viewmodel;
 
-import dtos.Request;
 import javafx.beans.property.*;
 import dtos.AuthenticationService;
 import dtos.LoginRequest;
-import network.ClientSocket;
+import services.AuthenticationServiceImpl;
+import view.ViewHandler;
+import persistance.user.UserDAO;
+import persistance.user.UserPostgresDAO;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,20 +19,31 @@ public class LoginVM
   private final StringProperty message = new SimpleStringProperty();
   private final BooleanProperty isAdmin = new SimpleBooleanProperty(false);
   private final BooleanProperty disableLoginButton = new SimpleBooleanProperty(true);
-
   private final BooleanProperty loginSucceeded = new SimpleBooleanProperty(false);
+  private final StringProperty currentUserEmail = new SimpleStringProperty();
+  private final AuthenticationService authService;
 
-  public LoginVM()
+  public LoginVM() throws SQLException
   {
+    // Initialize the UserDAO properly
+    UserDAO userDAO = new UserPostgresDAO();
+    // Initialize the AuthenticationService with proper dependencies
+    this.authService = new AuthenticationServiceImpl(userDAO, null);
+
+    // Make sure ViewHandler knows about our authentication service
+    ViewHandler.setAuthService(authService);
+
     email.addListener((observable, oldValue, newValue) -> validate());
     password.addListener((observable, oldValue, newValue) -> validate());
     isAdmin.addListener((observable, oldValue, newValue) -> validate());
+    currentUserEmail.set(null);
   }
 
   public void validate()
   {
     List<String> errors = new ArrayList<>();
-    // email validation
+
+    // Email validation
     String emailValue = email.get();
     if (emailValue == null || emailValue.trim().isEmpty())
     {
@@ -45,7 +59,8 @@ public class LoginVM
         errors.add("Email must contain '@' and a domain (e.g. 'user@domain.com').");
       }
     }
-    // password validation
+
+    // Password validation
     String pwd = password.get();
     if (pwd == null)
     {
@@ -77,14 +92,66 @@ public class LoginVM
         {
           errors.add("Password must contain at least one symbol.");
         }
-
       }
     }
-    // final validation result
+
     disableLoginButton.set(!errors.isEmpty());
     message.set(String.join("\n", errors));
   }
 
+  public void loginUser()
+  {
+    if (!disableLoginButton.get())
+    {
+      try
+      {
+        LoginRequest loginRequest = new LoginRequest(email.get(), password.get());
+        String response = authService.login(loginRequest);
+
+        if ("Ok".equals(response))
+        {
+          currentUserEmail.set(email.get());
+          loginSucceeded.set(true);
+          message.set("Login successful");
+
+          if (authService.isCurrentUserAdmin())
+          {
+            isAdmin.set(true);
+            System.out.println("User is admin, redirecting to admin view");
+            ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_ADMIN);
+          }
+          else
+          {
+            isAdmin.set(false);
+            System.out.println("User is not admin, redirecting to user view");
+            ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_USER);
+          }
+
+          email.set("");
+          password.set("");
+        }
+        else
+        {
+          handleError("Login failed: " + response);
+        }
+      }
+      catch (RuntimeException e)
+      {
+        handleError("Login error: " + e.getMessage());
+      }
+    }
+  }
+
+  private void handleError(String errorMessage)
+  {
+    System.out.println(errorMessage);
+    loginSucceeded.set(false);
+    message.set(errorMessage);
+    currentUserEmail.set(null);
+    isAdmin.set(false);
+  }
+
+  // Property getters
   public StringProperty emailProperty()
   {
     return email;
@@ -115,32 +182,13 @@ public class LoginVM
     return loginSucceeded;
   }
 
-  public void loginUser()
+  public String getCurrentUserEmail()
   {
-    if (!disableLoginButton.get())
-    {
-      // Create a login request with the user credentials
-      LoginRequest loginRequest = new LoginRequest(email.get(), password.get());
+    return currentUserEmail.get();
+  }
 
-      Request request = new Request("login", "auth", loginRequest);
-
-      try
-      {
-        Object response = ClientSocket.sentRequest(request);
-
-        message.set(response.toString());
-        loginSucceeded.set(true);
-        email.set("");
-        password.set("");
-      }
-      catch (RuntimeException e)
-      {
-        message.set("Login failed: " + e.getMessage());
-        loginSucceeded.set(false);
-      }
-
-      // we do not need to have validation here because it will be in the Server
-
-    }
+  public boolean isUserAdmin()
+  {
+    return authService.isCurrentUserAdmin();
   }
 }

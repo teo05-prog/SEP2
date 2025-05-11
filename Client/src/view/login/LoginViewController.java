@@ -26,29 +26,11 @@ public class LoginViewController
 
   public void initialize()
   {
-    this.viewModel = viewModel;
     emailInput.textProperty().bindBidirectional(viewModel.emailProperty());
     passwordInput.textProperty().bindBidirectional(viewModel.passwordProperty());
     adminCheckBox.selectedProperty().bindBidirectional(viewModel.isAdminProperty());
-
     messageLabel.textProperty().bind(viewModel.messageProperty());
-
     buttonLogin.disableProperty().bind(viewModel.enableLoginButtonProperty());
-
-    viewModel.loginSucceededProperty().addListener(((observable, oldValue, newValue) -> {
-      if (newValue)
-      {
-        // Check if admin is selected and show appropriate view
-        if (adminCheckBox.isSelected())
-        {
-          ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_ADMIN);
-        }
-        else
-        {
-          ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_USER);
-        }
-      }
-    }));
   }
 
   public void onRegister(ActionEvent e)
@@ -60,6 +42,8 @@ public class LoginViewController
   public void onLogin(ActionEvent e)
   {
     if (e.getSource() == buttonLogin)
+    {
       viewModel.loginUser();
+    }
   }
 }

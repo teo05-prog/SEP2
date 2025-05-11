@@ -4,7 +4,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import dtos.AuthenticationService;
+import persistance.user.UserDAO;
+import persistance.user.UserPostgresDAO;
 import services.AuthenticationServiceImpl;
+import services.user.UserService;
+import services.user.UserServiceImpl;
 import view.admin.add.AddTrainViewController;
 import view.admin.main.MainAdminViewController;
 import view.admin.modify.ModifyViewController;
@@ -19,6 +23,7 @@ import view.traveller.myAccount.TravellerMyAccountViewController;
 import viewmodel.*;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class ViewHandler
 {
@@ -30,29 +35,59 @@ public class ViewHandler
   private static Stage stage;
   private static ViewType previousView;
   private static AddTrainVM addTrainVM;
-  private static SearchTicketVM searchTicketVM; // do not delete this line, I need it to store and reuse the same SearchTicketVN when moving from Search -> ChooseTrain
+  private static SearchTicketVM searchTicketVM;
+  private static AuthenticationService authService;
 
-  public static void start(Stage s)
+  public static void setAuthService(AuthenticationService service)
+  {
+    System.out.println("Setting auth service: " + (service != null));
+    authService = service;
+  }
+
+  public static void start(Stage s) throws SQLException
   {
     stage = s;
     showView(ViewType.FRONT);
     stage.show();
   }
 
+  public static boolean isAdmin() {
+    if (authService == null) {
+      System.err.println("Authentication service is not set. Cannot determine admin status.");
+      return false;
+    }
+    return authService.isCurrentUserAdmin();
+  }
+
   public static void showView(ViewType view)
   {
     try
     {
+      System.out.println("Attempting to show view: " + view);
       previousView = view;
+
       switch (view)
       {
+        case LOGGEDIN_ADMIN, ADMIN_ACCOUNT, ADD_TRAIN, MODIFY_TRAIN ->
+        {
+          System.out.println("Handling admin view: " + view);
+          if (!isAdmin())
+          {
+            System.out.println("Not admin, redirecting to user view");
+            showLoggedInUserView();
+            return;
+          }
+          switch (view)
+          {
+            case LOGGEDIN_ADMIN -> showLoggedInAdminView();
+            case ADMIN_ACCOUNT -> showAdminAccountView();
+            case ADD_TRAIN -> showAddTrainView();
+            case MODIFY_TRAIN -> showModifyTrainView();
+          }
+        }
         case FRONT -> showFrontView();
         case REGISTER -> showRegisterView();
         case LOGIN -> showLoginView();
-        case LOGGEDIN_ADMIN -> showLoggedInAdminView();
-        case ADMIN_ACCOUNT -> showAdminAccountView();
-        case ADD_TRAIN -> showAddTrainView();
-        case MODIFY_TRAIN -> showModifyTrainView();
         case LOGGEDIN_USER -> showLoggedInUserView();
         case USER_ACCOUNT -> showUserAccountView();
         case CHOOSE_TRAIN -> showChooseTrainView();
@@ -62,6 +97,7 @@ public class ViewHandler
     }
     catch (Exception e)
     {
+      System.out.println("Error showing view: " + e.getMessage());
       e.printStackTrace();
     }
   }
@@ -88,7 +124,7 @@ public class ViewHandler
     stage.setScene(scene);
   }
 
-  private static void showLoginView() throws IOException
+  private static void showLoginView() throws IOException, SQLException
   {
     LoginVM logInVM = new LoginVM();
     LoginViewController controller = new LoginViewController(logInVM);

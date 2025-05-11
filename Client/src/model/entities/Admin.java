@@ -2,9 +2,9 @@ package model.entities;
 
 public class Admin extends User
 {
-  public Admin(String name, String password, String email)
+  public Admin(String name, String email, String password)
   {
-    super(name, password, email);
+    super(name, email, password);
   }
 
   public String getName()

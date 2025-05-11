@@ -17,21 +17,28 @@ public class LoginRequestHandler implements RequestHandler
 
   @Override public Object handler(String action, Object payload)
   {
-    if ("login".equals(action) || "auth".equals(action))
+    return switch (action)
     {
-      // Convert JSON to LoginRequest
-      LoginRequest loginRequest = gson.fromJson(gson.toJson(payload), LoginRequest.class);
+      case "login" -> handleLogin(payload);
+      case "getRole" -> handleGetRole(payload);
+      default -> throw new IllegalArgumentException("Unknown action: " + action);
+    };
+  }
 
-      String result = authService.login(loginRequest);
-      if ("Ok".equals(result))
-      {
-        return "Login successful";
-      }
-      else
-      {
-        throw new ValidationException(result);
-      }
+  private Object handleLogin(Object payload)
+  {
+    LoginRequest loginRequest = gson.fromJson(gson.toJson(payload), LoginRequest.class);
+    String result = authService.login(loginRequest);
+    if ("Ok".equals(result))
+    {
+      return "Login successful";
     }
-    throw new IllegalArgumentException("Unknown action: " + action);
+    throw new ValidationException(result);
+  }
+
+  private Object handleGetRole(Object payload)
+  {
+    String email = gson.fromJson(gson.toJson(payload), String.class);
+    return authService.getUserRole(email);
   }
 }
