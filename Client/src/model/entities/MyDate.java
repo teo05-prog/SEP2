@@ -1,7 +1,9 @@
 package model.entities;
 
 import java.sql.Date;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class MyDate
 {
@@ -159,5 +161,9 @@ public class MyDate
       throw new IllegalArgumentException(
           "Cannot convert to SQL Date: " + dateStr + ". Please ensure the date is valid.");
     }
+  }
+
+  public LocalDateTime toLocalDateTime() {
+    return LocalDateTime.of(year, month, day, hour, minute);
   }
 }
