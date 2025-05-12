@@ -22,6 +22,7 @@ public class TravellerMyAccountViewController
   {
     this.viewModel = viewModel;
     setupBindings();
+    viewModel.refresh();
   }
 
   @FXML public void initialize()

@@ -1,5 +1,6 @@
 package viewmodel;
 
+import dtos.AuthenticationService;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 import view.ViewHandler;
@@ -17,8 +18,11 @@ public class SearchTicketVM
 
   private final BooleanBinding inputValid;
 
+  private final AuthenticationService authService;
+
   public SearchTicketVM()
   {
+    this.authService = ViewHandler.getAuthService();
     inputValid = from.isNotEmpty().and(to.isNotEmpty()).and(date.isNotNull()).and(time.isNotEmpty());
   }
 

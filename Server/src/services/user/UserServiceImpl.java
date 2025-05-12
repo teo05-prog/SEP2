@@ -1,7 +1,9 @@
 package services.user;
 
 import dtos.RegisterRequest;
+import model.entities.MyDate;
 import model.entities.Traveller;
+import model.entities.User;
 import persistance.user.UserDAO;
 
 public class UserServiceImpl implements UserService
@@ -13,12 +15,14 @@ public class UserServiceImpl implements UserService
     this.userDao = userDao;
   }
 
-  @Override public void createTraveller(RegisterRequest request) throws Exception
+  @Override public User createTraveller(RegisterRequest request) throws Exception
   {
-    Traveller traveller = new Traveller(request.getName(), request.getEmail(), request.getPassword(), request.getBirthday());
+    MyDate birthday = request.getBirthday();
+    Traveller traveller = new Traveller(request.getName(), request.getEmail(), request.getPassword(), birthday);
 
     userDao.createTraveller(traveller.getName(), traveller.getEmail(), traveller.getPassword(),
-        traveller.getBirthDate());
+        birthday);
+    return traveller;
   }
 
   @Override public void deleteTraveller(RegisterRequest request) throws Exception

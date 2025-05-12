@@ -121,8 +121,6 @@ public class RegisterViewController
   {
     if (e.getSource() == buttonRegister)
     {
-      MyDate date = viewModel.birthDateProperty().get();
-
       viewModel.registerUser();
       ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_USER);
     }

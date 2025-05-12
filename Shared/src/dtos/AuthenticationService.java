@@ -1,5 +1,7 @@
 package dtos;
 
+import model.entities.User;
+
 public interface AuthenticationService
 {
   public abstract String login(LoginRequest request);
@@ -9,4 +11,6 @@ public interface AuthenticationService
   boolean isCurrentUserAdmin();
 
   String getUserRole(String email);
+
+  User getCurrentUser();
 }

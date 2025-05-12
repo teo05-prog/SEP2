@@ -11,6 +11,7 @@ import services.user.UserService;
 public class AuthenticationServiceImpl implements AuthenticationService
 {
   private boolean isAdmin = false;
+  private User currentUser;
   private final UserDAO userDAO;
   private final UserService userService;
 
@@ -37,6 +38,7 @@ public class AuthenticationServiceImpl implements AuthenticationService
     }
     // Set admin status based on user role
     this.isAdmin = (user instanceof Admin);
+    this.currentUser = user;
     System.out.println("Setting isAdmin to: " + this.isAdmin);
 
     return "Ok";
@@ -72,11 +74,15 @@ public class AuthenticationServiceImpl implements AuthenticationService
     // Create traveller
     try
     {
-      userService.createTraveller(request);
+      User newUser = userService.createTraveller(request);
+      this.currentUser = newUser;
+      this.isAdmin = false;
+      System.out.println("Registration successful. Current user: " + currentUser);
       return "Success";
     }
     catch (Exception e)
     {
+      System.out.println("Registration failed: " + e.getMessage());
       return "Registration failed: " + e.getMessage();
     }
   }
@@ -94,5 +100,10 @@ public class AuthenticationServiceImpl implements AuthenticationService
       return (user instanceof Admin) ? "ADMIN" : "USER";
     }
     return null;
+  }
+
+  @Override public User getCurrentUser()
+  {
+    return currentUser;
   }
 }

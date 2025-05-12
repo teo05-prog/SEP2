@@ -40,8 +40,17 @@ public class ViewHandler
 
   public static void setAuthService(AuthenticationService service)
   {
-    System.out.println("Setting auth service: " + (service != null));
     authService = service;
+    System.out.println("Setting auth service: " + (service != null));
+  }
+
+  public static AuthenticationService getAuthService()
+  {
+    if (authService == null)
+    {
+      throw new IllegalStateException("AuthService not initialized");
+    }
+    return authService;
   }
 
   public static void start(Stage s) throws SQLException
