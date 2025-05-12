@@ -12,7 +12,6 @@ public class LoginViewController
 
   @FXML private TextField emailInput;
   @FXML private PasswordField passwordInput;
-  @FXML private CheckBox adminCheckBox;
 
   @FXML private Label messageLabel;
 
@@ -28,7 +27,6 @@ public class LoginViewController
   {
     emailInput.textProperty().bindBidirectional(viewModel.emailProperty());
     passwordInput.textProperty().bindBidirectional(viewModel.passwordProperty());
-    adminCheckBox.selectedProperty().bindBidirectional(viewModel.isAdminProperty());
     messageLabel.textProperty().bind(viewModel.messageProperty());
     buttonLogin.disableProperty().bind(viewModel.enableLoginButtonProperty());
   }

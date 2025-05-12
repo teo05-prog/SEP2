@@ -17,7 +17,6 @@ public class LoginVM
   private final StringProperty email = new SimpleStringProperty();
   private final StringProperty password = new SimpleStringProperty();
   private final StringProperty message = new SimpleStringProperty();
-  private final BooleanProperty isAdmin = new SimpleBooleanProperty(false);
   private final BooleanProperty disableLoginButton = new SimpleBooleanProperty(true);
   private final BooleanProperty loginSucceeded = new SimpleBooleanProperty(false);
   private final StringProperty currentUserEmail = new SimpleStringProperty();
@@ -25,17 +24,13 @@ public class LoginVM
 
   public LoginVM() throws SQLException
   {
-    // Initialize the UserDAO properly
     UserDAO userDAO = new UserPostgresDAO();
-    // Initialize the AuthenticationService with proper dependencies
     this.authService = new AuthenticationServiceImpl(userDAO, null);
 
-    // Make sure ViewHandler knows about our authentication service
     ViewHandler.setAuthService(authService);
 
     email.addListener((observable, oldValue, newValue) -> validate());
     password.addListener((observable, oldValue, newValue) -> validate());
-    isAdmin.addListener((observable, oldValue, newValue) -> validate());
     currentUserEmail.set(null);
   }
 
@@ -116,13 +111,11 @@ public class LoginVM
 
           if (authService.isCurrentUserAdmin())
           {
-            isAdmin.set(true);
             System.out.println("User is admin, redirecting to admin view");
             ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_ADMIN);
           }
           else
           {
-            isAdmin.set(false);
             System.out.println("User is not admin, redirecting to user view");
             ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_USER);
           }
@@ -148,7 +141,6 @@ public class LoginVM
     loginSucceeded.set(false);
     message.set(errorMessage);
     currentUserEmail.set(null);
-    isAdmin.set(false);
   }
 
   // Property getters
@@ -160,11 +152,6 @@ public class LoginVM
   public StringProperty passwordProperty()
   {
     return password;
-  }
-
-  public BooleanProperty isAdminProperty()
-  {
-    return isAdmin;
   }
 
   public StringProperty messageProperty()
