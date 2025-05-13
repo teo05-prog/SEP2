@@ -26,7 +26,7 @@ public class RegisterRequestHandler implements RequestHandler
       String result = authService.register(registerRequest);
       if ("Success".equals(result))
       {
-        return "Registration successful";
+        return "Success";
       }
       else
       {
