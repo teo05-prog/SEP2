@@ -1,6 +1,6 @@
 package startup;
 
-import dtos.AuthenticationService;
+import services.AuthenticationService;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import persistance.user.UserDAO;
@@ -14,10 +14,11 @@ public class RunClient extends Application
 {
   @Override public void start(Stage primaryStage) throws Exception
   {
-    UserDAO userDAO = new UserPostgresDAO();
-    UserService userService = new UserServiceImpl(userDAO);
-    AuthenticationService authService = new AuthenticationServiceImpl(userDAO, userService);
-    ViewHandler.setAuthService(authService);
     ViewHandler.start(primaryStage);
+  }
+
+  public static void main(String[] args)
+  {
+    launch(args);
   }
 }

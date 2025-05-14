@@ -2,7 +2,7 @@ package network.requestHandlers;
 
 import com.google.gson.Gson;
 import model.exceptions.ValidationException;
-import dtos.AuthenticationService;
+import services.AuthenticationService;
 import dtos.RegisterRequest;
 
 public class RegisterRequestHandler implements RequestHandler

@@ -1,14 +1,15 @@
 package viewmodel;
-
-import javafx.beans.property.*;
-import dtos.AuthenticationService;
 import dtos.LoginRequest;
-import services.AuthenticationServiceImpl;
-import view.ViewHandler;
-import persistance.user.UserDAO;
-import persistance.user.UserPostgresDAO;
+import dtos.Request;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
-import java.sql.SQLException;
+import network.ClientSocket;
+import session.Session;
+import view.ViewHandler;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,21 +18,14 @@ public class LoginVM
   private final StringProperty email = new SimpleStringProperty();
   private final StringProperty password = new SimpleStringProperty();
   private final StringProperty message = new SimpleStringProperty();
-  private final BooleanProperty disableLoginButton = new SimpleBooleanProperty(true);
-  private final BooleanProperty loginSucceeded = new SimpleBooleanProperty(false);
-  private final StringProperty currentUserEmail = new SimpleStringProperty();
-  private final AuthenticationService authService;
+  private final BooleanProperty disableLoginButton = new SimpleBooleanProperty(
+      true);
+  private final BooleanProperty loginSucceeded = new SimpleBooleanProperty(
+      false);
 
-  public LoginVM() throws SQLException
+  public LoginVM()
   {
-    UserDAO userDAO = new UserPostgresDAO();
-    this.authService = new AuthenticationServiceImpl(userDAO, null);
-
-    ViewHandler.setAuthService(authService);
-
-    email.addListener((observable, oldValue, newValue) -> validate());
-    password.addListener((observable, oldValue, newValue) -> validate());
-    currentUserEmail.set(null);
+    disableLoginButton.bind(email.isEmpty().or(password.isEmpty()));
   }
 
   public void validate()
@@ -49,9 +43,11 @@ public class LoginVM
       int atPos = emailValue.indexOf('@');
       int dotPos = emailValue.lastIndexOf('.');
 
-      if (atPos <= 0 || dotPos <= atPos + 1 || dotPos == emailValue.length() - 1)
+      if (atPos <= 0 || dotPos <= atPos + 1
+          || dotPos == emailValue.length() - 1)
       {
-        errors.add("Email must contain '@' and a domain (e.g. 'user@domain.com').");
+        errors.add(
+            "Email must contain '@' and a domain (e.g. 'user@domain.com').");
       }
     }
 
@@ -98,35 +94,41 @@ public class LoginVM
   {
     if (!disableLoginButton.get())
     {
+      LoginRequest loginRequest = new LoginRequest(email.get(), password.get());
+      Request request = new Request("login", "login", loginRequest);
       try
       {
-        LoginRequest loginRequest = new LoginRequest(email.get(), password.get());
-        String response = authService.login(loginRequest);
+        //send login request
+        Object response = ClientSocket.sentRequest(request);
+        //expecting the server to return the user's email
+        String userEmail = (String) response;
+        //store it in the session
+        Session.getInstance().setUserEmail(userEmail);
 
-        if ("Ok".equals(response))
+        //ask server for role
+        Request roleRequest = new Request("login","getRole",userEmail);
+        Object roleResponse = ClientSocket.sentRequest(roleRequest);
+        String role = (String) roleResponse;
+
+        Session.getInstance().setIsAdmin("ADMIN".equals(role));
+
+        message.set(response.toString());
+        loginSucceeded.set(true);
+
+        //route user
+        if (Session.getInstance().isAdmin())
         {
-          currentUserEmail.set(email.get());
-          loginSucceeded.set(true);
-          message.set("Login successful");
-
-          if (authService.isCurrentUserAdmin())
-          {
-            System.out.println("User is admin, redirecting to admin view");
-            ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_ADMIN);
-          }
-          else
-          {
-            System.out.println("User is not admin, redirecting to user view");
-            ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_USER);
-          }
-
-          email.set("");
-          password.set("");
+          System.out.println("User is admin, redirecting to admin view");
+          ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_ADMIN);
         }
         else
         {
-          handleError("Login failed: " + response);
+          System.out.println("User is not admin, redirecting to user view");
+          ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_USER);
         }
+
+        email.set("");
+        password.set("");
       }
       catch (RuntimeException e)
       {
@@ -140,7 +142,6 @@ public class LoginVM
     System.out.println(errorMessage);
     loginSucceeded.set(false);
     message.set(errorMessage);
-    currentUserEmail.set(null);
   }
 
   // Property getters
@@ -169,13 +170,4 @@ public class LoginVM
     return loginSucceeded;
   }
 
-  public String getCurrentUserEmail()
-  {
-    return currentUserEmail.get();
-  }
-
-  public boolean isUserAdmin()
-  {
-    return authService.isCurrentUserAdmin();
-  }
 }
