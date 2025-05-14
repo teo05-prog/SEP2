@@ -15,6 +15,8 @@ import view.front.FrontViewController;
 import view.login.LoginViewController;
 import view.register.RegisterViewController;
 import view.traveller.myAccount.TravellerMyAccountViewController;
+import view.traveller.upcomingDepartures.UpcomingDepartureController;
+import view.traveller.previousDepartures.PreviousDeparturesController;
 import viewmodel.*;
 
 import java.io.IOException;
@@ -23,7 +25,7 @@ public class ViewHandler
 {
   public enum ViewType
   {
-    FRONT, REGISTER, LOGIN, LOGGEDIN_ADMIN, LOGGEDIN_USER, ADMIN_ACCOUNT, USER_ACCOUNT, ADD_TRAIN, MODIFY_TRAIN, CHOOSE_TRAIN, SEAT_SELECTION, CONFIRM_TICKET
+    FRONT, REGISTER, LOGIN, LOGGEDIN_ADMIN, LOGGEDIN_USER, ADMIN_ACCOUNT, USER_ACCOUNT, ADD_TRAIN, MODIFY_TRAIN, CHOOSE_TRAIN, SEAT_SELECTION, CONFIRM_TICKET,UPCOMING,PREVIOUS
   }
 
   private static Stage stage;
@@ -59,6 +61,8 @@ public class ViewHandler
         case CHOOSE_TRAIN -> showChooseTrainView();
         case SEAT_SELECTION -> showChooseSeatSelectionView();
         case CONFIRM_TICKET -> showChooseConfirmTicketView();
+        case UPCOMING -> showUpcomingDeparturesView();
+        case PREVIOUS -> showPreviousDeparturesView();
       }
     }
     catch (Exception e)
@@ -234,5 +238,30 @@ public class ViewHandler
     stage.setTitle("VIArail App");
     stage.setScene(scene);
   }
+  private static void showPreviousDeparturesView() throws IOException
+  {
+    PreviousDeparturesController controller = new PreviousDeparturesController();
+    PreviousDeparturesVM previousDeparturesVM = new PreviousDeparturesVM();
+    FXMLLoader fxmlLoader = new FXMLLoader(
+        ViewHandler.class.getResource("/view/traveller/previousDepartures/PreviousDeparturesView.fxml"));
+    fxmlLoader.setControllerFactory(ignore -> controller);
+    Scene scene = new Scene(fxmlLoader.load());
+    controller.init(previousDeparturesVM);
+    stage.setTitle("VIArail App");
+    stage.setScene(scene);
+  }
+  private static void showUpcomingDeparturesView() throws IOException
+  {
+    UpcomingDepartureController controller = new UpcomingDepartureController();
+    UpcomingDeparturesVM upcomingDeparturesVM = new UpcomingDeparturesVM();
+    FXMLLoader fxmlLoader = new FXMLLoader(
+        ViewHandler.class.getResource("/view/traveller/upcomingDepartures/UpcomingDeparturesView.fxml"));
+    fxmlLoader.setControllerFactory(ignore -> controller);
+    Scene scene = new Scene(fxmlLoader.load());
+    controller.init(upcomingDeparturesVM);
+    stage.setTitle("VIArail App");
+    stage.setScene(scene);
+  }
+
 
 }

@@ -83,7 +83,10 @@ public class UpcomingDepartureController
 
   public void onPreviousButton(ActionEvent e)
   {
-    //implement later
+    if (e.getSource() == previousButton)
+    {
+      ViewHandler.showView(ViewHandler.ViewType.PREVIOUS);
+    }
   }
 
   public void onUpcomingButton()

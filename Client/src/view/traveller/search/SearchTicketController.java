@@ -98,14 +98,21 @@ public class SearchTicketController
     // do nothing because we are already on Start page
   }
 
-  @FXML private void onPreviousButton()
+  @FXML private void onPreviousButton(ActionEvent e)
   {
-    //later
+    if (e.getSource() == previousButton)
+    {
+      ViewHandler.showView(ViewHandler.ViewType.PREVIOUS);
+    }
   }
 
-  @FXML private void onUpcomingButton()
+  @FXML private void onUpcomingButton(ActionEvent e)
   {
-    //later
+    if (e.getSource() == upcomingButton)
+    {
+      ViewHandler.showView(ViewHandler.ViewType.UPCOMING);
+    }
+
   }
 
   @FXML private void onMyAccountButton(ActionEvent e)
