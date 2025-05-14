@@ -80,7 +80,7 @@ public class PreviousDeparturesController
   }
   @FXML public void onPreviousButton(ActionEvent e)
   {
-   // do nothing because we are already on Upcoming departures page
+   // do nothing because we are already on Previous departures page
   }
   public void onMyAccountButton(ActionEvent e)
   {
