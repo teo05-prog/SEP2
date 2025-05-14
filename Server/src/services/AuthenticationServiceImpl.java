@@ -1,6 +1,5 @@
 package services;
 
-import dtos.AuthenticationService;
 import dtos.LoginRequest;
 import dtos.RegisterRequest;
 import model.entities.Admin;
@@ -105,5 +104,9 @@ public class AuthenticationServiceImpl implements AuthenticationService
   @Override public User getCurrentUser()
   {
     return currentUser;
+  }
+
+  public String getLoggedInUserEmail(){
+    return currentUser != null ? currentUser.getEmail() : null;
   }
 }

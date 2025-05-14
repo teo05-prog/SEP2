@@ -2,17 +2,21 @@ package network.requestHandlers;
 
 import com.google.gson.Gson;
 import model.exceptions.ValidationException;
-import dtos.AuthenticationService;
+import services.AuthenticationService;
 import dtos.LoginRequest;
+import utilities.LogLevel;
+import utilities.Logger;
 
 public class LoginRequestHandler implements RequestHandler
 {
   private final AuthenticationService authService;
   private final Gson gson = new Gson();
+  private final Logger logger;
 
-  public LoginRequestHandler(AuthenticationService authService)
+  public LoginRequestHandler(AuthenticationService authService, Logger logger)
   {
     this.authService = authService;
+    this.logger = logger;
   }
 
   @Override public Object handler(String action, Object payload)
@@ -21,19 +25,28 @@ public class LoginRequestHandler implements RequestHandler
     {
       case "login" -> handleLogin(payload);
       case "getRole" -> handleGetRole(payload);
-      default -> throw new IllegalArgumentException("Unknown action: " + action);
+      default ->
+          throw new IllegalArgumentException("Unknown action: " + action);
     };
   }
 
   private Object handleLogin(Object payload)
   {
-    LoginRequest loginRequest = gson.fromJson(gson.toJson(payload), LoginRequest.class);
+    LoginRequest loginRequest = gson.fromJson(gson.toJson(payload),
+        LoginRequest.class);
     String result = authService.login(loginRequest);
     if ("Ok".equals(result))
     {
-      return "Login successful";
+      logger.log("Login successful for: " + loginRequest.getEmail(),
+          LogLevel.INFO);
+      return loginRequest.getEmail();
     }
-    throw new ValidationException(result);
+    logger.log(
+        "Login failed for: " + loginRequest.getEmail() + ". Reason: " + result,
+        LogLevel.WARNING);
+
+    throw new ValidationException(
+        result != null ? result : "Unknown error during login");
   }
 
   private Object handleGetRole(Object payload)
