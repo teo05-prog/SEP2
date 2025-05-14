@@ -5,6 +5,7 @@ import javafx.beans.property.*;
 import dtos.AuthenticationService;
 import dtos.LoginRequest;
 import network.ClientSocket;
+import session.Session;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,7 +127,12 @@ public class LoginVM
 
       try
       {
+        //send login request
         Object response = ClientSocket.sentRequest(request);
+        //expecting the server to return the user's email
+        String userEmail = (String) response;
+        //store it in the session
+        Session.getInstance().setUserEmail(userEmail);
 
         message.set(response.toString());
         loginSucceeded.set(true);

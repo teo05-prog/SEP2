@@ -9,14 +9,17 @@ import services.user.UserService;
 
 public class AuthenticationServiceImpl implements AuthenticationService
 {
+
   private final UserDAO userDAO;
   private final UserService userService;
+  private User loggedInUser;
 
   public AuthenticationServiceImpl(UserDAO userDAO, UserService userService)
   {
     this.userDAO = userDAO;
     this.userService = userService;
   }
+
 
   @Override public String login(LoginRequest request)
   {
@@ -29,6 +32,7 @@ public class AuthenticationServiceImpl implements AuthenticationService
     {
       return "Incorrect password.";
     }
+    this.loggedInUser = user;
     return "Ok";
   }
 
@@ -69,5 +73,8 @@ public class AuthenticationServiceImpl implements AuthenticationService
     {
       return "Registration failed: " + e.getMessage();
     }
+  }
+  public String getLoggedInUserEmail(){
+    return loggedInUser != null ? loggedInUser.getEmail() : null;
   }
 }

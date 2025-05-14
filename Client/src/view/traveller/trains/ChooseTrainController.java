@@ -1,5 +1,6 @@
 package view.traveller.trains;
 
+import dtos.TrainDTO;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,7 +16,7 @@ public class ChooseTrainController
   private SearchTicketVM searchTicketVM;
 
   @FXML private Label messageLabel;
-  @FXML private ListView<Train> trainListView;
+  @FXML private ListView<TrainDTO> trainListView;
   @FXML private Button continueButton;
 
   public ChooseTrainController()
@@ -31,6 +32,7 @@ public class ChooseTrainController
     }
     this.searchTicketVM = searchTicketVM;
     bindProperties();
+    this.viewModel.loadFilteredTrains();
   }
 
   public void initialize()
@@ -45,10 +47,10 @@ public class ChooseTrainController
   private void bindProperties()
   {
     messageLabel.textProperty().bind(viewModel.messageProperty());
-    //    trainListView.setItems(viewModel.getTrainList());
+    trainListView.setItems(viewModel.getTrainList());
     viewModel.selectedTrainProperty().bind(trainListView.getSelectionModel().selectedItemProperty());
 
-    //    continueButton.disableProperty().bind(viewModel.selectedTrainProperty().isNull());
+    continueButton.disableProperty().bind(viewModel.selectedTrainProperty().isNull());
     continueButton.setOnAction(e -> onContinueButton());
   }
 

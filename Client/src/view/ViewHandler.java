@@ -4,7 +4,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import dtos.AuthenticationService;
+import persistance.user.UserDAO;
 import services.AuthenticationServiceImpl;
+import session.Session;
 import view.admin.add.AddTrainViewController;
 import view.admin.main.MainAdminViewController;
 import view.admin.modify.ModifyViewController;
@@ -162,7 +164,8 @@ public class ViewHandler
 
   private static void showLoggedInUserView() throws IOException
   {
-    searchTicketVM = new SearchTicketVM();
+    String email = Session.getInstance().getUserEmail();
+    searchTicketVM = new SearchTicketVM(email);
     SearchTicketController controller = new SearchTicketController();
     FXMLLoader fxmlLoader = new FXMLLoader(
         ViewHandler.class.getResource("/view/traveller/search/SearchTicketView.fxml"));

@@ -10,5 +10,6 @@
     <orderEntry type="module" module-name="Client" />
     <orderEntry type="library" name="org.postgresql" level="project" />
     <orderEntry type="library" name="postgresql" level="project" />
+    <orderEntry type="module" module-name="Server" />
   </component>
 </module>

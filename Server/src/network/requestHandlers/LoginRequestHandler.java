@@ -25,7 +25,8 @@ public class LoginRequestHandler implements RequestHandler
       String result = authService.login(loginRequest);
       if ("Ok".equals(result))
       {
-        return "Login successful";
+        //return email so client can store it
+        return loginRequest.getEmail();
       }
       else
       {

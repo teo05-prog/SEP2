@@ -1,10 +1,14 @@
 package startup;
 
 import dtos.AuthenticationService;
+import persistance.search.SearchDAO;
+import persistance.search.SearchPostgresDAO;
 import services.AuthenticationServiceImpl;
 import network.requestHandlers.*;
 import persistance.user.UserDAO;
 import persistance.user.UserPostgresDAO;
+import services.search.SearchService;
+import services.search.SearchServiceImpl;
 import services.user.UserService;
 import services.user.UserServiceImpl;
 import utilities.LogLevel;
@@ -21,14 +25,17 @@ public class ServiceProvider
 
   // DAOs
   private final UserDAO userDAO;
+  private final SearchDAO searchDAO;
 
   // Services
   private final UserService userService;
   private final AuthenticationService authService;
+  private final SearchService searchService;
 
   // Request Handlers
   private final RegisterRequestHandler registerRequestHandler;
   private final LoginRequestHandler loginRequestHandler;
+  private final SearchRequestHandler searchRequestHandler;
 
   // Constructor
   private ServiceProvider() throws SQLException
@@ -36,16 +43,22 @@ public class ServiceProvider
     // Initialize Logger
     this.logger = new Logger(LogLevel.DEBUG);
 
+    //initialize DAO singleton before using it
+    SearchPostgresDAO.init(logger);
+
     // Initialize DAOs
     this.userDAO = UserPostgresDAO.getInstance();
+    this.searchDAO = SearchPostgresDAO.getInstance();
 
     // Initialize Services
     this.userService = new UserServiceImpl(userDAO);
     this.authService = new AuthenticationServiceImpl(userDAO, userService);
+    this.searchService = new SearchServiceImpl(searchDAO, logger);
 
     // Initialize Request Handlers
     this.registerRequestHandler = new RegisterRequestHandler(authService);
     this.loginRequestHandler = new LoginRequestHandler(authService);
+    this.searchRequestHandler = new SearchRequestHandler(searchService,logger);
   }
 
   public static synchronized ServiceProvider getInstance() throws SQLException
@@ -91,12 +104,14 @@ public class ServiceProvider
     return loginRequestHandler;
   }
 
-  // Stub methods for other handlers that may be implemented later
+
   public RequestHandler getSearchRequestHandler()
   {
-    throw new UnsupportedOperationException("Search handler not implemented yet");
+    return searchRequestHandler;
   }
 
+
+  // Stub methods for other handlers that may be implemented later
   public RequestHandler getTrainsRequestHandler()
   {
     throw new UnsupportedOperationException("Trains handler not implemented yet");
