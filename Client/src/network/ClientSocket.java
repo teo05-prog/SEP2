@@ -34,9 +34,10 @@ public class ClientSocket
         {
           return response.payload();
         }
-        case "ERROR" -> throw new RuntimeException(
-            ((ErrorResponse) gson.fromJson(gson.toJson(response.payload()),
-                ErrorResponse.class)).errorMessage());
+        case "ERROR" -> {
+          ErrorResponse error = gson.fromJson(gson.toJson(response.payload()), ErrorResponse.class);
+        throw new RuntimeException(error.errorMessage());
+        }
         case "SERVER_FAILURE" -> throw new RuntimeException(
             "Server failed to process request. Please try again later.");
         default -> throw new RuntimeException(

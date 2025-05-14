@@ -57,14 +57,23 @@ public class UserPostgresDAO implements UserDAO
       PreparedStatement statement = connection.prepareStatement(sql);
       statement.setString(1, email);
       var resultSet = statement.executeQuery();
+
+      System.out.println("Searching for user: " + email);
+
       if (resultSet.next())
       {
         String name = resultSet.getString("name");
         String password = resultSet.getString("password");
         boolean isAdmin = resultSet.getBoolean("isAdmin");
+
+        System.out.println("Found user: " + name);
+        System.out.println("IsAdmin flag: " + isAdmin);
+
         if (isAdmin)
         {
-          return new Admin(name, password, email);
+          Admin admin = new Admin(name, email, password);
+          System.out.println("Created Admin object: " + admin.getClass().getSimpleName());
+          return admin;
         }
         else
         {
@@ -73,9 +82,11 @@ public class UserPostgresDAO implements UserDAO
           return new Traveller(name, email, password, birthDate);
         }
       }
+      System.out.println("No user found with email: " + email);
     }
     catch (SQLException e)
     {
+      System.out.println("Database error: " + e.getMessage());
       e.printStackTrace();
     }
     return null;

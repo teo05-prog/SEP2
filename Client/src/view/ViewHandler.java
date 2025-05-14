@@ -3,9 +3,6 @@ package view;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import dtos.AuthenticationService;
-import persistance.user.UserDAO;
-import services.AuthenticationServiceImpl;
 import session.Session;
 import view.admin.add.AddTrainViewController;
 import view.admin.main.MainAdminViewController;
@@ -45,7 +42,9 @@ public class ViewHandler
   {
     try
     {
+      System.out.println("Attempting to show view: " + view);
       previousView = view;
+
       switch (view)
       {
         case FRONT -> showFrontView();
@@ -64,6 +63,7 @@ public class ViewHandler
     }
     catch (Exception e)
     {
+      System.out.println("Error showing view: " + e.getMessage());
       e.printStackTrace();
     }
   }

@@ -6,11 +6,16 @@ public class User
   private String password;
   private String email;
 
-  public User(String name, String password, String email)
+  public User(String name, String email, String password)
   {
     this.name = name;
     this.password = password;
     this.email = email;
+  }
+
+  public boolean isAdmin()
+  {
+    return this instanceof Admin;
   }
 
   public String getName()

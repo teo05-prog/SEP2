@@ -142,7 +142,7 @@ public class MyDate
 
   public String toString()
   {
-    return String.format("%02d/%02d/%04d %02d:%02d", day, month, year, hour, minute);
+    return String.format("%02d/%02d/%04d", day, month, year);
   }
 
   public Date toSqlDate()

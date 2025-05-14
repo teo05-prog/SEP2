@@ -1,18 +1,18 @@
 package services;
 
-import dtos.AuthenticationService;
 import dtos.LoginRequest;
 import dtos.RegisterRequest;
+import model.entities.Admin;
 import model.entities.User;
 import persistance.user.UserDAO;
 import services.user.UserService;
 
 public class AuthenticationServiceImpl implements AuthenticationService
 {
-
+  private boolean isAdmin = false;
+  private User currentUser;
   private final UserDAO userDAO;
   private final UserService userService;
-  private User loggedInUser;
 
   public AuthenticationServiceImpl(UserDAO userDAO, UserService userService)
   {
@@ -20,10 +20,13 @@ public class AuthenticationServiceImpl implements AuthenticationService
     this.userService = userService;
   }
 
-
   @Override public String login(LoginRequest request)
   {
+    System.out.println("Login attempt for: " + request.getEmail());
+
     User user = userDAO.readByEmail(request.getEmail());
+    System.out.println("Retrieved user: " + (user != null ? user.getClass().getSimpleName() : "null"));
+
     if (user == null)
     {
       return "Email not found.";
@@ -32,7 +35,11 @@ public class AuthenticationServiceImpl implements AuthenticationService
     {
       return "Incorrect password.";
     }
-    this.loggedInUser = user;
+    // Set admin status based on user role
+    this.isAdmin = (user instanceof Admin);
+    this.currentUser = user;
+    System.out.println("Setting isAdmin to: " + this.isAdmin);
+
     return "Ok";
   }
 
@@ -66,15 +73,40 @@ public class AuthenticationServiceImpl implements AuthenticationService
     // Create traveller
     try
     {
-      userService.createTraveller(request);
+      User newUser = userService.createTraveller(request);
+      this.currentUser = newUser;
+      this.isAdmin = false;
+      System.out.println("Registration successful. Current user: " + currentUser);
       return "Success";
     }
     catch (Exception e)
     {
+      System.out.println("Registration failed: " + e.getMessage());
       return "Registration failed: " + e.getMessage();
     }
   }
+
+  @Override public boolean isCurrentUserAdmin()
+  {
+    return isAdmin;
+  }
+
+  @Override public String getUserRole(String email)
+  {
+    User user = userDAO.readByEmail(email);
+    if (user != null)
+    {
+      return (user instanceof Admin) ? "ADMIN" : "USER";
+    }
+    return null;
+  }
+
+  @Override public User getCurrentUser()
+  {
+    return currentUser;
+  }
+
   public String getLoggedInUserEmail(){
-    return loggedInUser != null ? loggedInUser.getEmail() : null;
+    return currentUser != null ? currentUser.getEmail() : null;
   }
 }

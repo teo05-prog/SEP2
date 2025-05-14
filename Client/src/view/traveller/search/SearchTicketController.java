@@ -73,9 +73,10 @@ public class SearchTicketController
     //bind time
     viewModel.timeProperty().bindBidirectional(timeComboBox.valueProperty());
 
-    dateInput.setValue(java.time.LocalDate.now());
-    // bind date
-    viewModel.dateProperty().bindBidirectional(dateInput.valueProperty());
+    //bind date
+    dateInput.valueProperty().addListener((obs, oldDate, newDate) -> {
+      viewModel.dateProperty().set(newDate);
+    });
 
     //bind seat and bicycle
     viewModel.seatProperty().bindBidirectional(seatCheckBox.selectedProperty());

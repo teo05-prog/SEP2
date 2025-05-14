@@ -2,6 +2,8 @@ package viewmodel;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import model.entities.User;
+import session.Session;
 
 public class AdminMyAccountVM
 {
@@ -10,15 +12,18 @@ public class AdminMyAccountVM
 
   public AdminMyAccountVM()
   {
-    // to be replaced with actual data loading
     loadUserData();
   }
 
   private void loadUserData()
   {
-    // to be replaced with actual data loading
-    name.set("John Johnson");
-    email.set("john@example.com");
+    String userEmail = Session.getInstance().getUserEmail();
+    String userName = Session.getInstance().getUserName(); // Optional
+
+    if (userEmail != null) {
+      email.set(userEmail);
+      name.set(userName != null ? userName : "Admin");
+    }
   }
 
   public StringProperty nameProperty()

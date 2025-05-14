@@ -53,7 +53,7 @@ public class RegisterViewController
     viewModel.registrationSucceededProperty().addListener(((observable, oldValue, newValue) -> {
       if (newValue)
       {
-        ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_USER);
+        ViewHandler.showView(ViewHandler.ViewType.LOGIN);
       }
     }));
   }
@@ -121,10 +121,7 @@ public class RegisterViewController
   {
     if (e.getSource() == buttonRegister)
     {
-      MyDate date = viewModel.birthDateProperty().get();
-
       viewModel.registerUser();
-      ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_USER);
     }
   }
 

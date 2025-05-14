@@ -7,6 +7,9 @@ public class Session
   private static Session instance;
   private String userEmail;
   private TrainDTO selectedTrainDTO;
+  private boolean isAdmin;
+  private String userName;
+  private String birthday;
 
   private Session()
   {
@@ -44,5 +47,35 @@ public class Session
   public TrainDTO getSelectedTrainDTO()
   {
     return selectedTrainDTO;
+  }
+
+  public void setIsAdmin(boolean isAdmin)
+  {
+    this.isAdmin = isAdmin;
+  }
+
+  public boolean isAdmin()
+  {
+    return isAdmin;
+  }
+
+  public void setUserName(String userName)
+  {
+    this.userName = userName;
+  }
+
+  public String getUserName()
+  {
+    return userName;
+  }
+
+  public String getBirthday()
+  {
+    return birthday;
+  }
+
+  public void setBirthday(String birthday)
+  {
+    this.birthday = birthday;
   }
 }

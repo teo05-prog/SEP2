@@ -1,6 +1,6 @@
 package startup;
 
-import dtos.AuthenticationService;
+import services.AuthenticationService;
 import persistance.search.SearchDAO;
 import persistance.search.SearchPostgresDAO;
 import services.AuthenticationServiceImpl;
@@ -57,7 +57,7 @@ public class ServiceProvider
 
     // Initialize Request Handlers
     this.registerRequestHandler = new RegisterRequestHandler(authService);
-    this.loginRequestHandler = new LoginRequestHandler(authService);
+    this.loginRequestHandler = new LoginRequestHandler(authService,logger);
     this.searchRequestHandler = new SearchRequestHandler(searchService,logger);
   }
 

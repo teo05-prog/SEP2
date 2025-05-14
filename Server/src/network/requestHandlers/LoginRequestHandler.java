@@ -2,37 +2,56 @@ package network.requestHandlers;
 
 import com.google.gson.Gson;
 import model.exceptions.ValidationException;
-import dtos.AuthenticationService;
+import services.AuthenticationService;
 import dtos.LoginRequest;
+import utilities.LogLevel;
+import utilities.Logger;
 
 public class LoginRequestHandler implements RequestHandler
 {
   private final AuthenticationService authService;
   private final Gson gson = new Gson();
+  private final Logger logger;
 
-  public LoginRequestHandler(AuthenticationService authService)
+  public LoginRequestHandler(AuthenticationService authService, Logger logger)
   {
     this.authService = authService;
+    this.logger = logger;
   }
 
   @Override public Object handler(String action, Object payload)
   {
-    if ("login".equals(action) || "auth".equals(action))
+    return switch (action)
     {
-      // Convert JSON to LoginRequest
-      LoginRequest loginRequest = gson.fromJson(gson.toJson(payload), LoginRequest.class);
+      case "login" -> handleLogin(payload);
+      case "getRole" -> handleGetRole(payload);
+      default ->
+          throw new IllegalArgumentException("Unknown action: " + action);
+    };
+  }
 
-      String result = authService.login(loginRequest);
-      if ("Ok".equals(result))
-      {
-        //return email so client can store it
-        return loginRequest.getEmail();
-      }
-      else
-      {
-        throw new ValidationException(result);
-      }
+  private Object handleLogin(Object payload)
+  {
+    LoginRequest loginRequest = gson.fromJson(gson.toJson(payload),
+        LoginRequest.class);
+    String result = authService.login(loginRequest);
+    if ("Ok".equals(result))
+    {
+      logger.log("Login successful for: " + loginRequest.getEmail(),
+          LogLevel.INFO);
+      return loginRequest.getEmail();
     }
-    throw new IllegalArgumentException("Unknown action: " + action);
+    logger.log(
+        "Login failed for: " + loginRequest.getEmail() + ". Reason: " + result,
+        LogLevel.WARNING);
+
+    throw new ValidationException(
+        result != null ? result : "Unknown error during login");
+  }
+
+  private Object handleGetRole(Object payload)
+  {
+    String email = gson.fromJson(gson.toJson(payload), String.class);
+    return authService.getUserRole(email);
   }
 }

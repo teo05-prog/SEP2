@@ -16,7 +16,6 @@ import utilities.Logger;
 
 import java.io.*;
 import java.net.Socket;
-import java.sql.SQLException;
 import java.util.Arrays;
 
 public class ClientHandler implements Runnable
@@ -115,8 +114,18 @@ public class ClientHandler implements Runnable
       default -> throw new IllegalStateException("Unexpected value: " + request.handler());
     };
 
-    Object result = handler.handler(request.action(), request.payload());
-    Response response = new Response("SUCCESS", result);
-    outgoingData.println(gson.toJson(response));
+    try {
+      Object result = handler.handler(request.action(), request.payload());
+      Response response = new Response("SUCCESS", result);
+      outgoingData.println(gson.toJson(response));
+    } catch (ValidationException e) {
+      logger.log("Validation failed: " + e.getMessage(), LogLevel.WARNING);
+      Response error = new Response("ERROR", new ErrorResponse(e.getMessage()));
+      outgoingData.println(gson.toJson(error));
+    } catch (Exception e) {
+      logger.log("Unexpected server error: " + e.getMessage(), LogLevel.ERROR);
+      Response error = new Response("SERVER_FAILURE", new ErrorResponse("Internal server error"));
+      outgoingData.println(gson.toJson(error));
+    }
   }
 }

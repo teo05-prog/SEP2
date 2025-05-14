@@ -2,6 +2,8 @@ package viewmodel;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import session.Session;
+
 
 public class TravellerMyAccountVM
 {
@@ -11,16 +13,26 @@ public class TravellerMyAccountVM
 
   public TravellerMyAccountVM()
   {
-    // to be replaced with actual data loading
     loadUserData();
   }
 
   private void loadUserData()
   {
-    // to be replaced with actual data loading
-    name.set("John Doe");
-    birthday.set("01/01/1990");
-    email.set("john@example.com");
+    String userEmail = Session.getInstance().getUserEmail();
+    String userName = Session.getInstance().getUserName(); // if you store it
+    String birthday = Session.getInstance().getBirthday(); // if you store it
+
+    if (userEmail != null)
+    {
+      email.set(userEmail);
+      name.set(userName != null ? userName : "N/A");
+      this.birthday.set(birthday != null ? birthday : "N/A");
+    }
+  }
+
+  public void refresh()
+  {
+    loadUserData();
   }
 
   public StringProperty nameProperty()

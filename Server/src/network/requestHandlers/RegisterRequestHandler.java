@@ -2,7 +2,7 @@ package network.requestHandlers;
 
 import com.google.gson.Gson;
 import model.exceptions.ValidationException;
-import dtos.AuthenticationService;
+import services.AuthenticationService;
 import dtos.RegisterRequest;
 
 public class RegisterRequestHandler implements RequestHandler
@@ -26,7 +26,7 @@ public class RegisterRequestHandler implements RequestHandler
       String result = authService.register(registerRequest);
       if ("Success".equals(result))
       {
-        return "Registration successful";
+        return "Success";
       }
       else
       {
