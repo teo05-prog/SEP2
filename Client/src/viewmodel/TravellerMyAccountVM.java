@@ -4,7 +4,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import session.Session;
 
-
 public class TravellerMyAccountVM
 {
   private final StringProperty name = new SimpleStringProperty();
@@ -19,8 +18,8 @@ public class TravellerMyAccountVM
   private void loadUserData()
   {
     String userEmail = Session.getInstance().getUserEmail();
-    String userName = Session.getInstance().getUserName(); // if you store it
-    String birthday = Session.getInstance().getBirthday(); // if you store it
+    String userName = Session.getInstance().getUserName();
+    String birthday = Session.getInstance().getBirthday();
 
     if (userEmail != null)
     {

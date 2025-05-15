@@ -166,4 +166,9 @@ public class MyDate
   public LocalDateTime toLocalDateTime() {
     return LocalDateTime.of(year, month, day, hour, minute);
   }
+
+  public java.util.Date getDate()
+  {
+    return java.sql.Date.valueOf(year + "-" + month + "-" + day);
+  }
 }

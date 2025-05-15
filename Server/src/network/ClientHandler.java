@@ -105,24 +105,29 @@ public class ClientHandler implements Runnable
       case "register" -> serviceProvider.getRegisterRequestHandler();
       case "search" -> serviceProvider.getSearchRequestHandler();
       case "trains" -> serviceProvider.getTrainsRequestHandler();
+      case "schedules" -> serviceProvider.getSchedulesRequestHandler();
       case "seat" -> serviceProvider.getSeatRequestHandler();
       case "confirm" -> serviceProvider.getConfirmRequestHandler();
       case "add" -> serviceProvider.getAddRequestHandler();
       case "mainAdmin" -> serviceProvider.getMainAdminRequestHandler();
       case "modify" -> serviceProvider.getModifyRequestHandler();
-      case "myAccountTraveller" -> serviceProvider.getMyAccountRequestHandler();
       default -> throw new IllegalStateException("Unexpected value: " + request.handler());
     };
 
-    try {
+    try
+    {
       Object result = handler.handler(request.action(), request.payload());
       Response response = new Response("SUCCESS", result);
       outgoingData.println(gson.toJson(response));
-    } catch (ValidationException e) {
+    }
+    catch (ValidationException e)
+    {
       logger.log("Validation failed: " + e.getMessage(), LogLevel.WARNING);
       Response error = new Response("ERROR", new ErrorResponse(e.getMessage()));
       outgoingData.println(gson.toJson(error));
-    } catch (Exception e) {
+    }
+    catch (Exception e)
+    {
       logger.log("Unexpected server error: " + e.getMessage(), LogLevel.ERROR);
       Response error = new Response("SERVER_FAILURE", new ErrorResponse("Internal server error"));
       outgoingData.println(gson.toJson(error));

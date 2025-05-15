@@ -1,6 +1,7 @@
 package model.entities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TrainList
 {
@@ -9,6 +10,11 @@ public class TrainList
   public TrainList()
   {
     this.trains = new ArrayList<>();
+  }
+
+  public TrainList(List<Train> trains)
+  {
+    this.trains = new ArrayList<>(trains);
   }
 
   public ArrayList<Train> getTrains()
@@ -28,10 +34,16 @@ public class TrainList
 
   public String toString()
   {
+    if (trains.isEmpty())
+    {
+      return "No trains available";
+    }
+
+    StringBuilder sb = new StringBuilder();
     for (Train train : trains)
     {
-      return train.toString();
+      sb.append(train.toString()).append("\n");
     }
-    return "";
+    return sb.toString();
   }
 }

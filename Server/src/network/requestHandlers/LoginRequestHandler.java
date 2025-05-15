@@ -2,7 +2,7 @@ package network.requestHandlers;
 
 import com.google.gson.Gson;
 import model.exceptions.ValidationException;
-import services.AuthenticationService;
+import services.authentication.AuthenticationService;
 import dtos.LoginRequest;
 import utilities.LogLevel;
 import utilities.Logger;

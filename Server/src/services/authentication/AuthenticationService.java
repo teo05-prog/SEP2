@@ -1,4 +1,4 @@
-package services;
+package services.authentication;
 
 import model.entities.User;
 import dtos.LoginRequest;
