@@ -274,26 +274,4 @@ public class TrainPostgresDAO implements TrainDAO
     }
     return trainList;
   }
-
-  @Override public List<Train> getAllTrains()
-  {
-    List<Train> trains = new ArrayList<>();
-    try (var connection = getConnection())
-    {
-      String sql = "SELECT * FROM train";
-      var statement = connection.prepareStatement(sql);
-      ResultSet rs = statement.executeQuery();
-
-      while (rs.next())
-      {
-        Train train = new Train(rs.getInt("train_id"));
-        trains.add(train);
-      }
-    }
-    catch (SQLException e)
-    {
-      e.printStackTrace();
-    }
-    return trains;
-  }
 }

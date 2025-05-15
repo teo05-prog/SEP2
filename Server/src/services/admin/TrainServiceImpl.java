@@ -4,8 +4,6 @@ import model.entities.Train;
 import model.entities.TrainList;
 import persistance.admin.TrainDAO;
 
-import java.util.List;
-
 public class TrainServiceImpl implements TrainService
 {
   private final TrainDAO trainDAO;
@@ -33,9 +31,9 @@ public class TrainServiceImpl implements TrainService
     trainList.removeTrain(train);
   }
 
-  @Override public List<Train> getAllTrains()
+  @Override public TrainList getAllTrains()
   {
-    List<Train> trains = trainDAO.getAllTrains();
+    TrainList trains = trainDAO.allTrains();
     System.out.println("Returning " + trains.size() + " trains");
     return trains;
   }

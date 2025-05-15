@@ -5,8 +5,6 @@ import model.entities.Train;
 import model.entities.TrainList;
 import services.admin.TrainService;
 
-import java.util.List;
-
 public class TrainsRequestHandler implements RequestHandler
 {
   private final TrainService trainService;
@@ -34,9 +32,9 @@ public class TrainsRequestHandler implements RequestHandler
 
   private Object handleGetAllTrains(Object payload)
   {
-    List<Train> trains = trainService.getAllTrains();
+    TrainList trains = trainService.getAllTrains();
     System.out.println("Returning " + trains.size() + " trains");
-    return new TrainList(trains);
+    return trains;
   }
 
   private Object handleGetTrainById(Object payload)

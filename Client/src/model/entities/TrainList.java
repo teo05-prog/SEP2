@@ -46,4 +46,9 @@ public class TrainList
     }
     return sb.toString();
   }
+
+  public int size()
+  {
+    return trains.size();
+  }
 }

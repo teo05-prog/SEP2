@@ -85,6 +85,21 @@ public class MainAdminVM
     return observableSchedules;
   }
 
+  public String formatTrainDisplay(Train train)
+  {
+    if (train.getSchedule() != null && train.getSchedule().getDepartureStation() != null
+        && train.getSchedule().getArrivalStation() != null)
+    {
+
+      return String.format("Train ID: %d, From: %s, To: %s", train.getTrainId(),
+          train.getSchedule().getDepartureStation().getName(), train.getSchedule().getArrivalStation().getName());
+    }
+    else
+    {
+      return String.format("Train ID: %d, No schedule", train.getTrainId());
+    }
+  }
+
   private Object request(String handler, String action, Object payload) throws Exception
   {
     try (Socket socket = new Socket(HOST, PORT);
@@ -201,7 +216,6 @@ public class MainAdminVM
   {
     try
     {
-      // Change the handler from "trains" to "schedules"
       Object response = request("schedules", "getAllSchedules", null);
 
       if (response != null)
