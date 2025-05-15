@@ -10,7 +10,6 @@ public class TrainsRequestHandler implements RequestHandler
   private final TrainService trainService;
   private final Gson gson = new Gson();
 
-
   public TrainsRequestHandler(TrainService trainService)
   {
     this.trainService = trainService;
@@ -25,8 +24,7 @@ public class TrainsRequestHandler implements RequestHandler
       case "createTrain" -> handleCreateTrain(payload);
       case "updateTrain" -> handleUpdateTrain(payload);
       case "deleteTrain" -> handleDeleteTrain(payload);
-      default ->
-          throw new IllegalArgumentException("Unknown action: " + action);
+      default -> throw new IllegalArgumentException("Unknown action: " + action);
     };
   }
 
