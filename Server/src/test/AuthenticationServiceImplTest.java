@@ -10,7 +10,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import persistance.user.UserDAO;
-import services.AuthenticationServiceImpl;
+import services.authentication.AuthenticationServiceImpl;
 import services.user.UserService;
 
 import static org.junit.jupiter.api.Assertions.*;

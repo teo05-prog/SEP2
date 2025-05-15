@@ -1,9 +1,17 @@
 package startup;
 
-import services.AuthenticationService;
+import persistance.admin.ScheduleDAO;
+import persistance.admin.SchedulePostgresDAO;
+import persistance.admin.TrainDAO;
+import persistance.admin.TrainPostgresDAO;
+import services.admin.ScheduleService;
+import services.admin.ScheduleServiceImpl;
+import services.admin.TrainService;
+import services.admin.TrainServiceImpl;
+import services.authentication.AuthenticationService;
 import persistance.search.SearchDAO;
 import persistance.search.SearchPostgresDAO;
-import services.AuthenticationServiceImpl;
+import services.authentication.AuthenticationServiceImpl;
 import network.requestHandlers.*;
 import persistance.user.UserDAO;
 import persistance.user.UserPostgresDAO;
@@ -26,16 +34,22 @@ public class ServiceProvider
   // DAOs
   private final UserDAO userDAO;
   private final SearchDAO searchDAO;
+  private final TrainDAO trainDAO;
+  private final ScheduleDAO scheduleDAO;
 
   // Services
   private final UserService userService;
   private final AuthenticationService authService;
   private final SearchService searchService;
+  private final TrainService trainService;
+  private final ScheduleService scheduleService;
 
   // Request Handlers
   private final RegisterRequestHandler registerRequestHandler;
   private final LoginRequestHandler loginRequestHandler;
   private final SearchRequestHandler searchRequestHandler;
+  private final TrainsRequestHandler trainsRequestHandler;
+  private final SchedulesRequestHandler schedulesRequestHandler;
 
   // Constructor
   private ServiceProvider() throws SQLException
@@ -49,16 +63,22 @@ public class ServiceProvider
     // Initialize DAOs
     this.userDAO = UserPostgresDAO.getInstance();
     this.searchDAO = SearchPostgresDAO.getInstance();
+    this.trainDAO = TrainPostgresDAO.getInstance();
+    this.scheduleDAO = SchedulePostgresDAO.getInstance();
 
     // Initialize Services
     this.userService = new UserServiceImpl(userDAO);
     this.authService = new AuthenticationServiceImpl(userDAO, userService);
     this.searchService = new SearchServiceImpl(searchDAO, logger);
+    this.trainService = new TrainServiceImpl(trainDAO);
+    this.scheduleService = new ScheduleServiceImpl(scheduleDAO);
 
     // Initialize Request Handlers
     this.registerRequestHandler = new RegisterRequestHandler(authService);
     this.loginRequestHandler = new LoginRequestHandler(authService,logger);
     this.searchRequestHandler = new SearchRequestHandler(searchService,logger);
+    this.trainsRequestHandler = new TrainsRequestHandler(trainService);
+    this.schedulesRequestHandler = new SchedulesRequestHandler(scheduleService);
   }
 
   public static synchronized ServiceProvider getInstance() throws SQLException
@@ -94,29 +114,32 @@ public class ServiceProvider
   }
 
   // Getters for Request Handlers
-  public RegisterRequestHandler getRegisterRequestHandler()
+  public RequestHandler getRegisterRequestHandler()
   {
     return registerRequestHandler;
   }
 
-  public LoginRequestHandler getLoginRequestHandler()
+  public RequestHandler getLoginRequestHandler()
   {
     return loginRequestHandler;
   }
-
 
   public RequestHandler getSearchRequestHandler()
   {
     return searchRequestHandler;
   }
 
-
-  // Stub methods for other handlers that may be implemented later
   public RequestHandler getTrainsRequestHandler()
   {
-    throw new UnsupportedOperationException("Trains handler not implemented yet");
+    return trainsRequestHandler;
   }
 
+  public RequestHandler getSchedulesRequestHandler()
+  {
+    return schedulesRequestHandler;
+  }
+
+  // Stub methods for other handlers that may be implemented later
   public RequestHandler getSeatRequestHandler()
   {
     throw new UnsupportedOperationException("Seat handler not implemented yet");
@@ -140,10 +163,5 @@ public class ServiceProvider
   public RequestHandler getModifyRequestHandler()
   {
     throw new UnsupportedOperationException("Modify handler not implemented yet");
-  }
-
-  public RequestHandler getMyAccountRequestHandler()
-  {
-    throw new UnsupportedOperationException("MyAccount handler not implemented yet");
   }
 }
