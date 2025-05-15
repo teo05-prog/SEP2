@@ -46,7 +46,7 @@ public class PreviousDeparturesController
     PreviousDeparturesListView.setItems(viewModel.getPreviousDepartures());
 
     // customize how tickets are displayed
-    //can be deleted if you want the departures to be displayed as default))
+    //can be deleted if you want the departures to be displayed as default)
     PreviousDeparturesListView.setCellFactory(param -> new ListCell<Ticket>()
     {
       @Override protected void updateItem(Ticket ticket, boolean empty)
