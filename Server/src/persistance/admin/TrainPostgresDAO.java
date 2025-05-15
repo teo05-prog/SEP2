@@ -37,7 +37,7 @@ public class TrainPostgresDAO implements TrainDAO
   {
     try (var connection = getConnection())
     {
-      String sql = "INSERT INTO trains (train_id) VALUES (?)";
+      String sql = "INSERT INTO train (train_id) VALUES (?)";
       var statement = connection.prepareStatement(sql);
       statement.setInt(1, trainId);
       statement.executeUpdate();
@@ -168,7 +168,7 @@ public class TrainPostgresDAO implements TrainDAO
   {
     try (var connection = getConnection())
     {
-      String sql = "UPDATE trains SET train_id = ? WHERE train_id = ?";
+      String sql = "UPDATE train SET train_id = ? WHERE train_id = ?";
       var statement = connection.prepareStatement(sql);
       statement.setInt(1, train.getTrainId());
       statement.setInt(2, train.getTrainId());
@@ -280,7 +280,7 @@ public class TrainPostgresDAO implements TrainDAO
     List<Train> trains = new ArrayList<>();
     try (var connection = getConnection())
     {
-      String sql = "SELECT * FROM trains";
+      String sql = "SELECT * FROM train";
       var statement = connection.prepareStatement(sql);
       ResultSet rs = statement.executeQuery();
 
