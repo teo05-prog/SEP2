@@ -38,7 +38,7 @@ public class TrainServiceImpl implements TrainService
     return trains;
   }
 
-  @Override public Object getTrainById(int trainId)
+  @Override public Train getTrainById(int trainId)
   {
     Train train = trainDAO.readTrainById(trainId);
     if (train == null)

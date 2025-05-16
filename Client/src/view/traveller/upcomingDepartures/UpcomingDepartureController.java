@@ -66,8 +66,8 @@ public class UpcomingDepartureController
         }
         else
         {
-          setText(ticket.getTrainId() + " - " + "Departure: " + ticket.getDepartureTime().toString() + " Arrival: "
-              + ticket.getArrivalTime().toString());
+          setText(ticket.getTrainId() + " - " + "Departure: " + ticket.getScheduleId().getDepartureDate().toString() + " Arrival: "
+              + ticket.getScheduleId().getArrivalDate().toString());
         }
       }
     });

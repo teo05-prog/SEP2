@@ -8,6 +8,6 @@ public interface TrainService
   void createTrain(int trainId);
   void deleteTrain(int trainId);
   TrainList getAllTrains();
-  Object getTrainById(int trainId);
+  Train getTrainById(int trainId);
   void updateTrain(Train train);
 }

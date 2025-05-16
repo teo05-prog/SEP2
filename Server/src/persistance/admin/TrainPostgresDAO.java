@@ -67,6 +67,7 @@ public class TrainPostgresDAO implements TrainDAO
         // Check if the train has a schedule
         if (resultSet.getObject("schedule_id") != null)
         {
+          int scheduleId = resultSet.getInt("schedule_id");
           // Create Station objects for departure and arrival
           Station departureStation = new Station(resultSet.getString("departureStation"));
           Station arrivalStation = new Station(resultSet.getString("arrivalStation"));
@@ -106,7 +107,7 @@ public class TrainPostgresDAO implements TrainDAO
           }
 
           // Create the schedule with the new implementation
-          Schedule schedule = new Schedule(departureStation, arrivalStation, departureDate, arrivalDate);
+          Schedule schedule = new Schedule(scheduleId, departureStation, arrivalStation, departureDate, arrivalDate);
 
           // Use reflection to set the schedule since the field might be private
           try
@@ -212,6 +213,7 @@ public class TrainPostgresDAO implements TrainDAO
         // Check if the train has a schedule
         if (resultSet.getObject("schedule_id") != null)
         {
+          int scheduleId = resultSet.getInt("schedule_id");
           // Create Station objects for departure and arrival
           Station departureStation = new Station(resultSet.getString("departureStation"));
           Station arrivalStation = new Station(resultSet.getString("arrivalStation"));
@@ -251,7 +253,7 @@ public class TrainPostgresDAO implements TrainDAO
           }
 
           // Create the schedule with the new implementation
-          Schedule schedule = new Schedule(departureStation, arrivalStation, departureDate, arrivalDate);
+          Schedule schedule = new Schedule(scheduleId, departureStation, arrivalStation, departureDate, arrivalDate);
 
           // Use reflection to set the schedule since the field might be private
           try

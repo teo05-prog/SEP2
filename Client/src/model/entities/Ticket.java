@@ -6,32 +6,56 @@ public class Ticket
   private Bicycle bicycleSeat;
   private Seat seatId;
   private Train trainId;
-  private MyDate departureTime;
-  private MyDate arrivalTime;
+  private Schedule scheduleId;
+  private String email;
   private int price;
 
-  public Ticket(int ticketID, Bicycle bicycleSeat, Seat seatId, Train trainId, MyDate departureTime, MyDate arrivalTime,
+  public Ticket(int ticketID, Bicycle bicycleSeat, Seat seatId, Train trainId, Schedule scheduleId, String email,
       int price)
   {
     this.ticketID = ticketID;
     this.bicycleSeat = bicycleSeat;
     this.seatId = seatId;
     this.trainId = trainId;
-    this.departureTime = departureTime;
-    this.arrivalTime = arrivalTime;
+    this.scheduleId = scheduleId;
+    this.email = email;
     this.price = price;
   }
 
-  public Ticket(int ticketID, Seat seatId)
-  {
-    this.ticketID = ticketID;
-    this.seatId = seatId;
-  }
-
-  public Ticket(int ticketID, Bicycle bicycleSeat)
+  public Ticket(int ticketID, Bicycle bicycleSeat, Seat seatId, Train trainId, Schedule scheduleId, String email)
   {
     this.ticketID = ticketID;
     this.bicycleSeat = bicycleSeat;
+    this.seatId = seatId;
+    this.trainId = trainId;
+    this.scheduleId = scheduleId;
+    this.email = email;
+  }
+
+  public Ticket(int ticketID, Train trainId, Schedule scheduleId, Seat seatId, String email)
+  {
+    this.ticketID = ticketID;
+    this.trainId = trainId;
+    this.scheduleId = scheduleId;
+    this.seatId = seatId;
+    this.email = email;
+  }
+
+  public Ticket(int ticketID, Train trainId, Schedule scheduleId, Bicycle bicycleSeat, String email)
+  {
+    this.ticketID = ticketID;
+    this.trainId = trainId;
+    this.scheduleId = scheduleId;
+    this.bicycleSeat = bicycleSeat;
+    this.email = email;
+  }
+
+  public Ticket(int ticketID, Train trainId, Schedule scheduleId, String email)
+  {
+    this.ticketID = ticketID;
+    this.trainId = trainId;
+    this.scheduleId = scheduleId;
+    this.email = email;
   }
 
   public Ticket(int ticketID)
@@ -69,29 +93,14 @@ public class Ticket
     this.bicycleSeat = bicycleSeat;
   }
 
-  public MyDate getDepartureTime()
-  {
-    return departureTime;
-  }
-
-  public void setDepartureTime(MyDate departureTime)
-  {
-    this.departureTime = departureTime;
-  }
-
-  public MyDate getArrivalTime()
-  {
-    return arrivalTime;
-  }
-
-  public void setArrivalTime(MyDate arrivalTime)
-  {
-    this.arrivalTime = arrivalTime;
-  }
-
   public Train getTrainId()
   {
     return trainId;
+  }
+
+  public void setTrainId(Train trainId)
+  {
+    this.trainId = trainId;
   }
 
   public int getPrice()
@@ -104,9 +113,29 @@ public class Ticket
     this.price = price;
   }
 
+  public Schedule getScheduleId()
+  {
+    return scheduleId;
+  }
+
+  public void setScheduleId(Schedule scheduleId)
+  {
+    this.scheduleId = scheduleId;
+  }
+
+  public String getEmail()
+  {
+    return email;
+  }
+
+  public void setEmail(String email)
+  {
+    this.email = email;
+  }
+
   public String toString()
   {
-    return "Ticket ID: " + ticketID + ", Seat ID: " + seatId.getSeatId() + ", Departure Time: "
-        + departureTime.toString() + ", Arrival Time: " + arrivalTime.toString() + ", Price: " + price;
+    return "Ticket{" + "ticketID=" + ticketID + ", bicycleSeat=" + bicycleSeat + ", seatId=" + seatId + ", trainId="
+        + trainId + "," + scheduleId.toString() + ", email=" + email + ", price=" + price + '}';
   }
 }

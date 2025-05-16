@@ -45,6 +45,7 @@ public class SchedulePostgresDAO implements ScheduleDAO
 
       while (rs.next())
       {
+        int scheduleId = rs.getInt("schedule_id");
         Station departureStation = new Station(rs.getString("departureStation"));
         Station arrivalStation = new Station(rs.getString("arrivalStation"));
 
@@ -61,7 +62,7 @@ public class SchedulePostgresDAO implements ScheduleDAO
         myArrivalDate.setHour(arrivalTime.toLocalTime().getHour());
         myArrivalDate.setMinute(arrivalTime.toLocalTime().getMinute());
 
-        Schedule schedule = new Schedule(departureStation, arrivalStation, myDepartureDate, myArrivalDate);
+        Schedule schedule = new Schedule(scheduleId, departureStation, arrivalStation, myDepartureDate, myArrivalDate);
         schedules.add(schedule);
       }
     }
@@ -102,7 +103,7 @@ public class SchedulePostgresDAO implements ScheduleDAO
         myArrivalDate.setHour(arrivalTime.toLocalTime().getHour());
         myArrivalDate.setMinute(arrivalTime.toLocalTime().getMinute());
 
-        schedule = new Schedule(departureStation, arrivalStation, myDepartureDate, myArrivalDate);
+        schedule = new Schedule(scheduleId, departureStation, arrivalStation, myDepartureDate, myArrivalDate);
         return schedule;
       }
     }
