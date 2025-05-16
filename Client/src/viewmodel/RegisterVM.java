@@ -3,7 +3,7 @@ package viewmodel;
 import dtos.Request;
 import javafx.beans.property.*;
 import model.entities.MyDate;
-import dtos.RegisterRequest;
+import dtos.RegisterDTO;
 import network.ClientSocket;
 
 import java.util.ArrayList;
@@ -174,7 +174,7 @@ public class RegisterVM
       MyDate date = birthDate.get();
 
       // Fixed order of parameters to match the constructor
-      RegisterRequest registerRequest = new RegisterRequest(name.get(), email.get(), password.get(), birthDate.get());
+      RegisterDTO registerRequest = new RegisterDTO(name.get(), email.get(), password.get(), birthDate.get());
 
       Request request = new Request("register", "create", registerRequest);
 
