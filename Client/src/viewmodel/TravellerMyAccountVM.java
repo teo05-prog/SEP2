@@ -44,16 +44,19 @@ public class TravellerMyAccountVM
       // Set the email since we know it
       email.set(userEmail);
 
-      try {
+      try
+      {
         // Create a request to get user details from the server
         Request userRequest = new Request("user", "getUserDetails", userEmail);
         Object response = ClientSocket.sentRequest(userRequest);
 
-        if (response != null) {
+        if (response != null)
+        {
           // Parse the user details from the response
           // This will depend on what format your server returns
           // For example, if it returns a map:
-          if (response instanceof java.util.Map<?,?>) {
+          if (response instanceof java.util.Map<?, ?>)
+          {
             java.util.Map<String, Object> userDetails = (java.util.Map<String, Object>) response;
 
             // Extract user details
@@ -64,38 +67,50 @@ public class TravellerMyAccountVM
             name.set(userName != null ? userName : "N/A");
             birthday.set(userBirthday != null ? userBirthday : "N/A");
 
-            System.out.println("Loaded user data: " + userName + ", " + userEmail);
+            System.out.println("Loaded user data: " + userName + ", " + userEmail + ", " + userBirthday);
           }
           // If your server returns a custom User object
-          else if (response instanceof User) {
+          else if (response instanceof User)
+          {
             User user = (User) response;
             name.set(user.getName() != null ? user.getName() : "N/A");
 
-            if (user instanceof Traveller) {
+            if (user instanceof Traveller)
+            {
               Traveller traveller = (Traveller) user;
-              if (traveller.getBirthDate() != null) {
+              if (traveller.getBirthDate() != null)
+              {
                 birthday.set(traveller.getBirthDate().toString());
-              } else {
+              }
+              else
+              {
                 birthday.set("N/A");
               }
-            } else {
+            }
+            else
+            {
               birthday.set("N/A");
             }
           }
           // If your server returns a serialized string or other format
-          else {
+          else
+          {
             // Handle according to your application's protocol
             name.set("Data format error");
             birthday.set("Data format error");
             System.out.println("Unexpected response format: " + response.getClass().getName());
           }
-        } else {
+        }
+        else
+        {
           // No user details returned
           name.set("User data not found");
           birthday.set("User data not found");
           System.out.println("No user details returned from server");
         }
-      } catch (Exception e) {
+      }
+      catch (Exception e)
+      {
         System.out.println("Error loading user data: " + e.getMessage());
         e.printStackTrace();
 
@@ -103,14 +118,6 @@ public class TravellerMyAccountVM
         name.set("Error loading data");
         birthday.set("Error loading data");
       }
-    }
-    else
-    {
-      // No user is logged in
-      email.set("Not logged in");
-      name.set("Not logged in");
-      birthday.set("Not logged in");
-      System.out.println("No user logged in or email is null");
     }
   }
 
