@@ -50,6 +50,7 @@ public class ServiceProvider
   private final SearchRequestHandler searchRequestHandler;
   private final TrainsRequestHandler trainsRequestHandler;
   private final SchedulesRequestHandler schedulesRequestHandler;
+  private final UserDetailsRequestHandler userDetailsRequestHandler;
 
   // Constructor
   private ServiceProvider() throws SQLException
@@ -79,6 +80,7 @@ public class ServiceProvider
     this.searchRequestHandler = new SearchRequestHandler(searchService,logger);
     this.trainsRequestHandler = new TrainsRequestHandler(trainService);
     this.schedulesRequestHandler = new SchedulesRequestHandler(scheduleService);
+    this.userDetailsRequestHandler = new UserDetailsRequestHandler(userDAO);
   }
 
   public static synchronized ServiceProvider getInstance() throws SQLException
@@ -137,6 +139,11 @@ public class ServiceProvider
   public RequestHandler getSchedulesRequestHandler()
   {
     return schedulesRequestHandler;
+  }
+
+  public RequestHandler getUserDetailsRequestHandler()
+  {
+    return userDetailsRequestHandler;
   }
 
   // Stub methods for other handlers that may be implemented later

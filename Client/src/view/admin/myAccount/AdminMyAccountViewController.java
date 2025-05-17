@@ -20,6 +20,7 @@ public class AdminMyAccountViewController
   {
     this.viewModel = viewModel;
     setupBindings();
+    viewModel.refresh();
   }
 
   @FXML public void initialize()

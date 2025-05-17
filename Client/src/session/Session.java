@@ -37,6 +37,7 @@ public class Session
   public void clear()
   {
     userEmail = null;
+    isAdmin = false;
   }
 
   public void setSelectedTrainDTO(TrainDTO selectedTrain)

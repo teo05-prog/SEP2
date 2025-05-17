@@ -1,11 +1,11 @@
 package services.user;
 
-import dtos.RegisterRequest;
+import dtos.RegisterDTO;
 import model.entities.User;
 
 public interface UserService
 {
-  User createTraveller(RegisterRequest request) throws Exception;
+  User createTraveller(RegisterDTO request) throws Exception;
 
-  void deleteTraveller(RegisterRequest request) throws Exception;
+  void deleteTraveller(RegisterDTO request) throws Exception;
 }
