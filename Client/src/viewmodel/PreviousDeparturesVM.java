@@ -62,7 +62,8 @@ public class PreviousDeparturesVM
   }
 
   // refresh data when needed
-  public void refreshData() {
+  public void refreshData()
+  {
     loadPreviousDepartures();
   }
 }

@@ -3,20 +3,57 @@ package viewmodel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.entities.Ticket;
+import services.ticket.TicketService;
+import services.ticket.TicketServiceImpl;
+import session.Session;
+
+import java.sql.SQLException;
+import java.util.List;
 
 public class UpcomingDeparturesVM
 {
   private ObservableList<Ticket> upcomingDepartures;
+  private TicketService ticketService;
+  private Session session;
 
   public UpcomingDeparturesVM()
   {
-    upcomingDepartures = FXCollections.observableArrayList();
-    loadUpcomingDepartures();
+    try
+    {
+      this.ticketService = TicketServiceImpl.getInstance();
+      this.upcomingDepartures = FXCollections.observableArrayList();
+      this.session = Session.getInstance();
+      loadUpcomingDepartures();
+    }
+    catch (SQLException e)
+    {
+      System.err.println("Error initializing UpcomingDeparturesVM: " + e.getMessage());
+      e.printStackTrace();
+    }
   }
 
-  private void loadUpcomingDepartures()
+  public void loadUpcomingDepartures()
   {
-    // empty list for now
+    try
+    {
+      // Get the current user's email from the session
+      String userEmail = session.getUserEmail();
+
+      if (userEmail != null && !userEmail.isEmpty())
+      {
+        // Get tickets for the current user
+        List<Ticket> userTickets = ticketService.getTicketsByEmail(userEmail);
+
+        // Clear and add to the observable list
+        upcomingDepartures.clear();
+        upcomingDepartures.addAll(userTickets);
+      }
+    }
+    catch (Exception e)
+    {
+      System.err.println("Error loading user tickets: " + e.getMessage());
+      e.printStackTrace();
+    }
   }
 
   public ObservableList<Ticket> getUpcomingDepartures()
@@ -25,7 +62,8 @@ public class UpcomingDeparturesVM
   }
 
   // refresh data when needed
-  public void refreshData() {
+  public void refreshData()
+  {
     loadUpcomingDepartures();
   }
 }
