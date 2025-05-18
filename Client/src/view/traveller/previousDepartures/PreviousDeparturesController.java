@@ -21,7 +21,6 @@ public class PreviousDeparturesController
 
   public PreviousDeparturesController()
   {
-    this.viewModel = new PreviousDeparturesVM();
   }
 
   public void init(PreviousDeparturesVM viewModel)
@@ -30,23 +29,28 @@ public class PreviousDeparturesController
     {
       this.viewModel = viewModel;
     }
+    else
+    {
+      this.viewModel = new PreviousDeparturesVM();
+    }
     setupUI();
     bindProperties();
   }
+
   @FXML public void initialize()
   {
     if (viewModel == null)
     {
       viewModel = new PreviousDeparturesVM();
+      viewModel.loadPreviousDepartures();
     }
   }
+
   public void bindProperties()
   {
     // Bind the ListView to the upcoming departures
     PreviousDeparturesListView.setItems(viewModel.getPreviousDepartures());
 
-    // customize how tickets are displayed
-    //can be deleted if you want the departures to be displayed as default
     PreviousDeparturesListView.setCellFactory(param -> new ListCell<Ticket>()
     {
       @Override protected void updateItem(Ticket ticket, boolean empty)
@@ -59,8 +63,8 @@ public class PreviousDeparturesController
         }
         else
         {
-          setText(ticket.getTrainId() + " - " + "Departure: " + ticket.getScheduleId().getDepartureDate().toString() + " Arrival: "
-              + ticket.getScheduleId().getArrivalDate().toString());
+          setText(ticket.getTrainId() + " - " + "Departure: " + ticket.getScheduleId().getDepartureDate().toString()
+              + " Arrival: " + ticket.getScheduleId().getArrivalDate().toString());
         }
       }
     });
@@ -69,8 +73,9 @@ public class PreviousDeparturesController
   private void setupUI()
   {
     previousButton.setDisable(true);
-
+    viewModel.loadPreviousDepartures();
   }
+
   @FXML public void onStartButton(ActionEvent e)
   {
     if (e.getSource() == startButton)
@@ -78,10 +83,12 @@ public class PreviousDeparturesController
       ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_USER);
     }
   }
+
   @FXML public void onPreviousButton(ActionEvent e)
   {
-   // do nothing because we are already on Previous departures page
+    // do nothing because we are already on Previous departures page
   }
+
   public void onMyAccountButton(ActionEvent e)
   {
     if (e.getSource() == myAccountButton)
@@ -89,6 +96,7 @@ public class PreviousDeparturesController
       ViewHandler.showView(ViewHandler.ViewType.USER_ACCOUNT);
     }
   }
+
   @FXML public void onUpcomingButton(ActionEvent e)
   {
     if (e.getSource() == upcomingButton)

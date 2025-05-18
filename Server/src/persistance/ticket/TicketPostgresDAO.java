@@ -222,6 +222,31 @@ public class TicketPostgresDAO implements TicketDAO
     }
   }
 
+  @Override public List<Ticket> getTicketsByEmail(String email)
+  {
+    try (var connection = getConnection())
+    {
+      String sql = "SELECT t.*, "
+          + "s.departureStation, s.arrivalStation, s.departureDate, s.departureTime, s.arrivalDate, s.arrivalTime "
+          + "FROM ticket t " + "JOIN schedule s ON t.schedule_id = s.schedule_id " + "WHERE t.user_email = ?";
+      var statement = connection.prepareStatement(sql);
+      statement.setString(1, email);
+      var resultSet = statement.executeQuery();
+      List<Ticket> tickets = new ArrayList<>();
+
+      while (resultSet.next())
+      {
+        tickets.add(extractTicketFromResultSet(resultSet));
+      }
+      return tickets;
+    }
+    catch (SQLException e)
+    {
+      System.err.println("Error retrieving tickets by user email: " + e.getMessage());
+      throw new RuntimeException("Database error while retrieving user tickets", e);
+    }
+  }
+
   private Ticket extractTicketFromResultSet(ResultSet resultSet) throws SQLException
   {
     int ticketId = resultSet.getInt("ticket_id");
