@@ -274,8 +274,12 @@ public class TicketPostgresDAO implements TicketDAO
 
     Schedule schedule = new Schedule(scheduleId, departureStation, arrivalStation, departureDate, arrivalDate);
 
-    // Create basic ticket
-    Ticket ticket = new Ticket(ticketId, new Train(trainId), schedule, email);
+    // Create train and set its schedule
+    Train train = new Train(trainId);
+    train.setSchedule(schedule);
+
+    // Create basic ticket (now using the train with schedule correctly set)
+    Ticket ticket = new Ticket(ticketId, train, schedule, email);
 
     // Add seat if present
     int seatNumber = resultSet.getInt("seat_number");
