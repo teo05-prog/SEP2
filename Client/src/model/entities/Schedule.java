@@ -9,6 +9,7 @@ public class Schedule
   private MyDate departureDate;
   private MyDate arrivalDate;
 
+
   public Schedule(int scheduleId, Station departureStation, Station arrivalStation, MyDate departureDate, MyDate arrivalDate)
   {
     this.scheduleId = scheduleId;

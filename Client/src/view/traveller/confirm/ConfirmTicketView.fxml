@@ -18,9 +18,25 @@
             <Insets />
          </VBox.margin>
       </Label>
-      <VBox prefHeight="240.0" prefWidth="380.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+      <VBox prefHeight="200.0" prefWidth="520.0" style="-fx-background-color: white; -fx-background-radius: 10;">
          <children>
-            <Label text="Outbound: ">
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Outbound: ">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="10.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <Label fx:id="dateTimeLabel" text="Date and Time: ">
                <font>
                   <Font size="18.0" />
                </font>
@@ -28,7 +44,7 @@
                   <Insets left="10.0" top="10.0" />
                </VBox.margin>
             </Label>
-            <Label text="Date and Time: ">
+            <Label fx:id="fromLabel" text="From: ">
                <font>
                   <Font size="18.0" />
                </font>
@@ -36,15 +52,7 @@
                   <Insets left="10.0" top="10.0" />
                </VBox.margin>
             </Label>
-            <Label text="From: ">
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <VBox.margin>
-                  <Insets left="10.0" top="10.0" />
-               </VBox.margin>
-            </Label>
-            <Label text="To:">
+            <Label fx:id="toLabel" text="To:">
                <font>
                   <Font size="18.0" />
                </font>
@@ -53,18 +61,22 @@
                </VBox.margin>
             </Label>
             <Separator prefWidth="200.0" />
-            <HBox prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Label text="Total price: ">
-                     <font>
-                        <Font name="System Bold Italic" size="24.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="10.0" top="10.0" />
-                     </HBox.margin>
-                  </Label>
-               </children>
-            </HBox>
+            <Label fx:id="seatLabel" layoutX="20.0" layoutY="119.0" text="Seat:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" top="10.0" />
+               </VBox.margin>
+            </Label>
+            <Label fx:id="bicycleLabel" layoutX="10.0" layoutY="152.0" text="Bicycle:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" top="10.0" />
+               </VBox.margin>
+            </Label>
          </children>
          <VBox.margin>
             <Insets top="40.0" />

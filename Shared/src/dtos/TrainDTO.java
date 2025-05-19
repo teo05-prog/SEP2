@@ -1,19 +1,23 @@
 package dtos;
 
-import model.MyDate;
+import model.entities.MyDate;
 
 public class TrainDTO
 {
   public int trainId;
+  public int scheduleId;
   public String from;
   public String to;
-  public MyDate myDate;
+  public MyDate departureDate;
+  public MyDate arrivalDate;
 
-  public TrainDTO(int trainId, String from, String to, MyDate myDate){
+  public TrainDTO(int trainId,int scheduleId, String from, String to, MyDate departureDate, MyDate arrivalDate){
     this.trainId = trainId;
+    this.scheduleId = scheduleId;
     this.from = from;
     this.to = to;
-    this.myDate = myDate;
+    this.departureDate = departureDate;
+    this.arrivalDate = arrivalDate;
   }
 
   @Override public String toString(){
@@ -22,8 +26,10 @@ public class TrainDTO
         trainId,
         from,
         to,
-        myDate.hour, myDate.minute,
-        myDate.day, myDate.month, myDate.year
+        departureDate.hour, departureDate.minute,
+        departureDate.day, departureDate.month, departureDate.year,
+        arrivalDate.hour, arrivalDate.minute,
+        arrivalDate.day, arrivalDate.month, arrivalDate.year
     );
   }
 }
