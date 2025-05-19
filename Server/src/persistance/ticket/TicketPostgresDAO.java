@@ -305,8 +305,6 @@ public class TicketPostgresDAO implements TicketDAO
       return null;
     }
 
-    // Assuming MyDate has a constructor that takes year, month, day, hour, minute
-    // This will need to be adjusted based on your actual MyDate implementation
     java.util.Calendar cal = java.util.Calendar.getInstance();
 
     // Set date components
@@ -320,11 +318,13 @@ public class TicketPostgresDAO implements TicketDAO
     int minute = 0;
     if (time != null)
     {
-      cal.setTime(time);
-      hour = cal.get(java.util.Calendar.HOUR_OF_DAY);
-      minute = cal.get(java.util.Calendar.MINUTE);
+      java.util.Calendar timeCal = java.util.Calendar.getInstance();
+      timeCal.setTime(time);
+      hour = timeCal.get(java.util.Calendar.HOUR_OF_DAY);
+      minute = timeCal.get(java.util.Calendar.MINUTE);
     }
 
-    return new MyDate(year, month, day, hour, minute);
+    // Create MyDate object with correct parameter order: day, month, year, hour, minute
+    return new MyDate(day, month, year, hour, minute);
   }
 }
