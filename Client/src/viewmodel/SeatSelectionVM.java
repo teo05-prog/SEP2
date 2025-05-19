@@ -1,9 +1,14 @@
 package viewmodel;
 
+import com.google.gson.Gson;
+import dtos.TrainDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
+import network.ClientSocket;
+import session.Session;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class SeatSelectionVM
@@ -54,5 +59,27 @@ public class SeatSelectionVM
   {
     bookedSeats.addAll(selectedSeats);
     selectedSeats.clear();
+  }
+
+  public void loadBookedSeatsForSelectedTrain(){
+    TrainDTO selectedTrain = Session.getInstance().getSelectedTrainDTO();
+    if (selectedTrain == null) return;
+
+    int trainId = selectedTrain.trainId;
+
+    try {
+      Object response = ClientSocket.sendRequest("seat", "getBookedSeats", trainId);
+
+      // Gson turns numbers into Double by default, so cast carefully
+      List<Double> bookedList = new Gson().fromJson(response.toString(), List.class);
+
+      bookedSeats.clear();
+      for (Double seat : bookedList) {
+        bookedSeats.add(seat.intValue());// safely convert to Integer
+        System.out.println("Booked seats: "+bookedSeats);
+      }
+    } catch (Exception e) {
+      e.printStackTrace(); // optionally replace with logger
+    }
   }
 }

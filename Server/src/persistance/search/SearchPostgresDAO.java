@@ -2,7 +2,7 @@ package persistance.search;
 
 import dtos.SearchFilterDTO;
 import dtos.TrainDTO;
-import model.MyDate;
+import model.entities.MyDate;
 import utilities.LogLevel;
 import utilities.Logger;
 
@@ -36,7 +36,7 @@ public class SearchPostgresDAO implements SearchDAO{
 
   private Connection getConnection() throws SQLException{
     return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail",
-        "postgres", "141220");
+        "postgres", "14012004");
   }
 
   @Override
@@ -71,7 +71,7 @@ public class SearchPostgresDAO implements SearchDAO{
     List<TrainDTO> trains = new ArrayList<>();
 
     String sql = """
-        SELECT t.train_id, s.departureStation, s.arrivalStation, s.departureDate, s.departureTime
+        SELECT s.schedule_id, t.train_id, s.departureStation, s.arrivalStation, s.departureDate, s.departureTime, s.arrivalDate, s.arrivalTime
         FROM schedule s
         JOIN train t ON t.train_id = s.train_id
         WHERE s.departureStation =(
@@ -93,22 +93,32 @@ public class SearchPostgresDAO implements SearchDAO{
 
       ResultSet resultSet = statement.executeQuery();
       while (resultSet.next()){
+        int schedule = resultSet.getInt("schedule_id");
         int id = resultSet.getInt("train_id");
         String from = resultSet.getString("departureStation");
         String to = resultSet.getString("arrivalStation");
 
-        LocalDate date = resultSet.getDate("departureDate").toLocalDate();
-        LocalTime time = resultSet.getTime("departureDate").toLocalTime();
+        LocalDate depDate = resultSet.getDate("departureDate").toLocalDate();
+        LocalTime depTime = resultSet.getTime("departureTime").toLocalTime();
+        LocalDate arrDate = resultSet.getDate("arrivalDate").toLocalDate();
+        LocalTime arrTime = resultSet.getTime("arrivalTime").toLocalTime();
 
-        MyDate myDate = new MyDate(
-            date.getDayOfMonth(),
-            date.getMonthValue(),
-            date.getYear(),
-            time.getHour(),
-            time.getMinute()
+       MyDate departureDate = new MyDate(
+            depDate.getDayOfMonth(),
+            depDate.getMonthValue(),
+            depDate.getYear(),
+            depTime.getHour(),
+            depTime.getMinute()
+        );
+        MyDate arrivalDate = new MyDate(
+            arrDate.getDayOfMonth(),
+            arrDate.getMonthValue(),
+            arrDate.getYear(),
+            arrTime.getHour(),
+            arrTime.getMinute()
         );
 
-        TrainDTO trainDTO = new TrainDTO(id, from, to, myDate);
+        TrainDTO trainDTO = new TrainDTO(id,schedule, from, to, departureDate, arrivalDate);
         trains.add(trainDTO);
       }
     }catch (SQLException e){

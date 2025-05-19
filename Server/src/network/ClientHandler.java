@@ -107,7 +107,7 @@ public class ClientHandler implements Runnable
       case "trains" -> serviceProvider.getTrainsRequestHandler();
       case "schedules" -> serviceProvider.getSchedulesRequestHandler();
       case "seat" -> serviceProvider.getSeatRequestHandler();
-      case "confirm" -> serviceProvider.getConfirmRequestHandler();
+      case "ticket" -> serviceProvider.getTicketRequestHandler();
       case "add" -> serviceProvider.getAddRequestHandler();
       case "mainAdmin" -> serviceProvider.getMainAdminRequestHandler();
       case "modify" -> serviceProvider.getModifyRequestHandler();

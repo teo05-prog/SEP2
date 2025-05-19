@@ -4,6 +4,10 @@ import persistance.admin.ScheduleDAO;
 import persistance.admin.SchedulePostgresDAO;
 import persistance.admin.TrainDAO;
 import persistance.admin.TrainPostgresDAO;
+import persistance.seat.SeatDAO;
+import persistance.seat.SeatPostgresDAO;
+import persistance.ticket.TicketDAO;
+import persistance.ticket.TicketPostgresDAO;
 import services.admin.ScheduleService;
 import services.admin.ScheduleServiceImpl;
 import services.admin.TrainService;
@@ -17,6 +21,10 @@ import persistance.user.UserDAO;
 import persistance.user.UserPostgresDAO;
 import services.search.SearchService;
 import services.search.SearchServiceImpl;
+import services.seat.SeatService;
+import services.seat.SeatServiceImpl;
+import services.ticket.TicketService;
+import services.ticket.TicketServiceImpl;
 import services.user.UserService;
 import services.user.UserServiceImpl;
 import utilities.LogLevel;
@@ -36,6 +44,8 @@ public class ServiceProvider
   private final SearchDAO searchDAO;
   private final TrainDAO trainDAO;
   private final ScheduleDAO scheduleDAO;
+  private final SeatDAO seatDAO;
+  private final TicketDAO ticketDAO;
 
   // Services
   private final UserService userService;
@@ -43,6 +53,8 @@ public class ServiceProvider
   private final SearchService searchService;
   private final TrainService trainService;
   private final ScheduleService scheduleService;
+  private final SeatService seatService;
+  private final TicketService ticketService;
 
   // Request Handlers
   private final RegisterRequestHandler registerRequestHandler;
@@ -50,6 +62,8 @@ public class ServiceProvider
   private final SearchRequestHandler searchRequestHandler;
   private final TrainsRequestHandler trainsRequestHandler;
   private final SchedulesRequestHandler schedulesRequestHandler;
+  private final SeatRequestHandler seatRequestHandler;
+  private final TicketsRequestHandler ticketsRequestHandler;
 
   // Constructor
   private ServiceProvider() throws SQLException
@@ -59,12 +73,15 @@ public class ServiceProvider
 
     //initialize DAO singleton before using it
     SearchPostgresDAO.init(logger);
+    SeatPostgresDAO.init(logger);
 
     // Initialize DAOs
     this.userDAO = UserPostgresDAO.getInstance();
     this.searchDAO = SearchPostgresDAO.getInstance();
     this.trainDAO = TrainPostgresDAO.getInstance();
     this.scheduleDAO = SchedulePostgresDAO.getInstance();
+    this.seatDAO = SeatPostgresDAO.getInstance();
+    this.ticketDAO = TicketPostgresDAO.getInstance();
 
     // Initialize Services
     this.userService = new UserServiceImpl(userDAO);
@@ -72,6 +89,8 @@ public class ServiceProvider
     this.searchService = new SearchServiceImpl(searchDAO, logger);
     this.trainService = new TrainServiceImpl(trainDAO);
     this.scheduleService = new ScheduleServiceImpl(scheduleDAO);
+    this.seatService = new SeatServiceImpl(seatDAO);
+    this.ticketService = new TicketServiceImpl(ticketDAO);
 
     // Initialize Request Handlers
     this.registerRequestHandler = new RegisterRequestHandler(authService);
@@ -79,6 +98,8 @@ public class ServiceProvider
     this.searchRequestHandler = new SearchRequestHandler(searchService,logger);
     this.trainsRequestHandler = new TrainsRequestHandler(trainService);
     this.schedulesRequestHandler = new SchedulesRequestHandler(scheduleService);
+    this.seatRequestHandler = new SeatRequestHandler(seatService,logger);
+    this.ticketsRequestHandler = new TicketsRequestHandler(ticketService);
   }
 
   public static synchronized ServiceProvider getInstance() throws SQLException
@@ -139,15 +160,15 @@ public class ServiceProvider
     return schedulesRequestHandler;
   }
 
-  // Stub methods for other handlers that may be implemented later
   public RequestHandler getSeatRequestHandler()
   {
-    throw new UnsupportedOperationException("Seat handler not implemented yet");
+    return seatRequestHandler;
   }
 
-  public RequestHandler getConfirmRequestHandler()
+  // Stub methods for other handlers that may be implemented later
+  public RequestHandler getTicketRequestHandler()
   {
-    throw new UnsupportedOperationException("Confirm handler not implemented yet");
+    return ticketsRequestHandler;
   }
 
   public RequestHandler getAddRequestHandler()

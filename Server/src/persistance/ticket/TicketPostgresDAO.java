@@ -29,7 +29,7 @@ public class TicketPostgresDAO implements TicketDAO
   private static java.sql.Connection getConnection() throws SQLException
   {
     return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail", "postgres",
-        "141220");
+        "14012004");
   }
 
   @Override public void createSeatAndBicycleTicket(int ticketID, Bicycle bicycleSeat, Seat seatId, Train trainId,

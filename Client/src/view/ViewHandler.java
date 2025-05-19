@@ -8,6 +8,7 @@ import view.admin.add.AddTrainViewController;
 import view.admin.main.MainAdminViewController;
 import view.admin.modify.ModifyViewController;
 import view.admin.myAccount.AdminMyAccountViewController;
+import view.traveller.confirm.ConfirmTicketController;
 import view.traveller.search.SearchTicketController;
 import view.traveller.seat.SeatSelectionController;
 import view.traveller.trains.ChooseTrainController;
@@ -215,13 +216,14 @@ public class ViewHandler
 
   private static void showChooseConfirmTicketView() throws IOException
   {
-    ChooseTrainController controller = new ChooseTrainController();
-    // add view model
+    ConfirmTicketController controller = new ConfirmTicketController();
+    ConfirmTicketVM confirmTicketVM = new ConfirmTicketVM();
     FXMLLoader fxmlLoader = new FXMLLoader(
         ViewHandler.class.getResource("/view/traveller/confirm/ConfirmTicketView.fxml"));
 
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
+    controller.init(confirmTicketVM);
     stage.setTitle("VIArail App");
     stage.setScene(scene);
   }
