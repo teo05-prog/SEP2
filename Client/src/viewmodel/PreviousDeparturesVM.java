@@ -8,7 +8,11 @@ import services.ticket.TicketServiceImpl;
 import session.Session;
 
 import java.sql.SQLException;
+
+import model.entities.MyDate;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PreviousDeparturesVM
 {
@@ -44,9 +48,22 @@ public class PreviousDeparturesVM
         // Get tickets for the current user
         List<Ticket> userTickets = ticketService.getTicketsByEmail(userEmail);
 
+        // Get current date for comparison
+        MyDate today = MyDate.today();
+
+        // Filter tickets to include only those with departure dates in the past
+        List<Ticket> pastTickets = userTickets.stream().filter(ticket -> {
+          // Check if ticket's departure date exists and is in the past
+          if (ticket.getScheduleId().getDepartureDate() != null)
+          {
+            return ticket.getScheduleId().getDepartureDate().isBefore(today);
+          }
+          return false;
+        }).collect(Collectors.toList());
+
         // Clear and add to the observable list
         previousDepartures.clear();
-        previousDepartures.addAll(userTickets);
+        previousDepartures.addAll(pastTickets);
       }
     }
     catch (Exception e)
