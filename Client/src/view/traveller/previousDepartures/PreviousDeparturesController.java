@@ -21,7 +21,6 @@ public class PreviousDeparturesController
 
   public PreviousDeparturesController()
   {
-    this.viewModel = new PreviousDeparturesVM();
   }
 
   public void init(PreviousDeparturesVM viewModel)
@@ -30,37 +29,65 @@ public class PreviousDeparturesController
     {
       this.viewModel = viewModel;
     }
+    else
+    {
+      this.viewModel = new PreviousDeparturesVM();
+    }
     setupUI();
     bindProperties();
   }
+
   @FXML public void initialize()
   {
     if (viewModel == null)
     {
       viewModel = new PreviousDeparturesVM();
+      viewModel.loadPreviousDepartures();
     }
   }
-  public void bindProperties()
-  {
-    // Bind the ListView to the upcoming departures
+
+  public void bindProperties() {
+    // Bind the ListView to the previous departures
     PreviousDeparturesListView.setItems(viewModel.getPreviousDepartures());
 
-    // customize how tickets are displayed
-    //can be deleted if you want the departures to be displayed as default
-    PreviousDeparturesListView.setCellFactory(param -> new ListCell<Ticket>()
-    {
-      @Override protected void updateItem(Ticket ticket, boolean empty)
-      {
+    PreviousDeparturesListView.setCellFactory(param -> new ListCell<Ticket>() {
+      @Override
+      protected void updateItem(Ticket ticket, boolean empty) {
         super.updateItem(ticket, empty);
 
-        if (empty || ticket == null)
-        {
+        if (empty || ticket == null) {
           setText(null);
-        }
-        else
-        {
-          setText(ticket.getTrainId() + " - " + "Departure: " + ticket.getScheduleId().getDepartureDate().toString() + " Arrival: "
-              + ticket.getScheduleId().getArrivalDate().toString());
+        } else {
+          // Format train and departure/arrival information with explicit formatting
+          StringBuilder sb = new StringBuilder();
+          sb.append("Train ID: ").append(ticket.getTrainId().getTrainId());
+          sb.append(", From: ").append(ticket.getScheduleId().getDepartureStation().getName());
+          sb.append(", To: ").append(ticket.getScheduleId().getArrivalStation().getName());
+          sb.append(" - Departure: ");
+
+          // Format date as DD/MM/YYYY
+          if (ticket.getScheduleId().getDepartureDate() != null) {
+            sb.append(String.format("%02d/%02d/%04d",
+                ticket.getScheduleId().getDepartureDate().getDay(),
+                ticket.getScheduleId().getDepartureDate().getMonth(),
+                ticket.getScheduleId().getDepartureDate().getYear()));
+          } else {
+            sb.append("N/A");
+          }
+
+          sb.append(" Arrival: ");
+
+          // Format arrival date as DD/MM/YYYY
+          if (ticket.getScheduleId().getArrivalDate() != null) {
+            sb.append(String.format("%02d/%02d/%04d",
+                ticket.getScheduleId().getArrivalDate().getDay(),
+                ticket.getScheduleId().getArrivalDate().getMonth(),
+                ticket.getScheduleId().getArrivalDate().getYear()));
+          } else {
+            sb.append("N/A");
+          }
+
+          setText(sb.toString());
         }
       }
     });
@@ -69,8 +96,9 @@ public class PreviousDeparturesController
   private void setupUI()
   {
     previousButton.setDisable(true);
-
+    viewModel.loadPreviousDepartures();
   }
+
   @FXML public void onStartButton(ActionEvent e)
   {
     if (e.getSource() == startButton)
@@ -78,10 +106,12 @@ public class PreviousDeparturesController
       ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_USER);
     }
   }
+
   @FXML public void onPreviousButton(ActionEvent e)
   {
-   // do nothing because we are already on Previous departures page
+    // do nothing because we are already on Previous departures page
   }
+
   public void onMyAccountButton(ActionEvent e)
   {
     if (e.getSource() == myAccountButton)
@@ -89,6 +119,7 @@ public class PreviousDeparturesController
       ViewHandler.showView(ViewHandler.ViewType.USER_ACCOUNT);
     }
   }
+
   @FXML public void onUpcomingButton(ActionEvent e)
   {
     if (e.getSource() == upcomingButton)

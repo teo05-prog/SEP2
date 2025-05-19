@@ -14,4 +14,5 @@ public interface TicketService
   void deleteTicket(int ticketId);
   List<Ticket> getAllTickets();
   Ticket getTicketById(int ticketId);
+  List<Ticket> getTicketsByEmail(String email);
 }

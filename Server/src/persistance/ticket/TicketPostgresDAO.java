@@ -222,6 +222,31 @@ public class TicketPostgresDAO implements TicketDAO
     }
   }
 
+  @Override public List<Ticket> getTicketsByEmail(String email)
+  {
+    try (var connection = getConnection())
+    {
+      String sql = "SELECT t.*, "
+          + "s.departureStation, s.arrivalStation, s.departureDate, s.departureTime, s.arrivalDate, s.arrivalTime "
+          + "FROM ticket t " + "JOIN schedule s ON t.schedule_id = s.schedule_id " + "WHERE t.user_email = ?";
+      var statement = connection.prepareStatement(sql);
+      statement.setString(1, email);
+      var resultSet = statement.executeQuery();
+      List<Ticket> tickets = new ArrayList<>();
+
+      while (resultSet.next())
+      {
+        tickets.add(extractTicketFromResultSet(resultSet));
+      }
+      return tickets;
+    }
+    catch (SQLException e)
+    {
+      System.err.println("Error retrieving tickets by user email: " + e.getMessage());
+      throw new RuntimeException("Database error while retrieving user tickets", e);
+    }
+  }
+
   private Ticket extractTicketFromResultSet(ResultSet resultSet) throws SQLException
   {
     int ticketId = resultSet.getInt("ticket_id");
@@ -249,8 +274,12 @@ public class TicketPostgresDAO implements TicketDAO
 
     Schedule schedule = new Schedule(scheduleId, departureStation, arrivalStation, departureDate, arrivalDate);
 
-    // Create basic ticket
-    Ticket ticket = new Ticket(ticketId, new Train(trainId), schedule, email);
+    // Create train and set its schedule
+    Train train = new Train(trainId);
+    train.setSchedule(schedule);
+
+    // Create basic ticket (now using the train with schedule correctly set)
+    Ticket ticket = new Ticket(ticketId, train, schedule, email);
 
     // Add seat if present
     int seatNumber = resultSet.getInt("seat_number");
@@ -276,8 +305,6 @@ public class TicketPostgresDAO implements TicketDAO
       return null;
     }
 
-    // Assuming MyDate has a constructor that takes year, month, day, hour, minute
-    // This will need to be adjusted based on your actual MyDate implementation
     java.util.Calendar cal = java.util.Calendar.getInstance();
 
     // Set date components
@@ -291,11 +318,13 @@ public class TicketPostgresDAO implements TicketDAO
     int minute = 0;
     if (time != null)
     {
-      cal.setTime(time);
-      hour = cal.get(java.util.Calendar.HOUR_OF_DAY);
-      minute = cal.get(java.util.Calendar.MINUTE);
+      java.util.Calendar timeCal = java.util.Calendar.getInstance();
+      timeCal.setTime(time);
+      hour = timeCal.get(java.util.Calendar.HOUR_OF_DAY);
+      minute = timeCal.get(java.util.Calendar.MINUTE);
     }
 
-    return new MyDate(year, month, day, hour, minute);
+    // Create MyDate object with correct parameter order: day, month, year, hour, minute
+    return new MyDate(day, month, year, hour, minute);
   }
 }

@@ -21,7 +21,6 @@ public class UpcomingDepartureController
 
   public UpcomingDepartureController()
   {
-    this.viewModel = new UpcomingDeparturesVM();
   }
 
   public void init(UpcomingDeparturesVM viewModel)
@@ -29,6 +28,10 @@ public class UpcomingDepartureController
     if (viewModel != null)
     {
       this.viewModel = viewModel;
+    }
+    else
+    {
+      this.viewModel = new UpcomingDeparturesVM();
     }
     setupUI();
     bindProperties();
@@ -39,12 +42,14 @@ public class UpcomingDepartureController
     if (viewModel == null)
     {
       viewModel = new UpcomingDeparturesVM();
+      viewModel.loadUpcomingDepartures();
     }
   }
 
   private void setupUI()
   {
     upcomingButton.setDisable(true);
+    viewModel.loadUpcomingDepartures();
   }
 
   public void bindProperties()
@@ -66,8 +71,8 @@ public class UpcomingDepartureController
         }
         else
         {
-          setText(ticket.getTrainId() + " - " + "Departure: " + ticket.getScheduleId().getDepartureDate().toString() + " Arrival: "
-              + ticket.getScheduleId().getArrivalDate().toString());
+          setText(ticket.getTrainId() + " - " + "Departure: " + ticket.getScheduleId().getDepartureDate().toString()
+              + " Arrival: " + ticket.getScheduleId().getArrivalDate().toString());
         }
       }
     });

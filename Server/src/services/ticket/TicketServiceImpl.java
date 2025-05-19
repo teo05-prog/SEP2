@@ -2,16 +2,28 @@ package services.ticket;
 
 import model.entities.*;
 import persistance.ticket.TicketDAO;
+import persistance.ticket.TicketPostgresDAO;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class TicketServiceImpl implements TicketService
 {
   private final TicketDAO ticketDAO;
+  private static TicketServiceImpl instance;
 
-  public TicketServiceImpl(TicketDAO ticketDAO)
+  public TicketServiceImpl() throws SQLException
   {
-    this.ticketDAO = ticketDAO;
+    this.ticketDAO = TicketPostgresDAO.getInstance();
+  }
+
+  public static TicketServiceImpl getInstance() throws SQLException
+  {
+    if (instance == null)
+    {
+      instance = new TicketServiceImpl();
+    }
+    return instance;
   }
 
   @Override public void createSeatAndBicycleTicket(int ticketID, Bicycle bicycleSeat, Seat seatId, Train trainId,
@@ -111,6 +123,11 @@ public class TicketServiceImpl implements TicketService
     }
 
     return ticketDAO.getTicketById(ticketId);
+  }
+
+  @Override public List<Ticket> getTicketsByEmail(String email)
+  {
+    return ticketDAO.getTicketsByEmail(email);
   }
 
   private void validateTicketData(int ticketID, Train trainId, Schedule scheduleId, String email)
