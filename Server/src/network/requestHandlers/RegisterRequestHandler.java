@@ -2,8 +2,8 @@ package network.requestHandlers;
 
 import com.google.gson.Gson;
 import model.exceptions.ValidationException;
-import services.AuthenticationService;
-import dtos.RegisterRequest;
+import services.authentication.AuthenticationService;
+import dtos.RegisterDTO;
 
 public class RegisterRequestHandler implements RequestHandler
 {
@@ -21,7 +21,7 @@ public class RegisterRequestHandler implements RequestHandler
     {
 
       //convert JSON to RegisterRequest
-      RegisterRequest registerRequest = gson.fromJson(gson.toJson(payload), RegisterRequest.class);
+      RegisterDTO registerRequest = gson.fromJson(gson.toJson(payload), RegisterDTO.class);
 
       String result = authService.register(registerRequest);
       if ("Success".equals(result))

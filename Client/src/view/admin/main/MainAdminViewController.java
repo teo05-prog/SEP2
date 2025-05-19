@@ -1,10 +1,14 @@
 package view.admin.main;
 
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.cell.TextFieldListCell;
+import javafx.util.StringConverter;
 import model.entities.Train;
 import view.ViewHandler;
 import viewmodel.MainAdminVM;
@@ -25,7 +29,14 @@ public class MainAdminViewController
 
   public MainAdminViewController()
   {
-    this.viewModel = new MainAdminVM();
+    try
+    {
+      this.viewModel = new MainAdminVM();
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
   }
 
   public void init(MainAdminVM viewModel)
@@ -41,18 +52,95 @@ public class MainAdminViewController
   {
     if (viewModel == null)
     {
-      viewModel = new MainAdminVM();
+      try
+      {
+        viewModel = new MainAdminVM();
+      }
+      catch (Exception e)
+      {
+        e.printStackTrace();
+      }
     }
     bindProperties();
     trainsButton.setDisable(true);
+    setupTrainsListView();
+    viewModel.updateTrainsList();
+    try
+    {
+      viewModel.updateSchedulesList();
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  private void setupTrainsListView()
+  {
+    trainsListView.setItems(viewModel.getTrains());
+    trainsListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+    trainsListView.setCellFactory(param -> new TextFieldListCell<>(new StringConverter<Train>()
+    {
+      @Override public String toString(Train train)
+      {
+        if (train == null)
+          return "";
+        try
+        {
+          if (train.getSchedule() != null && train.getSchedule().getDepartureStation() != null
+              && train.getSchedule().getArrivalStation() != null)
+          {
+            return String.format("Train ID: %d, From: %s, To: %s", train.getTrainId(),
+                train.getSchedule().getDepartureStation().getName(), train.getSchedule().getArrivalStation().getName());
+          }
+          else
+          {
+            return String.format("Train ID: %d, No schedule", train.getTrainId());
+          }
+        }
+        catch (NullPointerException e)
+        {
+          // Handle case where schedule is null
+          return "Train ID: " + train.getTrainId() + ", No schedule";
+        }
+      }
+
+      @Override public Train fromString(String string)
+      {
+        // Not needed for non-editable cells
+        return null;
+      }
+    }));
+
+    // Add listener to handle selection changes
+    trainsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+      viewModel.trainSelectedProperty().set(newValue != null);
+    });
+
+    // Add listener to handle list changes
+    viewModel.getTrains().addListener((ListChangeListener<Train>) change -> {
+      while (change.next())
+      {
+        if (change.wasAdded() || change.wasRemoved())
+        {
+          // If list is empty, disable buttons
+          if (viewModel.getTrains().isEmpty())
+          {
+            viewModel.trainSelectedProperty().set(false);
+          }
+        }
+      }
+    });
   }
 
   private void bindProperties()
   {
     messageLabel.textProperty().bind(viewModel.messageProperty());
-    // trainsListView.setItems(viewModel.getTrains());
+    trainsListView.setItems(viewModel.getTrains());
     removeButton.disableProperty().bind(viewModel.enableRemoveButtonProperty());
     modifyButton.disableProperty().bind(viewModel.enableModifyButtonProperty());
+
     trainsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
       viewModel.trainSelectedProperty().set(newValue != null);
     });
@@ -69,7 +157,8 @@ public class MainAdminViewController
         Thread.sleep(3000);
         javafx.application.Platform.runLater(() -> {
           messageLabel.setText("");
-          messageLabel.textProperty().bind(viewModel.messageProperty()); // Rebind
+          messageLabel.textProperty().bind(viewModel.messageProperty());
+          viewModel.updateTrainsList();
         });
       }
       catch (InterruptedException e)
@@ -82,6 +171,7 @@ public class MainAdminViewController
   public void onTrainsButton(ActionEvent e)
   {
     // nothing happens, already on this view
+    viewModel.updateTrainsList();
   }
 
   public void onMyAccountButton(ActionEvent e)
@@ -102,10 +192,8 @@ public class MainAdminViewController
   {
     if (e.getSource() == removeButton)
     {
-      viewModel.removeTrain(trainsListView.getSelectionModel().getSelectedItem()); // to be implemented
-      viewModel.updateTrainsList(); // refresh the list
+      viewModel.removeTrain(trainsListView.getSelectionModel().getSelectedItem());
     }
-    // remove selected train
   }
 
   public void onModifyButton(ActionEvent e)

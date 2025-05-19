@@ -7,12 +7,12 @@ import java.time.LocalDateTime;
 
 public class MyDate
 {
-  private int day;
-  private int month;
-  private int year;
+  public int day;
+  public int month;
+  public int year;
 
-  private int minute;
-  private int hour;
+  public int minute;
+  public int hour;
 
   public MyDate(int day, int month, int year, int hour, int minute)
   {
@@ -165,5 +165,10 @@ public class MyDate
 
   public LocalDateTime toLocalDateTime() {
     return LocalDateTime.of(year, month, day, hour, minute);
+  }
+
+  public java.util.Date getDate()
+  {
+    return java.sql.Date.valueOf(year + "-" + month + "-" + day);
   }
 }

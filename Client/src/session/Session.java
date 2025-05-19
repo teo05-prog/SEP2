@@ -1,6 +1,7 @@
 package session;
 
 import dtos.TrainDTO;
+import model.entities.Ticket;
 
 public class Session
 {
@@ -10,6 +11,7 @@ public class Session
   private boolean isAdmin;
   private String userName;
   private String birthday;
+  private Ticket currentTicket;
 
   private Session()
   {
@@ -37,6 +39,7 @@ public class Session
   public void clear()
   {
     userEmail = null;
+    isAdmin = false;
   }
 
   public void setSelectedTrainDTO(TrainDTO selectedTrain)
@@ -77,5 +80,15 @@ public class Session
   public void setBirthday(String birthday)
   {
     this.birthday = birthday;
+  }
+
+  public void setCurrentTicket(Ticket currentTicket)
+  {
+    this.currentTicket = currentTicket;
+  }
+
+  public Ticket getCurrentTicket()
+  {
+    return currentTicket;
   }
 }

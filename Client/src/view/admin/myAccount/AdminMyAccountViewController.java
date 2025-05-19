@@ -6,7 +6,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import view.ViewHandler;
 import viewmodel.AdminMyAccountVM;
-import viewmodel.TravellerMyAccountVM;
 
 public class AdminMyAccountViewController
 {
@@ -21,6 +20,7 @@ public class AdminMyAccountViewController
   {
     this.viewModel = viewModel;
     setupBindings();
+    viewModel.refresh();
   }
 
   @FXML public void initialize()

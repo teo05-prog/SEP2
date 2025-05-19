@@ -1,16 +1,16 @@
 package dtos;
 
-public class LoginRequest
+public class LoginDTO
 {
   private String email;
   private String password;
 
-  public LoginRequest()
+  public LoginDTO()
   {
     // no-args constructor for Gson
   }
 
-  public LoginRequest(String email, String password)
+  public LoginDTO(String email, String password)
   {
     this.email = email;
     this.password = password;

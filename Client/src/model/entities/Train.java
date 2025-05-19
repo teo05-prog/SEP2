@@ -24,8 +24,28 @@ public class Train
     this.trainId = trainId;
   }
 
+  public Schedule getSchedule()
+  {
+    return schedule;
+  }
+
+  public void setSchedule(Schedule schedule)
+  {
+    this.schedule = schedule;
+  }
+
+  @Override
   public String toString()
   {
-    return "Train ID: " + trainId + ", " + schedule.toString();
+    if (schedule != null && schedule.getDepartureStation() != null && schedule.getArrivalStation() != null)
+    {
+
+      return String.format("Train ID: %d, From: %s, To: %s", trainId, schedule.getDepartureStation().getName(),
+          schedule.getArrivalStation().getName());
+    }
+    else
+    {
+      return String.format("Train ID: %d, No schedule", trainId);
+    }
   }
 }

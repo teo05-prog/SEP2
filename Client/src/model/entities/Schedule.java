@@ -2,14 +2,17 @@ package model.entities;
 
 public class Schedule
 {
+  private int scheduleId;
   private Station departureStation;
   private Station arrivalStation;
 
   private MyDate departureDate;
   private MyDate arrivalDate;
 
-  public Schedule(Station departureStation, Station arrivalStation, MyDate departureDate, MyDate arrivalDate)
+
+  public Schedule(int scheduleId, Station departureStation, Station arrivalStation, MyDate departureDate, MyDate arrivalDate)
   {
+    this.scheduleId = scheduleId;
     this.departureStation = departureStation;
     this.arrivalStation = arrivalStation;
     this.departureDate = departureDate;
@@ -56,9 +59,19 @@ public class Schedule
     this.arrivalStation = arrivalStation;
   }
 
+  public int getScheduleId()
+  {
+    return scheduleId;
+  }
+
+  public void setScheduleId(int scheduleId)
+  {
+    this.scheduleId = scheduleId;
+  }
+
   public String toString()
   {
-    return "Departure Station: " + departureStation.getName() + ", Arrival Station: " + arrivalStation.getName()
-        + ", Departure Date: " + departureDate.toString() + ", Arrival Date: " + arrivalDate.toString();
+    return "From: " + departureStation.getName() + ", To: " + arrivalStation.getName()
+        + ", Departure: " + departureDate.toString() + ", Arrival: " + arrivalDate.toString();
   }
 }

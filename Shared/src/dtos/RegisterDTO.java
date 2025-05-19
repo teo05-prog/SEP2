@@ -1,24 +1,24 @@
-package services;
+package dtos;
 
 import model.entities.MyDate;
 
-public class RegisterRequest
+public class RegisterDTO
 {
   private String name;
   private String email;
   private String password;
-  private MyDate birthDate;
+  private MyDate birthday;
 
-  public RegisterRequest()
+  public RegisterDTO()
   {
   }
 
-  public RegisterRequest(String name, String email, String password, MyDate birthDate)
+  public RegisterDTO(String name, String email, String password, MyDate birthday)
   {
     this.name = name;
     this.email = email;
     this.password = password;
-    this.birthDate = birthDate;
+    this.birthday = birthday;
   }
 
   public String getName()
@@ -51,13 +51,13 @@ public class RegisterRequest
     this.password = password;
   }
 
-  public MyDate getBirthDate()
+  public MyDate getBirthday()
   {
-    return birthDate;
+    return birthday;
   }
 
-  public void setBirthDate(MyDate birthDate)
+  public void setBirthday(MyDate birthday)
   {
-    this.birthDate = birthDate;
+    this.birthday = birthday;
   }
 }

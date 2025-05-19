@@ -1,5 +1,5 @@
 package viewmodel;
-import dtos.LoginRequest;
+import dtos.LoginDTO;
 import dtos.Request;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -94,7 +94,7 @@ public class LoginVM
   {
     if (!disableLoginButton.get())
     {
-      LoginRequest loginRequest = new LoginRequest(email.get(), password.get());
+      LoginDTO loginRequest = new LoginDTO(email.get(), password.get());
       Request request = new Request("login", "login", loginRequest);
       try
       {

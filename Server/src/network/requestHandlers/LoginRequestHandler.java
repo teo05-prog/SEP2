@@ -2,8 +2,8 @@ package network.requestHandlers;
 
 import com.google.gson.Gson;
 import model.exceptions.ValidationException;
-import services.AuthenticationService;
-import dtos.LoginRequest;
+import services.authentication.AuthenticationService;
+import dtos.LoginDTO;
 import utilities.LogLevel;
 import utilities.Logger;
 
@@ -32,8 +32,8 @@ public class LoginRequestHandler implements RequestHandler
 
   private Object handleLogin(Object payload)
   {
-    LoginRequest loginRequest = gson.fromJson(gson.toJson(payload),
-        LoginRequest.class);
+    LoginDTO loginRequest = gson.fromJson(gson.toJson(payload),
+        LoginDTO.class);
     String result = authService.login(loginRequest);
     if ("Ok".equals(result))
     {

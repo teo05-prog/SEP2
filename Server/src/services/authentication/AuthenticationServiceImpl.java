@@ -1,7 +1,7 @@
-package services;
+package services.authentication;
 
-import dtos.LoginRequest;
-import dtos.RegisterRequest;
+import dtos.LoginDTO;
+import dtos.RegisterDTO;
 import model.entities.Admin;
 import model.entities.User;
 import persistance.user.UserDAO;
@@ -20,7 +20,7 @@ public class AuthenticationServiceImpl implements AuthenticationService
     this.userService = userService;
   }
 
-  @Override public String login(LoginRequest request)
+  @Override public String login(LoginDTO request)
   {
     System.out.println("Login attempt for: " + request.getEmail());
 
@@ -43,7 +43,7 @@ public class AuthenticationServiceImpl implements AuthenticationService
     return "Ok";
   }
 
-  @Override public String register(RegisterRequest request)
+  @Override public String register(RegisterDTO request)
   {
     // Validate name
     if (request.getName() == null || request.getName().isEmpty())
@@ -86,11 +86,6 @@ public class AuthenticationServiceImpl implements AuthenticationService
     }
   }
 
-  @Override public boolean isCurrentUserAdmin()
-  {
-    return isAdmin;
-  }
-
   @Override public String getUserRole(String email)
   {
     User user = userDAO.readByEmail(email);
@@ -101,12 +96,8 @@ public class AuthenticationServiceImpl implements AuthenticationService
     return null;
   }
 
-  @Override public User getCurrentUser()
+  public String getLoggedInUserEmail()
   {
-    return currentUser;
-  }
-
-  public String getLoggedInUserEmail(){
     return currentUser != null ? currentUser.getEmail() : null;
   }
 }
