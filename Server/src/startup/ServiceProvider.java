@@ -62,6 +62,7 @@ public class ServiceProvider
   private final SearchRequestHandler searchRequestHandler;
   private final TrainsRequestHandler trainsRequestHandler;
   private final SchedulesRequestHandler schedulesRequestHandler;
+  private final UserDetailsRequestHandler userDetailsRequestHandler;
   private final SeatRequestHandler seatRequestHandler;
   private final TicketsRequestHandler ticketsRequestHandler;
 
@@ -98,6 +99,7 @@ public class ServiceProvider
     this.searchRequestHandler = new SearchRequestHandler(searchService,logger);
     this.trainsRequestHandler = new TrainsRequestHandler(trainService);
     this.schedulesRequestHandler = new SchedulesRequestHandler(scheduleService);
+    this.userDetailsRequestHandler = new UserDetailsRequestHandler(userDAO);
     this.seatRequestHandler = new SeatRequestHandler(seatService,logger);
     this.ticketsRequestHandler = new TicketsRequestHandler(ticketService);
   }
@@ -160,17 +162,23 @@ public class ServiceProvider
     return schedulesRequestHandler;
   }
 
+  public RequestHandler getUserDetailsRequestHandler()
+  {
+    return userDetailsRequestHandler;
+  }
+
+
   public RequestHandler getSeatRequestHandler()
   {
     return seatRequestHandler;
   }
 
-  // Stub methods for other handlers that may be implemented later
+
   public RequestHandler getTicketRequestHandler()
   {
     return ticketsRequestHandler;
   }
-
+  // Stub methods for other handlers that may be implemented later
   public RequestHandler getAddRequestHandler()
   {
     throw new UnsupportedOperationException("Add handler not implemented yet");

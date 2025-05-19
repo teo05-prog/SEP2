@@ -1,23 +1,24 @@
 package dtos;
 
-import model.entities.MyDate;
+import java.io.Serializable;
 
-public class RegisterRequest
+public class UserDTO implements Serializable
 {
+  private static final long serialVersionUID = 1L;
+
   private String name;
   private String email;
-  private String password;
-  private MyDate birthday;
+  private String birthday;
 
-  public RegisterRequest()
+  public UserDTO()
   {
+    // no-args constructor for Gson
   }
 
-  public RegisterRequest(String name, String email, String password, MyDate birthday)
+  public UserDTO(String name, String email, String birthday)
   {
     this.name = name;
     this.email = email;
-    this.password = password;
     this.birthday = birthday;
   }
 
@@ -41,22 +42,12 @@ public class RegisterRequest
     this.email = email;
   }
 
-  public String getPassword()
-  {
-    return password;
-  }
-
-  public void setPassword(String password)
-  {
-    this.password = password;
-  }
-
-  public MyDate getBirthday()
+  public String getBirthday()
   {
     return birthday;
   }
 
-  public void setBirthday(MyDate birthday)
+  public void setBirthday(String birthday)
   {
     this.birthday = birthday;
   }

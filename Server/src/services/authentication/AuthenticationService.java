@@ -1,18 +1,13 @@
 package services.authentication;
 
-import model.entities.User;
-import dtos.LoginRequest;
-import dtos.RegisterRequest;
+import dtos.LoginDTO;
+import dtos.RegisterDTO;
 
 public interface AuthenticationService
 {
-  String login(LoginRequest request);
+  String login(LoginDTO request);
 
-  String register(RegisterRequest request);
-
-  boolean isCurrentUserAdmin();
+  String register(RegisterDTO request);
 
   String getUserRole(String email);
-
-  User getCurrentUser();
 }
