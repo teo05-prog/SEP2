@@ -6,9 +6,12 @@ import java.util.List;
 
 public interface ScheduleDAO
 {
-  List<Schedule> getAllSchedules();
-  Schedule getScheduleById(int scheduleId);
   void createSchedule(Schedule schedule);
   void updateSchedule(Schedule schedule);
   void deleteSchedule(Schedule schedule);
+  Schedule getScheduleById(int scheduleId);
+  List<Schedule> getAllSchedules();
+  void assignScheduleToTrain(int scheduleId, int trainId);
+  void removeScheduleFromTrain(int scheduleId);
+  List<Schedule> getSchedulesByTrainId(int trainId);
 }

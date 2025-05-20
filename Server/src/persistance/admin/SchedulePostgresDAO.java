@@ -180,4 +180,79 @@ public class SchedulePostgresDAO implements ScheduleDAO
       e.printStackTrace();
     }
   }
+
+  @Override public void assignScheduleToTrain(int scheduleId, int trainId)
+  {
+    String sql = "UPDATE schedule SET train_id = ? WHERE schedule_id = ?";
+
+    try (var connection = getConnection())
+    {
+      var statement = connection.prepareStatement(sql);
+      statement.setInt(1, trainId);
+      statement.setInt(2, scheduleId);
+      statement.executeUpdate();
+    }
+    catch (SQLException e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  @Override public void removeScheduleFromTrain(int scheduleId)
+  {
+    String sql = "UPDATE schedule SET train_id = NULL WHERE schedule_id = ?";
+
+    try (var connection = getConnection())
+    {
+      var statement = connection.prepareStatement(sql);
+      statement.setInt(1, scheduleId);
+      statement.executeUpdate();
+    }
+    catch (SQLException e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  @Override public List<Schedule> getSchedulesByTrainId(int trainId)
+  {
+    List<Schedule> schedules = new ArrayList<>();
+    String sql = "SELECT * FROM schedule WHERE train_id = ?";
+
+    try (var connection = getConnection())
+    {
+      var statement = connection.prepareStatement(sql);
+      statement.setInt(1, trainId);
+      ResultSet rs = statement.executeQuery();
+
+      while (rs.next())
+      {
+        int scheduleId = rs.getInt("schedule_id");
+        Station departureStation = new Station(rs.getString("departureStation"));
+        Station arrivalStation = new Station(rs.getString("arrivalStation"));
+
+        Date departureDate = rs.getDate("departureDate");
+        Time departureTime = rs.getTime("departureTime");
+        Date arrivalDate = rs.getDate("arrivalDate");
+        Time arrivalTime = rs.getTime("arrivalTime");
+
+        MyDate myDepartureDate = new MyDate((java.sql.Date) departureDate);
+        myDepartureDate.setHour(departureTime.toLocalTime().getHour());
+        myDepartureDate.setMinute(departureTime.toLocalTime().getMinute());
+
+        MyDate myArrivalDate = new MyDate((java.sql.Date) arrivalDate);
+        myArrivalDate.setHour(arrivalTime.toLocalTime().getHour());
+        myArrivalDate.setMinute(arrivalTime.toLocalTime().getMinute());
+
+        Schedule schedule = new Schedule(scheduleId, departureStation, arrivalStation, myDepartureDate, myArrivalDate);
+        schedules.add(schedule);
+      }
+    }
+    catch (SQLException e)
+    {
+      e.printStackTrace();
+    }
+
+    return schedules;
+  }
 }

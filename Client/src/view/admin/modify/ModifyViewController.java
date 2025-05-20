@@ -2,13 +2,8 @@ package view.admin.modify;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.*;
 import model.entities.Schedule;
-import model.entities.Train;
 import view.ViewHandler;
 import viewmodel.ModifyTrainVM;
 
@@ -23,7 +18,6 @@ public class ModifyViewController
   @FXML private TableColumn<Schedule, String> toColumn;
   @FXML private TableColumn<Schedule, String> arrivalColumn;
   @FXML private TableColumn<Schedule, String> departureColumn;
-  @FXML private TableColumn<Schedule, Integer> seatsColumn;
 
   @FXML private Button backButton;
   @FXML private Button saveButton;
@@ -41,24 +35,12 @@ public class ModifyViewController
     toColumn.setCellValueFactory(cellData -> viewModel.getArrivalStationNameProperty(cellData.getValue()));
     departureColumn.setCellValueFactory(cellData -> viewModel.getDepartureTimeProperty(cellData.getValue()));
     arrivalColumn.setCellValueFactory(cellData -> viewModel.getArrivalTimeProperty(cellData.getValue()));
-
-    // For available seats, we need to adjust since this may be a property of Train rather than Schedule
-    // Assuming Schedule has availableSeats property, otherwise this needs to be calculated
-    seatsColumn.setCellValueFactory(new PropertyValueFactory<>("availableSeats"));
-
-    // Handle row selection
-    trainTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-      if (newSelection != null)
-      {
-        viewModel.currentScheduleProperty().set(newSelection);
-      }
-    });
   }
 
   private void bindData()
   {
     trainIDLabel.textProperty().bind(viewModel.getTrainIDProperty());
-    trainTable.setItems(viewModel.getAvailableSchedules());
+    trainTable.setItems(viewModel.getTrainSchedules());
     saveButton.disableProperty().bind(viewModel.getSaveButtonDisabledProperty());
   }
 

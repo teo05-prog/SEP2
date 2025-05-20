@@ -38,4 +38,19 @@ public class ScheduleServiceImpl implements ScheduleService
   {
     return scheduleDAO.getAllSchedules();
   }
+
+  @Override public void assignScheduleToTrain(int scheduleId, int trainId)
+  {
+    scheduleDAO.assignScheduleToTrain(scheduleId, trainId);
+  }
+
+  @Override public void removeScheduleFromTrain(int scheduleId)
+  {
+    scheduleDAO.removeScheduleFromTrain(scheduleId);
+  }
+
+  @Override public List<Schedule> getSchedulesByTrainId(int trainId)
+  {
+    return scheduleDAO.getSchedulesByTrainId(trainId);
+  }
 }
