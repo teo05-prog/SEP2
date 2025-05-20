@@ -3,6 +3,7 @@ package viewmodel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import model.deserializer.ScheduleDeserializer;
 import dtos.Request;
 import dtos.Response;
 import dtos.error.ErrorResponse;
@@ -17,7 +18,6 @@ import javafx.scene.control.ButtonType;
 import model.entities.Schedule;
 import model.entities.Train;
 import model.entities.TrainList;
-import session.Session;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,8 +38,11 @@ public class MainAdminVM
 
   private final ObservableList<Train> observableTrains = FXCollections.observableArrayList();
   private final ObservableList<Schedule> observableSchedules = FXCollections.observableArrayList();
+  private final ObservableList<Object> displayItems = FXCollections.observableArrayList();
 
-  private final Gson gson = new GsonBuilder().create();
+  private Train selectedTrain;
+
+  private final Gson gson = new GsonBuilder().registerTypeAdapter(Schedule.class, new ScheduleDeserializer()).create();
   private static final String HOST = "localhost";
   private static final int PORT = 4892;
 
@@ -51,6 +54,7 @@ public class MainAdminVM
     try
     {
       updateSchedulesList();
+      createDisplayList();
     }
     catch (Exception e)
     {
@@ -89,6 +93,21 @@ public class MainAdminVM
     return observableSchedules;
   }
 
+  public ObservableList<Object> getDisplayItems()
+  {
+    return displayItems;
+  }
+
+  public void setSelectedTrain(Train train)
+  {
+    this.selectedTrain = train;
+  }
+
+  public Train getSelectedTrain()
+  {
+    return selectedTrain;
+  }
+
   public String formatTrainDisplay(Train train)
   {
     if (train.getSchedule() != null && train.getSchedule().getDepartureStation() != null
@@ -104,18 +123,25 @@ public class MainAdminVM
     }
   }
 
+  public void createDisplayList()
+  {
+    displayItems.clear();
+    for (Train train : observableTrains)
+    {
+      displayItems.add(train);
+    }
+  }
+
   private Object request(String handler, String action, Object payload) throws Exception
   {
     try (Socket socket = new Socket(HOST, PORT);
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())))
     {
-
       // Create and send request
       Request request = new Request(handler, action, payload);
       String jsonRequest = gson.toJson(request);
       out.println(jsonRequest);
-
       // Read and parse response
       String jsonResponse = in.readLine();
       Response response = gson.fromJson(jsonResponse, Response.class);
@@ -153,7 +179,10 @@ public class MainAdminVM
       request("trains", "deleteTrain", selectedItem.getTrainId());
       message.set("Train " + selectedItem.getTrainId() + " removed.");
       trainSelected.set(false);
+      selectedTrain = null;
       updateTrainsList();
+      updateSchedulesList();
+      createDisplayList();
       return true;
     }
     catch (Exception e)
@@ -179,6 +208,7 @@ public class MainAdminVM
               .getName() + " removed.");
       scheduleSelected.set(false);
       updateSchedulesList();
+      createDisplayList();
     }
     catch (Exception e)
     {
@@ -228,22 +258,20 @@ public class MainAdminVM
       {
         observableSchedules.clear();
 
-        // Handle different response types correctly
-        if (response instanceof List)
+        // Convert the response to JSON string
+        String jsonResponse = gson.toJson(response);
+
+        // Define the proper type token for Schedule list
+        Type scheduleListType = new TypeToken<List<Schedule>>()
         {
-          observableSchedules.addAll((List<Schedule>) response);
-        }
-        else
+        }.getType();
+
+        // Deserialize properly with type information
+        List<Schedule> schedules = gson.fromJson(jsonResponse, scheduleListType);
+
+        if (schedules != null)
         {
-          // If response is JSON, deserialize it to the correct type
-          Type listType = new TypeToken<List<Schedule>>()
-          {
-          }.getType();
-          List<Schedule> schedules = gson.fromJson(gson.toJson(response), listType);
-          if (schedules != null)
-          {
-            observableSchedules.addAll(schedules);
-          }
+          observableSchedules.addAll(schedules);
         }
       }
     }
@@ -263,8 +291,6 @@ public class MainAdminVM
     }
     try
     {
-      // Handle train modification logic here
-      // This could involve navigating to a different view or showing a dialog
       message.set("Preparing to modify train " + selectedItem.getTrainId() + ".");
     }
     catch (Exception e)
@@ -294,12 +320,6 @@ public class MainAdminVM
     }
   }
 
-  /**
-   * Shows a confirmation dialog before deleting a train.
-   *
-   * @param train The train to delete
-   * @return true if the user confirmed deletion, false otherwise
-   */
   public boolean confirmDeleteDialog(Train train)
   {
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -311,12 +331,6 @@ public class MainAdminVM
     return result.isPresent() && result.get() == ButtonType.OK;
   }
 
-  /**
-   * Shows a success alert with the specified title and message.
-   *
-   * @param title The alert title
-   * @param message The alert message
-   */
   public void showSuccessAlert(String title, String message)
   {
     Alert alert = new Alert(Alert.AlertType.INFORMATION);

@@ -9,6 +9,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.util.StringConverter;
+import model.entities.Schedule;
 import model.entities.Train;
 import view.ViewHandler;
 import viewmodel.MainAdminVM;
@@ -18,7 +19,7 @@ public class MainAdminViewController
 {
   private MainAdminVM viewModel;
 
-  @FXML private ListView<Train> trainsListView;
+  @FXML private ListView<Object> trainsListView; // Changed from Train to Object to handle both Train and Schedule items
   @FXML private Label messageLabel;
 
   @FXML private Button trainsButton;
@@ -69,27 +70,26 @@ public class MainAdminViewController
 
   private void setupTrainsListView()
   {
-    trainsListView.setItems(viewModel.getTrains());
+    trainsListView.setItems(viewModel.getDisplayItems());
     trainsListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-    trainsListView.setCellFactory(param -> new TextFieldListCell<>(new StringConverter<Train>()
+    trainsListView.setCellFactory(param -> new TextFieldListCell<>(new StringConverter<Object>()
     {
-      @Override public String toString(Train train)
+      @Override public String toString(Object item)
       {
-        if (train == null)
+        if (item == null)
           return "";
-        try
+
+        if (item instanceof Train)
         {
-          return viewModel.formatTrainDisplay(train);
+          Train train = (Train) item;
+          return "Train ID: " + train.getTrainId();
         }
-        catch (NullPointerException e)
-        {
-          // Handle case where schedule is null
-          return "Train ID: " + train.getTrainId() + ", No schedule";
-        }
+
+        return item.toString();
       }
 
-      @Override public Train fromString(String string)
+      @Override public Object fromString(String string)
       {
         // Not needed for non-editable cells
         return null;
@@ -98,19 +98,24 @@ public class MainAdminViewController
 
     // Add listener to handle selection changes
     trainsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-      viewModel.trainSelectedProperty().set(newValue != null);
-      // REMOVED the direct setting of button disable properties here
-      // as they are already bound in bindProperties()
+      boolean isTrainSelected = newValue instanceof Train;
+      viewModel.trainSelectedProperty().set(isTrainSelected);
+
+      if (isTrainSelected)
+      {
+        // If a train is selected, store it in the viewModel
+        viewModel.setSelectedTrain((Train) newValue);
+      }
     });
 
     // Add listener to handle list changes
-    viewModel.getTrains().addListener((ListChangeListener<Train>) change -> {
+    viewModel.getDisplayItems().addListener((ListChangeListener<Object>) change -> {
       while (change.next())
       {
         if (change.wasAdded() || change.wasRemoved())
         {
           // If list is empty, disable buttons
-          if (viewModel.getTrains().isEmpty())
+          if (viewModel.getDisplayItems().isEmpty())
           {
             viewModel.trainSelectedProperty().set(false);
           }
@@ -122,12 +127,18 @@ public class MainAdminViewController
   private void bindProperties()
   {
     messageLabel.textProperty().bind(viewModel.messageProperty());
-    trainsListView.setItems(viewModel.getTrains());
+    trainsListView.setItems(viewModel.getDisplayItems());
     removeButton.disableProperty().bind(viewModel.enableRemoveButtonProperty());
     modifyButton.disableProperty().bind(viewModel.enableModifyButtonProperty());
 
     trainsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-      viewModel.trainSelectedProperty().set(newValue != null);
+      boolean isTrainSelected = newValue instanceof Train;
+      viewModel.trainSelectedProperty().set(isTrainSelected);
+
+      if (isTrainSelected)
+      {
+        viewModel.setSelectedTrain((Train) newValue);
+      }
     });
   }
 
@@ -137,6 +148,7 @@ public class MainAdminViewController
     try
     {
       viewModel.updateSchedulesList();
+      viewModel.createDisplayList();
     }
     catch (Exception e)
     {
@@ -157,6 +169,7 @@ public class MainAdminViewController
           messageLabel.setText("");
           messageLabel.textProperty().bind(viewModel.messageProperty());
           viewModel.updateTrainsList();
+          viewModel.createDisplayList();
         });
       }
       catch (InterruptedException e)
@@ -170,6 +183,7 @@ public class MainAdminViewController
   {
     // nothing happens, already on this view
     viewModel.updateTrainsList();
+    viewModel.createDisplayList();
   }
 
   @FXML public void onMyAccountButton(ActionEvent e)
@@ -190,7 +204,8 @@ public class MainAdminViewController
   {
     if (e.getSource() == removeButton)
     {
-      Train selectedTrain = trainsListView.getSelectionModel().getSelectedItem();
+      // Get the selected train from the viewModel, not directly from the listView
+      Train selectedTrain = viewModel.getSelectedTrain();
       if (selectedTrain != null && viewModel.confirmDeleteDialog(selectedTrain))
       {
         boolean deleted = viewModel.removeTrain(selectedTrain);
@@ -198,6 +213,7 @@ public class MainAdminViewController
         {
           viewModel.showSuccessAlert("Train Deleted", "The train was successfully removed from the system.");
           viewModel.updateTrainsList();
+          viewModel.createDisplayList();
         }
       }
     }
@@ -207,7 +223,8 @@ public class MainAdminViewController
   {
     if (e.getSource() == modifyButton)
     {
-      Train selectedTrain = trainsListView.getSelectionModel().getSelectedItem();
+      // Get the selected train from the viewModel, not directly from the listView
+      Train selectedTrain = viewModel.getSelectedTrain();
       if (selectedTrain != null)
       {
         // Create and initialize ModifyTrainVM with the selected train
