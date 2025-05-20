@@ -21,6 +21,8 @@ import view.traveller.previousDepartures.PreviousDeparturesController;
 import viewmodel.*;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ViewHandler
 {
@@ -34,11 +36,28 @@ public class ViewHandler
   private static AddTrainVM addTrainVM;
   private static SearchTicketVM searchTicketVM; // do not delete this line, I need it to store and reuse the same SearchTicketVN when moving from Search -> ChooseTrain
 
+  private static Map<String, Object> dataStore = new HashMap<>();
+
   public static void start(Stage s)
   {
     stage = s;
     showView(ViewType.FRONT);
     stage.show();
+  }
+
+  public static void setData(String key, Object value)
+  {
+    dataStore.put(key, value);
+  }
+
+  public static Object getData(String key)
+  {
+    return dataStore.get(key);
+  }
+
+  public static void clearData(String key)
+  {
+    dataStore.remove(key);
   }
 
   public static void showView(ViewType view)
@@ -163,6 +182,13 @@ public class ViewHandler
 
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
+
+    if(dataStore.containsKey("modifyTrainVM"))
+    {
+      ModifyTrainVM viewModel = (ModifyTrainVM) dataStore.get("modifyTrainVM");
+      controller.init(viewModel);
+    }
+
     stage.setTitle("VIArail App");
     stage.setScene(scene);
   }

@@ -12,9 +12,12 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import model.entities.Schedule;
 import model.entities.Train;
 import model.entities.TrainList;
+import session.Session;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,6 +26,7 @@ import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.net.Socket;
 import java.util.List;
+import java.util.Optional;
 
 public class MainAdminVM
 {
@@ -137,12 +141,12 @@ public class MainAdminVM
     }
   }
 
-  public void removeTrain(Train selectedItem)
+  public boolean removeTrain(Train selectedItem)
   {
     if (selectedItem == null)
     {
       message.set("No train selected.");
-      return;
+      return false;
     }
     try
     {
@@ -150,11 +154,13 @@ public class MainAdminVM
       message.set("Train " + selectedItem.getTrainId() + " removed.");
       trainSelected.set(false);
       updateTrainsList();
+      return true;
     }
     catch (Exception e)
     {
       message.set("Error removing train: " + e.getMessage());
       e.printStackTrace();
+      return false;
     }
   }
 
@@ -286,5 +292,37 @@ public class MainAdminVM
       message.set("Error preparing schedule modification: " + e.getMessage());
       e.printStackTrace();
     }
+  }
+
+  /**
+   * Shows a confirmation dialog before deleting a train.
+   *
+   * @param train The train to delete
+   * @return true if the user confirmed deletion, false otherwise
+   */
+  public boolean confirmDeleteDialog(Train train)
+  {
+    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    alert.setTitle("Confirm Deletion");
+    alert.setHeaderText("Delete Train");
+    alert.setContentText("Are you sure you want to delete train " + train.getTrainId() + "?");
+
+    Optional<ButtonType> result = alert.showAndWait();
+    return result.isPresent() && result.get() == ButtonType.OK;
+  }
+
+  /**
+   * Shows a success alert with the specified title and message.
+   *
+   * @param title The alert title
+   * @param message The alert message
+   */
+  public void showSuccessAlert(String title, String message)
+  {
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    alert.setTitle(title);
+    alert.setHeaderText(null);
+    alert.setContentText(message);
+    alert.showAndWait();
   }
 }

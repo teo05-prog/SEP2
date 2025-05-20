@@ -12,13 +12,13 @@ import javafx.util.StringConverter;
 import model.entities.Train;
 import view.ViewHandler;
 import viewmodel.MainAdminVM;
+import viewmodel.ModifyTrainVM;
 
 public class MainAdminViewController
 {
   private MainAdminVM viewModel;
 
   @FXML private ListView<Train> trainsListView;
-
   @FXML private Label messageLabel;
 
   @FXML private Button trainsButton;
@@ -64,15 +64,7 @@ public class MainAdminViewController
     bindProperties();
     trainsButton.setDisable(true);
     setupTrainsListView();
-    viewModel.updateTrainsList();
-    try
-    {
-      viewModel.updateSchedulesList();
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-    }
+    loadTrains();
   }
 
   private void setupTrainsListView()
@@ -88,16 +80,7 @@ public class MainAdminViewController
           return "";
         try
         {
-          if (train.getSchedule() != null && train.getSchedule().getDepartureStation() != null
-              && train.getSchedule().getArrivalStation() != null)
-          {
-            return String.format("Train ID: %d, From: %s, To: %s", train.getTrainId(),
-                train.getSchedule().getDepartureStation().getName(), train.getSchedule().getArrivalStation().getName());
-          }
-          else
-          {
-            return String.format("Train ID: %d, No schedule", train.getTrainId());
-          }
+          return viewModel.formatTrainDisplay(train);
         }
         catch (NullPointerException e)
         {
@@ -116,6 +99,9 @@ public class MainAdminViewController
     // Add listener to handle selection changes
     trainsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
       viewModel.trainSelectedProperty().set(newValue != null);
+      boolean hasSelection = newValue != null;
+      removeButton.setDisable(!hasSelection);
+      modifyButton.setDisable(!hasSelection);
     });
 
     // Add listener to handle list changes
@@ -146,6 +132,19 @@ public class MainAdminViewController
     });
   }
 
+  private void loadTrains()
+  {
+    viewModel.updateTrainsList();
+    try
+    {
+      viewModel.updateSchedulesList();
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+  }
+
   public void showAddTrainSuccess()
   {
     messageLabel.textProperty().unbind();
@@ -168,18 +167,21 @@ public class MainAdminViewController
     }).start();
   }
 
+  @FXML
   public void onTrainsButton(ActionEvent e)
   {
     // nothing happens, already on this view
     viewModel.updateTrainsList();
   }
 
+  @FXML
   public void onMyAccountButton(ActionEvent e)
   {
     if (e.getSource() == myAccountButton)
       ViewHandler.showView(ViewHandler.ViewType.ADMIN_ACCOUNT);
   }
 
+  @FXML
   public void onAddButton(ActionEvent e)
   {
     if (e.getSource() == addButton)
@@ -188,17 +190,44 @@ public class MainAdminViewController
     }
   }
 
+  @FXML
   public void onRemoveButton(ActionEvent e)
   {
     if (e.getSource() == removeButton)
     {
-      viewModel.removeTrain(trainsListView.getSelectionModel().getSelectedItem());
+      Train selectedTrain = trainsListView.getSelectionModel().getSelectedItem();
+      if (selectedTrain != null && viewModel.confirmDeleteDialog(selectedTrain))
+      {
+        boolean deleted = viewModel.removeTrain(selectedTrain);
+        if (deleted)
+        {
+          viewModel.showSuccessAlert("Train Deleted", "The train was successfully removed from the system.");
+          viewModel.updateTrainsList();
+        }
+      }
     }
   }
 
+  @FXML
   public void onModifyButton(ActionEvent e)
   {
     if (e.getSource() == modifyButton)
-      ViewHandler.showView(ViewHandler.ViewType.MODIFY_TRAIN);
+    {
+      Train selectedTrain = trainsListView.getSelectionModel().getSelectedItem();
+      if (selectedTrain != null)
+      {
+        // Create and initialize ModifyTrainVM with the selected train
+        ModifyTrainVM modifyVM = new ModifyTrainVM();
+        modifyVM.loadTrainData(selectedTrain);
+
+        // Store the viewmodel in the ViewHandler's data store
+        ViewHandler.setData("modifyTrainVM", modifyVM);
+        ViewHandler.showView(ViewHandler.ViewType.MODIFY_TRAIN);
+      }
+      else
+      {
+        viewModel.messageProperty().set("No train selected!");
+      }
+    }
   }
 }
