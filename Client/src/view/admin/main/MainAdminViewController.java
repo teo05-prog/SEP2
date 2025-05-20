@@ -99,9 +99,8 @@ public class MainAdminViewController
     // Add listener to handle selection changes
     trainsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
       viewModel.trainSelectedProperty().set(newValue != null);
-      boolean hasSelection = newValue != null;
-      removeButton.setDisable(!hasSelection);
-      modifyButton.setDisable(!hasSelection);
+      // REMOVED the direct setting of button disable properties here
+      // as they are already bound in bindProperties()
     });
 
     // Add listener to handle list changes
@@ -167,22 +166,19 @@ public class MainAdminViewController
     }).start();
   }
 
-  @FXML
-  public void onTrainsButton(ActionEvent e)
+  @FXML public void onTrainsButton(ActionEvent e)
   {
     // nothing happens, already on this view
     viewModel.updateTrainsList();
   }
 
-  @FXML
-  public void onMyAccountButton(ActionEvent e)
+  @FXML public void onMyAccountButton(ActionEvent e)
   {
     if (e.getSource() == myAccountButton)
       ViewHandler.showView(ViewHandler.ViewType.ADMIN_ACCOUNT);
   }
 
-  @FXML
-  public void onAddButton(ActionEvent e)
+  @FXML public void onAddButton(ActionEvent e)
   {
     if (e.getSource() == addButton)
     {
@@ -190,8 +186,7 @@ public class MainAdminViewController
     }
   }
 
-  @FXML
-  public void onRemoveButton(ActionEvent e)
+  @FXML public void onRemoveButton(ActionEvent e)
   {
     if (e.getSource() == removeButton)
     {
@@ -208,8 +203,7 @@ public class MainAdminViewController
     }
   }
 
-  @FXML
-  public void onModifyButton(ActionEvent e)
+  @FXML public void onModifyButton(ActionEvent e)
   {
     if (e.getSource() == modifyButton)
     {
