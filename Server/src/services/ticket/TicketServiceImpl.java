@@ -26,45 +26,45 @@ public class TicketServiceImpl implements TicketService
     return instance;
   }
 
-  @Override public void createSeatAndBicycleTicket(int ticketID, Bicycle bicycleSeat, Seat seatId, Train trainId,
+  @Override public void createSeatAndBicycleTicket(int ticketID, Bicycle bicycleSeat, Seat seatId,
       Schedule scheduleId, String email)
   {
-    validateTicketData(ticketID, trainId, scheduleId, email);
+    validateTicketData(ticketID, scheduleId, email);
     if (bicycleSeat == null || seatId == null)
     {
       throw new IllegalArgumentException("Both seat and bicycle must be provided for seat and bicycle ticket");
     }
 
-    ticketDAO.createSeatAndBicycleTicket(ticketID, bicycleSeat, seatId, trainId, scheduleId, email);
+    ticketDAO.createSeatAndBicycleTicket(ticketID, bicycleSeat, seatId, scheduleId, email);
   }
 
-  @Override public void createSeatTicket(int ticketID, Seat seatId, Train trainId, Schedule scheduleId, String email)
+  @Override public void createSeatTicket(int ticketID, Seat seatId, Schedule scheduleId, String email)
   {
-    validateTicketData(ticketID, trainId, scheduleId, email);
+    validateTicketData(ticketID, scheduleId, email);
     if (seatId == null)
     {
       throw new IllegalArgumentException("Seat must be provided for seat ticket");
     }
 
-    ticketDAO.createSeatTicket(ticketID, seatId, trainId, scheduleId, email);
+    ticketDAO.createSeatTicket(ticketID, seatId, scheduleId, email);
   }
 
-  @Override public void createBicycleTicket(int ticketID, Bicycle bicycleSeat, Train trainId, Schedule scheduleId,
+  @Override public void createBicycleTicket(int ticketID, Bicycle bicycleSeat, Schedule scheduleId,
       String email)
   {
-    validateTicketData(ticketID, trainId, scheduleId, email);
+    validateTicketData(ticketID, scheduleId, email);
     if (bicycleSeat == null)
     {
       throw new IllegalArgumentException("Bicycle must be provided for bicycle ticket");
     }
 
-    ticketDAO.createBicycleTicket(ticketID, bicycleSeat, trainId, scheduleId, email);
+    ticketDAO.createBicycleTicket(ticketID, bicycleSeat, scheduleId, email);
   }
 
-  @Override public void createTicket(int ticketID, Train trainId, Schedule scheduleId, String email)
+  @Override public void createTicket(int ticketID, Schedule scheduleId, String email)
   {
-    validateTicketData(ticketID, trainId, scheduleId, email);
-    ticketDAO.createTicket(ticketID, trainId, scheduleId, email);
+    validateTicketData(ticketID, scheduleId, email);
+    ticketDAO.createTicket(ticketID, scheduleId, email);
   }
 
   @Override public void updateTicket(Ticket ticket)
@@ -130,15 +130,11 @@ public class TicketServiceImpl implements TicketService
     return ticketDAO.getTicketsByEmail(email);
   }
 
-  private void validateTicketData(int ticketID, Train trainId, Schedule scheduleId, String email)
+  private void validateTicketData(int ticketID, Schedule scheduleId, String email)
   {
     if (ticketID <= 0)
     {
       throw new IllegalArgumentException("Ticket ID must be positive");
-    }
-    if (trainId == null)
-    {
-      throw new IllegalArgumentException("Train cannot be null");
     }
     if (scheduleId == null)
     {

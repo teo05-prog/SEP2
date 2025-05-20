@@ -35,14 +35,14 @@ public class TicketsRequestHandler implements RequestHandler
   private Ticket handleCreateTicket(Object payload)
   {
     Ticket ticket = gson.fromJson(gson.toJson(payload), Ticket.class);
-    ticketService.createTicket(ticket.getTicketID(), ticket.getTrainId(), ticket.getScheduleId(), ticket.getEmail());
+    ticketService.createTicket(ticket.getTicketID(), ticket.getScheduleId(), ticket.getEmail());
     return ticket;
   }
 
   private Ticket handleCreateSeatTicket(Object payload)
   {
     Ticket ticket = gson.fromJson(gson.toJson(payload), Ticket.class);
-    ticketService.createSeatTicket(ticket.getTicketID(), ticket.getSeatId(), ticket.getTrainId(),
+    ticketService.createSeatTicket(ticket.getTicketID(), ticket.getSeatId(),
         ticket.getScheduleId(), ticket.getEmail());
     return ticket;
   }
@@ -50,7 +50,7 @@ public class TicketsRequestHandler implements RequestHandler
   private Ticket handleCreateBicycleTicket(Object payload)
   {
     Ticket ticket = gson.fromJson(gson.toJson(payload), Ticket.class);
-    ticketService.createBicycleTicket(ticket.getTicketID(), ticket.getBicycleSeat(), ticket.getTrainId(),
+    ticketService.createBicycleTicket(ticket.getTicketID(), ticket.getBicycleSeat(),
         ticket.getScheduleId(), ticket.getEmail());
     return ticket;
   }
@@ -58,8 +58,7 @@ public class TicketsRequestHandler implements RequestHandler
   private Ticket handleCreateSeatAndBicycleTicket(Object payload)
   {
     Ticket ticket = gson.fromJson(gson.toJson(payload), Ticket.class);
-    ticketService.createSeatAndBicycleTicket(ticket.getTicketID(), ticket.getBicycleSeat(), ticket.getSeatId(),
-        ticket.getTrainId(), ticket.getScheduleId(), ticket.getEmail());
+    ticketService.createSeatAndBicycleTicket(ticket.getTicketID(), ticket.getBicycleSeat(), ticket.getSeatId(), ticket.getScheduleId(), ticket.getEmail());
     return ticket;
   }
 

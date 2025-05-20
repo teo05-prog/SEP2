@@ -32,19 +32,18 @@ public class TicketPostgresDAO implements TicketDAO
         "141220");
   }
 
-  @Override public void createSeatAndBicycleTicket(int ticketID, Bicycle bicycleSeat, Seat seatId, Train trainId,
+  @Override public void createSeatAndBicycleTicket(int ticketID, Bicycle bicycleSeat, Seat seatId,
       Schedule scheduleId, String email)
   {
     try (var connection = getConnection())
     {
-      String sql = "INSERT INTO ticket (ticket_id, train_id, schedule_id, bicycle_number, seat_number, user_email) VALUES (?, ?, ?, ?, ?, ?)";
+      String sql = "INSERT INTO ticket (ticket_id, schedule_id, bicycle_number, seat_number, user_email) VALUES (?, ?, ?, ?, ?)";
       var statement = connection.prepareStatement(sql);
       statement.setInt(1, ticketID);
-      statement.setInt(2, trainId.getTrainId());
-      statement.setInt(3, scheduleId.getScheduleId());
-      statement.setInt(4, bicycleSeat.getBicycleSeatId());
-      statement.setInt(5, seatId.getSeatId());
-      statement.setString(6, email);
+      statement.setInt(2, scheduleId.getScheduleId());
+      statement.setInt(3, bicycleSeat.getBicycleSeatId());
+      statement.setInt(4, seatId.getSeatId());
+      statement.setString(5, email);
       statement.executeUpdate();
     }
     catch (SQLException e)
@@ -54,17 +53,16 @@ public class TicketPostgresDAO implements TicketDAO
     }
   }
 
-  @Override public void createSeatTicket(int ticketID, Seat seatId, Train trainId, Schedule scheduleId, String email)
+  @Override public void createSeatTicket(int ticketID, Seat seatId, Schedule scheduleId, String email)
   {
     try (var connection = getConnection())
     {
-      String sql = "INSERT INTO ticket (ticket_id, train_id, schedule_id, seat_number, user_email) VALUES (?, ?, ?, ?, ?)";
+      String sql = "INSERT INTO ticket (ticket_id, schedule_id, seat_number, user_email) VALUES (?, ?, ?, ?)";
       var statement = connection.prepareStatement(sql);
       statement.setInt(1, ticketID);
-      statement.setInt(2, trainId.getTrainId());
-      statement.setInt(3, scheduleId.getScheduleId());
-      statement.setInt(4, seatId.getSeatId());
-      statement.setString(5, email);
+      statement.setInt(2, scheduleId.getScheduleId());
+      statement.setInt(3, seatId.getSeatId());
+      statement.setString(4, email);
       statement.executeUpdate();
     }
     catch (SQLException e)
@@ -74,18 +72,17 @@ public class TicketPostgresDAO implements TicketDAO
     }
   }
 
-  @Override public void createBicycleTicket(int ticketID, Bicycle bicycleSeat, Train trainId, Schedule scheduleId,
+  @Override public void createBicycleTicket(int ticketID, Bicycle bicycleSeat, Schedule scheduleId,
       String email)
   {
     try (var connection = getConnection())
     {
-      String sql = "INSERT INTO ticket (ticket_id, train_id, schedule_id, bicycle_number, user_email) VALUES (?, ?, ?, ?, ?)";
+      String sql = "INSERT INTO ticket (ticket_id, schedule_id, bicycle_number, user_email) VALUES (?, ?, ?, ?)";
       var statement = connection.prepareStatement(sql);
       statement.setInt(1, ticketID);
-      statement.setInt(2, trainId.getTrainId());
-      statement.setInt(3, scheduleId.getScheduleId());
-      statement.setInt(4, bicycleSeat.getBicycleSeatId());
-      statement.setString(5, email);
+      statement.setInt(2, scheduleId.getScheduleId());
+      statement.setInt(3, bicycleSeat.getBicycleSeatId());
+      statement.setString(4, email);
       statement.executeUpdate();
     }
     catch (SQLException e)
@@ -95,16 +92,15 @@ public class TicketPostgresDAO implements TicketDAO
     }
   }
 
-  @Override public void createTicket(int ticketID, Train trainId, Schedule scheduleId, String email)
+  @Override public void createTicket(int ticketID, Schedule scheduleId, String email)
   {
     try (var connection = getConnection())
     {
-      String sql = "INSERT INTO ticket (ticket_id, train_id, schedule_id, user_email) VALUES (?, ?, ?, ?)";
+      String sql = "INSERT INTO ticket (ticket_id, schedule_id, user_email) VALUES (?, ?, ?)";
       var statement = connection.prepareStatement(sql);
       statement.setInt(1, ticketID);
-      statement.setInt(2, trainId.getTrainId());
-      statement.setInt(3, scheduleId.getScheduleId());
-      statement.setString(4, email);
+      statement.setInt(2, scheduleId.getScheduleId());
+      statement.setString(3, email);
       statement.executeUpdate();
     }
     catch (SQLException e)
@@ -118,7 +114,7 @@ public class TicketPostgresDAO implements TicketDAO
   {
     try (var connection = getConnection())
     {
-      StringBuilder sqlBuilder = new StringBuilder("UPDATE ticket SET train_id = ?, schedule_id = ?, user_email = ?");
+      StringBuilder sqlBuilder = new StringBuilder("UPDATE ticket SET schedule_id = ?, user_email = ?");
 
       // Check if seat is being updated
       if (ticket.getSeatId() != null)
@@ -133,11 +129,10 @@ public class TicketPostgresDAO implements TicketDAO
       sqlBuilder.append(" WHERE ticket_id = ?");
 
       var statement = connection.prepareStatement(sqlBuilder.toString());
-      statement.setInt(1, ticket.getTrainId().getTrainId());
-      statement.setInt(2, ticket.getScheduleId().getScheduleId());
-      statement.setString(3, ticket.getEmail());
+      statement.setInt(1, ticket.getScheduleId().getScheduleId());
+      statement.setString(2, ticket.getEmail());
 
-      int paramIndex = 4;
+      int paramIndex = 3;
       // Set seat parameter if needed
       if (ticket.getSeatId() != null)
       {
@@ -179,8 +174,10 @@ public class TicketPostgresDAO implements TicketDAO
     try (var connection = getConnection())
     {
       String sql = "SELECT t.*, "
-          + "s.departureStation, s.arrivalStation, s.departureDate, s.departureTime, s.arrivalDate, s.arrivalTime "
-          + "FROM ticket t " + "JOIN schedule s ON t.schedule_id = s.schedule_id";
+          + "s.departureStation, s.arrivalStation, s.departureDate, s.departureTime, s.arrivalDate, s.arrivalTime, "
+          + "s.train_id "
+          + "FROM ticket t "
+          + "JOIN schedule s ON t.schedule_id = s.schedule_id";
       var statement = connection.prepareStatement(sql);
       var resultSet = statement.executeQuery();
       List<Ticket> tickets = new ArrayList<>();
@@ -203,8 +200,11 @@ public class TicketPostgresDAO implements TicketDAO
     try (var connection = getConnection())
     {
       String sql = "SELECT t.*, "
-          + "s.departureStation, s.arrivalStation, s.departureDate, s.departureTime, s.arrivalDate, s.arrivalTime "
-          + "FROM ticket t " + "JOIN schedule s ON t.schedule_id = s.schedule_id " + "WHERE t.ticket_id = ?";
+          + "s.departureStation, s.arrivalStation, s.departureDate, s.departureTime, s.arrivalDate, s.arrivalTime, "
+          + "s.train_id "
+          + "FROM ticket t "
+          + "JOIN schedule s ON t.schedule_id = s.schedule_id "
+          + "WHERE t.ticket_id = ?";
       var statement = connection.prepareStatement(sql);
       statement.setInt(1, ticketId);
       var resultSet = statement.executeQuery();
@@ -227,8 +227,11 @@ public class TicketPostgresDAO implements TicketDAO
     try (var connection = getConnection())
     {
       String sql = "SELECT t.*, "
-          + "s.departureStation, s.arrivalStation, s.departureDate, s.departureTime, s.arrivalDate, s.arrivalTime "
-          + "FROM ticket t " + "JOIN schedule s ON t.schedule_id = s.schedule_id " + "WHERE t.user_email = ?";
+          + "s.departureStation, s.arrivalStation, s.departureDate, s.departureTime, s.arrivalDate, s.arrivalTime, "
+          + "s.train_id "
+          + "FROM ticket t "
+          + "JOIN schedule s ON t.schedule_id = s.schedule_id "
+          + "WHERE t.user_email = ?";
       var statement = connection.prepareStatement(sql);
       statement.setString(1, email);
       var resultSet = statement.executeQuery();
@@ -250,9 +253,9 @@ public class TicketPostgresDAO implements TicketDAO
   private Ticket extractTicketFromResultSet(ResultSet resultSet) throws SQLException
   {
     int ticketId = resultSet.getInt("ticket_id");
-    int trainId = resultSet.getInt("train_id");
     int scheduleId = resultSet.getInt("schedule_id");
     String email = resultSet.getString("user_email");
+    int trainId = resultSet.getInt("train_id");
 
     // Create a proper Schedule object with all required information
     String departureStationName = resultSet.getString("departureStation");
@@ -278,7 +281,7 @@ public class TicketPostgresDAO implements TicketDAO
     Train train = new Train(trainId);
     train.setSchedule(schedule);
 
-    // Create basic ticket (now using the train with schedule correctly set)
+    // Create basic ticket
     Ticket ticket = new Ticket(ticketId, train, schedule, email);
 
     // Add seat if present
