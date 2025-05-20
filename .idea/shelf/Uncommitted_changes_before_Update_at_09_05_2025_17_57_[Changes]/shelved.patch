@@ -1,0 +1,252 @@
+Index: Server/src/services/AuthenticationServiceImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package services;\r\n//\r\n//import dtos.LoginRequest;\r\n//import dtos.RegisterRequest;\r\n//import dtos.AuthenticationService;\r\n//import model.User;\r\n//import model.exceptions.NotFoundException;\r\n//import model.exceptions.ValidationException;\r\n//import persistance.user.UserDAO;\r\n//\r\n//public class AuthenticationServiceImpl implements AuthenticationService\r\n//{\r\n//  private final UserDAO userDAO;\r\n//\r\n//  public AuthenticationServiceImpl(UserDAO userDAO){\r\n//    this.userDAO = userDAO;\r\n//  }\r\n//\r\n////  @Override public String login(LoginRequest request) {\r\n//////    User user = userDAO.readByEmail(request.getEmail());\r\n////\r\n////    if (user == null){\r\n////      throw new NotFoundException(\"Email not found.\");\r\n////    }\r\n////    if (!user.getPassword().equals(request.getPassword())){\r\n////      throw new ValidationException(\"Incorrect password.\");\r\n////    }\r\n////    return \"Ok\";\r\n////  }\r\n//\r\n//  @Override\r\n//  public String register(RegisterRequest registerRequest)\r\n//  {\r\n//    if (!registerRequest.getPassword().equals(registerRequest.getRepeatPassword())){\r\n//       throw new ValidationException(\"Passwords do not match.\");\r\n//    }\r\n//\r\n//    // to do emailExists\r\n//\r\n//\r\n////    User user = new User(\r\n////      registerRequest.getName(),\r\n////        registerRequest.getEmail(),\r\n////        registerRequest.getPassword()\r\n////        registerRequest.getBirthday()\r\n////    );\r\n//\r\n//    // to do insert\r\n//    return \"Success\";\r\n//  }\r\n//\r\n//}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Server/src/services/AuthenticationServiceImpl.java b/Server/src/services/AuthenticationServiceImpl.java
+--- a/Server/src/services/AuthenticationServiceImpl.java	(revision 4685f49297d2c4591f4eed227c6e751f42c62c8b)
++++ b/Server/src/services/AuthenticationServiceImpl.java	(date 1746806227904)
+@@ -1,52 +1,93 @@
+ package services;
+-//
+-//import dtos.LoginRequest;
+-//import dtos.RegisterRequest;
+-//import dtos.AuthenticationService;
+-//import model.User;
+-//import model.exceptions.NotFoundException;
+-//import model.exceptions.ValidationException;
+-//import persistance.user.UserDAO;
+-//
+-//public class AuthenticationServiceImpl implements AuthenticationService
+-//{
+-//  private final UserDAO userDAO;
+-//
+-//  public AuthenticationServiceImpl(UserDAO userDAO){
+-//    this.userDAO = userDAO;
+-//  }
+-//
+-////  @Override public String login(LoginRequest request) {
+-//////    User user = userDAO.readByEmail(request.getEmail());
+-////
+-////    if (user == null){
+-////      throw new NotFoundException("Email not found.");
+-////    }
+-////    if (!user.getPassword().equals(request.getPassword())){
+-////      throw new ValidationException("Incorrect password.");
+-////    }
+-////    return "Ok";
+-////  }
+-//
+-//  @Override
+-//  public String register(RegisterRequest registerRequest)
+-//  {
+-//    if (!registerRequest.getPassword().equals(registerRequest.getRepeatPassword())){
+-//       throw new ValidationException("Passwords do not match.");
+-//    }
+-//
+-//    // to do emailExists
+-//
+-//
+-////    User user = new User(
+-////      registerRequest.getName(),
+-////        registerRequest.getEmail(),
+-////        registerRequest.getPassword()
+-////        registerRequest.getBirthday()
+-////    );
+-//
+-//    // to do insert
+-//    return "Success";
+-//  }
+-//
+-//}
++
++import dtos.AuthenticationService;
++import dtos.LoginRequest;
++import dtos.RegisterRequest;
++import dtos.error.TravellerRequest;
++import model.entities.User;
++import persistance.user.UserDAO;
++import services.user.UserService;
++
++import java.sql.SQLException;
++
++public class AuthenticationServiceImpl implements AuthenticationService
++{
++  private final UserDAO userDAO;
++  private final UserService userService;
++
++  public AuthenticationServiceImpl() throws SQLException
++  {
++    this.userDAO = new persistance.user.UserPostgresDAO();
++    this.userService = new services.user.UserServiceImpl(userDAO);
++  }
++
++  public AuthenticationServiceImpl(UserDAO userDAO, UserService userService)
++  {
++    this.userDAO = userDAO;
++    this.userService = userService;
++  }
++
++  @Override public String login(LoginRequest request)
++  {
++    User user = userDAO.readByEmail(request.getEmail());
++
++    if (user == null)
++    {
++      return "Email not found.";
++    }
++
++    if (user.getPassword().equals(request.getPassword()))
++    {
++      return "Ok";
++    }
++
++    return "Incorrect password.";
++  }
++
++  @Override public String register(RegisterRequest request)
++  {
++    if (request.getName() == null || request.getName().trim().isEmpty())
++    {
++      return "Name cannot be empty";
++    }
++
++    if (request.getEmail() == null || request.getEmail().trim().isEmpty() || !isValidEmail(request.getEmail()))
++    {
++      return "Invalid email address";
++    }
++
++    if (request.getPassword() == null || request.getPassword().length() < 6)
++    {
++      return "Password must be at least 8 characters long";
++    }
++
++    // Check if user already exists
++    User existingUser = userDAO.readByEmail(request.getEmail());
++    if (existingUser != null)
++    {
++      return "A user with this email already exists";
++    }
++
++    try
++    {
++      // Convert RegisterRequest to TravellerRequest
++      TravellerRequest travellerRequest = new TravellerRequest(request.getName(), request.getEmail(),
++          request.getPassword(), request.getBirthday());
++
++      // Create the user
++      userService.createTraveller(travellerRequest);
++      return "Success";
++    }
++    catch (Exception e)
++    {
++      e.printStackTrace();
++      return "Registration failed: " + e.getMessage();
++    }
++  }
++
++  private boolean isValidEmail(String email)
++  {
++    // Simple email validation
++    return email.matches("^[A-Za-z0-9+_.-]+@(.+)$");
++  }
++}
+Index: Client/src/model/services/AuthenticationServiceImpl.java
+===================================================================
+diff --git a/Client/src/model/services/AuthenticationServiceImpl.java b/Client/src/model/services/AuthenticationServiceImpl.java
+deleted file mode 100644
+--- a/Client/src/model/services/AuthenticationServiceImpl.java	(revision 4685f49297d2c4591f4eed227c6e751f42c62c8b)
++++ /dev/null	(revision 4685f49297d2c4591f4eed227c6e751f42c62c8b)
+@@ -1,90 +0,0 @@
+-package model.services;
+-
+-import dtos.error.TravellerRequest;
+-import model.entities.User;
+-import persistance.user.UserDAO;
+-import services.user.UserService;
+-
+-import java.sql.SQLException;
+-
+-public class AuthenticationServiceImpl implements AuthenticationService
+-{
+-  private final UserDAO userDAO;
+-  private final UserService userService;
+-
+-  public AuthenticationServiceImpl() throws SQLException
+-  {
+-    this.userDAO = new persistance.user.UserPostgresDAO();
+-    this.userService = new services.user.UserServiceImpl(userDAO);
+-  }
+-
+-  public AuthenticationServiceImpl(UserDAO userDAO, UserService userService)
+-  {
+-    this.userDAO = userDAO;
+-    this.userService = userService;
+-  }
+-
+-  @Override public String login(LoginRequest request)
+-  {
+-    User user = userDAO.readByEmail(request.getEmail());
+-
+-    if (user == null)
+-    {
+-      return "Email not found.";
+-    }
+-
+-    if (user.getPassword().equals(request.getPassword()))
+-    {
+-      return "Ok";
+-    }
+-
+-    return "Incorrect password.";
+-  }
+-
+-  @Override public String register(RegisterRequest request)
+-  {
+-    if (request.getName() == null || request.getName().trim().isEmpty())
+-    {
+-      return "Name cannot be empty";
+-    }
+-
+-    if (request.getEmail() == null || request.getEmail().trim().isEmpty() || !isValidEmail(request.getEmail()))
+-    {
+-      return "Invalid email address";
+-    }
+-
+-    if (request.getPassword() == null || request.getPassword().length() < 6)
+-    {
+-      return "Password must be at least 8 characters long";
+-    }
+-
+-    // Check if user already exists
+-    User existingUser = userDAO.readByEmail(request.getEmail());
+-    if (existingUser != null)
+-    {
+-      return "A user with this email already exists";
+-    }
+-
+-    try
+-    {
+-      // Convert RegisterRequest to TravellerRequest
+-      TravellerRequest travellerRequest = new TravellerRequest(request.getName(), request.getEmail(),
+-          request.getPassword(), request.getBirthday());
+-
+-      // Create the user
+-      userService.createTraveller(travellerRequest);
+-      return "Success";
+-    }
+-    catch (Exception e)
+-    {
+-      e.printStackTrace();
+-      return "Registration failed: " + e.getMessage();
+-    }
+-  }
+-
+-  private boolean isValidEmail(String email)
+-  {
+-    // Simple email validation
+-    return email.matches("^[A-Za-z0-9+_.-]+@(.+)$");
+-  }
+-}

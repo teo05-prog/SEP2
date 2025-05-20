@@ -9,6 +9,7 @@ public class Schedule
   private MyDate departureDate;
   private MyDate arrivalDate;
 
+  private int availableSeats;
 
   public Schedule(int scheduleId, Station departureStation, Station arrivalStation, MyDate departureDate, MyDate arrivalDate)
   {
@@ -67,6 +68,16 @@ public class Schedule
   public void setScheduleId(int scheduleId)
   {
     this.scheduleId = scheduleId;
+  }
+
+  public int getAvailableSeats()
+  {
+    return availableSeats;
+  }
+
+  public void setAvailableSeats(int availableSeats)
+  {
+    this.availableSeats = availableSeats;
   }
 
   public String toString()

@@ -27,6 +27,7 @@ public class ModifyTrainVM
   private final ObjectProperty<Schedule> currentSchedule = new SimpleObjectProperty<>();
 
   private final ObservableList<Schedule> availableSchedules = FXCollections.observableArrayList();
+  private final ObservableList<Schedule> trainSchedules = FXCollections.observableArrayList();
 
   private Train selectedTrain;
   private Schedule originalSchedule;
@@ -70,33 +71,59 @@ public class ModifyTrainVM
     return availableSchedules;
   }
 
+  public ObservableList<Schedule> getTrainSchedules()
+  {
+    return trainSchedules;
+  }
+
   public void loadTrainData(Train train)
   {
-    this.selectedTrain = train;
-    trainID.set("Train ID: " + train.getTrainId());
-    originalSchedule = train.getSchedule();
-
-    if (originalSchedule != null)
+    try
     {
-      currentSchedule.set(originalSchedule);
-    }
-    else
-    {
-      currentSchedule.set(null);
-    }
+      this.selectedTrain = train;
+      if (train != null)
+      {
+        trainID.set("ID: " + train.getTrainId());
+        originalSchedule = train.getSchedule();
 
-    loadAllSchedules();
+        if (originalSchedule != null)
+        {
+          currentSchedule.set(originalSchedule);
+        }
+        else
+        {
+          currentSchedule.set(null);
+        }
+
+        // Load train-specific schedules from the server
+        loadTrainSchedules();
+        // Load all available schedules
+        loadAllSchedules();
+      }
+      else
+      {
+        System.out.println("Warning: Attempted to load null train");
+        trainID.set("Error: No train selected");
+      }
+    }
+    catch (Exception e)
+    {
+      System.out.println("Error in loadTrainData: " + e.getMessage());
+      e.printStackTrace();
+    }
   }
 
   private void loadAllSchedules()
   {
     try
     {
+      System.out.println("Loading all available schedules...");
       Object response = request("schedules", "getAllSchedules", null);
+
+      availableSchedules.clear();
+
       if (response != null)
       {
-        availableSchedules.clear();
-
         // Convert the response to a list of schedules
         java.util.List<Schedule> schedules = gson.fromJson(gson.toJson(response),
             new com.google.gson.reflect.TypeToken<java.util.List<Schedule>>()
@@ -105,14 +132,71 @@ public class ModifyTrainVM
 
         if (schedules != null)
         {
+          // Filter out schedules that are already assigned to this train
+          schedules.removeIf(
+              schedule -> trainSchedules.stream().anyMatch(ts -> ts.getScheduleId() == schedule.getScheduleId()));
+
           availableSchedules.addAll(schedules);
         }
-        System.out.println("Loaded " + availableSchedules.size() + " schedules.");
       }
+      System.out.println("Loaded " + availableSchedules.size() + " available schedules.");
     }
     catch (Exception e)
     {
       System.out.println("Error loading schedules: " + e.getMessage());
+      e.printStackTrace();
+      // Don't rethrow - continue with an empty list
+    }
+  }
+
+  private void loadTrainSchedules()
+  {
+    try
+    {
+      if (selectedTrain == null)
+      {
+        return;
+      }
+
+      // Get the train ID for filtering
+      int trainId = selectedTrain.getTrainId();
+      System.out.println("Loading schedules for train ID: " + trainId);
+
+      try
+      {
+        // Request train schedules from server using the train ID
+        Object response = request("schedules", "getSchedulesByTrainId", trainId);
+
+        trainSchedules.clear();
+
+        if (response != null)
+        {
+          // Convert the response to a list of schedules
+          java.util.List<Schedule> schedules = gson.fromJson(gson.toJson(response),
+              new com.google.gson.reflect.TypeToken<java.util.List<Schedule>>()
+              {
+              }.getType());
+
+          if (schedules != null)
+          {
+            trainSchedules.addAll(schedules);
+          }
+        }
+      }
+      catch (Exception e)
+      {
+        System.out.println("Error loading train schedules: " + e.getMessage());
+        e.printStackTrace();
+
+        // Continue with an empty list rather than completely failing
+        trainSchedules.clear();
+      }
+
+      System.out.println("Loaded " + trainSchedules.size() + " schedules for train " + selectedTrain.getTrainId());
+    }
+    catch (Exception e)
+    {
+      System.out.println("Unexpected error in loadTrainSchedules: " + e.getMessage());
       e.printStackTrace();
     }
   }
@@ -235,6 +319,7 @@ public class ModifyTrainVM
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())))
     {
+
       // Create and send request
       Request request = new Request(handler, action, payload);
       String jsonRequest = gson.toJson(request);
@@ -242,6 +327,12 @@ public class ModifyTrainVM
 
       // Read and parse response
       String jsonResponse = in.readLine();
+
+      if (jsonResponse == null)
+      {
+        throw new IOException("No response received from server");
+      }
+
       Response response = gson.fromJson(jsonResponse, Response.class);
 
       if (response.status().equals("SUCCESS"))

@@ -21,31 +21,27 @@
     <StackPane>
         <VBox prefHeight="300.0" prefWidth="480.0" style="-fx-background-color: white; -fx-background-radius: 10px;">
             <HBox prefHeight="30.0" style="-fx-background-color: #e8f4f2; -fx-background-radius: 10px 10px 0 0; -fx-padding: 5;">
-                <HBox alignment="CENTER" style="-fx-padding: 0;" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER" maxWidth="125.0" minWidth="125.0" style="-fx-padding: 0;" HBox.hgrow="ALWAYS">
                     <Label style="-fx-text-fill: #2c3e50; -fx-font-weight: bold;" text="From" />
                 </HBox>
-                <HBox alignment="CENTER" maxWidth="95.0" minWidth="97.0" style="-fx-padding: 0;" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER" maxWidth="125.0" minWidth="125.0" style="-fx-padding: 0;" HBox.hgrow="ALWAYS">
                     <Label style="-fx-text-fill: #2c3e50; -fx-font-weight: bold;" text="To" />
                 </HBox>
-                <HBox alignment="CENTER" style="-fx-padding: 0;" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER" maxWidth="125.0" minWidth="125.0" style="-fx-padding: 0;" HBox.hgrow="ALWAYS">
                     <Label style="-fx-text-fill: #2c3e50; -fx-font-weight: bold;" text="Arrival" />
                 </HBox>
-                <HBox alignment="CENTER" maxWidth="103.0" minWidth="103.0" prefWidth="103.0" style="-fx-padding: 0;" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER" maxWidth="130.0" minWidth="135.0" style="-fx-padding: 0;" HBox.hgrow="ALWAYS">
                     <Label style="-fx-text-fill: #2c3e50; -fx-font-weight: bold;" text="Departure" />
-                </HBox>
-                <HBox alignment="CENTER" maxWidth="95.0" minWidth="95.0" prefWidth="95.0" style="-fx-padding: 0;" HBox.hgrow="ALWAYS">
-                    <Label style="-fx-text-fill: #2c3e50; -fx-font-weight: bold;" text="Seats" />
                 </HBox>
             </HBox>
 
             <StackPane style="-fx-background-radius: 0 0 10px 10px; -fx-background-color: white;" VBox.vgrow="ALWAYS">
-                <TableView fx:id="trainTable" fixedCellSize="25" style="-fx-background-color: transparent; -fx-padding: 0; -fx-background-insets: 0; -fx-background-radius: 0 0 10px 10px;">
+                <TableView fx:id="trainTable" fixedCellSize="30" style="-fx-background-color: transparent; -fx-padding: 0; -fx-background-insets: 0; -fx-background-radius: 0 0 10px 10px;">
                     <columns>
-                        <TableColumn fx:id="fromColumn" maxWidth="-1.0" minWidth="107.0" prefWidth="-1.0" text="From" />
-                        <TableColumn fx:id="toColumn" maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="To" />
-                        <TableColumn fx:id="arrivalColumn" maxWidth="-1.0" minWidth="111.0" prefWidth="-1.0" text="Arrival" />
-                        <TableColumn fx:id="departureColumn" maxWidth="-1.0" minWidth="103.0" prefWidth="-1.0" text="Departure" />
-                        <TableColumn fx:id="seatsColumn" maxWidth="-1.0" minWidth="95.0" prefWidth="-1.0" text="Seats" />
+                        <TableColumn fx:id="fromColumn" maxWidth="-1.0" minWidth="130.0" prefWidth="-1.0" text="From" />
+                        <TableColumn fx:id="toColumn" maxWidth="-1.0" minWidth="130.0" prefWidth="-1.0" text="To" />
+                        <TableColumn fx:id="arrivalColumn" maxWidth="-1.0" minWidth="130.0" prefWidth="-1.0" text="Arrival" />
+                        <TableColumn fx:id="departureColumn" maxWidth="-1.0" minWidth="130.0" prefWidth="-1.0" text="Departure" />
                     </columns>
                     <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
