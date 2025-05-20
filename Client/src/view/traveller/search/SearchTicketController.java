@@ -56,7 +56,7 @@ public class SearchTicketController
     searchButton.disableProperty().bind(viewModel.inputValidProperty().not());
     // should be changed
     ObservableList<String> stations = FXCollections.observableArrayList("Copenhagen", "Aarhus", "Odense", "Aalborg",
-        "Esbjerg");
+        "Esbjerg", "Randers", "Horsens", "Vejle", "Kolding", "Silkeborg", "Herning");
     fromComboBox.setItems(stations);
     toComboBox.setItems(stations);
     // bind from and to stations

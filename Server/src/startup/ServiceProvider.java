@@ -91,7 +91,7 @@ public class ServiceProvider
     this.trainService = new TrainServiceImpl(trainDAO);
     this.scheduleService = new ScheduleServiceImpl(scheduleDAO);
     this.seatService = new SeatServiceImpl(seatDAO);
-    this.ticketService = new TicketServiceImpl(ticketDAO);
+    this.ticketService = new TicketServiceImpl();
 
     // Initialize Request Handlers
     this.registerRequestHandler = new RegisterRequestHandler(authService);
