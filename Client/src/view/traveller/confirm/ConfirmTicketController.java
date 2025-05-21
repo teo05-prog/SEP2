@@ -1,11 +1,13 @@
 package view.traveller.confirm;
 
 import com.google.gson.Gson;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Group;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import model.entities.Ticket;
 import session.Session;
+import view.ViewHandler;
 import viewmodel.ConfirmTicketVM;
 
 public class ConfirmTicketController
@@ -17,6 +19,8 @@ public class ConfirmTicketController
   @FXML private Label toLabel;
   @FXML private Label seatLabel;
   @FXML private Label bicycleLabel;
+  @FXML private Label noReservationLabel;
+  @FXML private Button buyButton;
 
   public void init(ConfirmTicketVM viewModel){
     this.viewModel = viewModel;
@@ -25,7 +29,11 @@ public class ConfirmTicketController
 
   private void bindData(){
     Ticket ticket = Session.getInstance().getCurrentTicket();
-    if (ticket == null) return;
+    System.out.println("Ticket in confirm page: "+new Gson().toJson(ticket));
+    if (ticket == null) {
+      System.out.println("Ticket is null");
+      return;
+    }
 
     fromLabel.setText(ticket.getScheduleId().getDepartureStation().getName());
     toLabel.setText(ticket.getScheduleId().getArrivalStation().getName());
@@ -43,6 +51,20 @@ public class ConfirmTicketController
     }else {
       bicycleLabel.setText("Bicycle: None");
     }
-    System.out.println("Ticket in confirm page: "+new Gson().toJson(ticket));
+
+    if (ticket.getSeatId() == null && ticket.getBicycleSeat() == null){
+      noReservationLabel.setText("This ticket has no seat or bicycle reserved");
+      noReservationLabel.setVisible(true);
+    }else {
+      noReservationLabel.setVisible(false);
+    }
+
+  }
+
+  public void onBuyButton(ActionEvent actionEvent)
+  {
+    if (actionEvent.getSource()== buyButton){
+      ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_USER);
+    }
   }
 }

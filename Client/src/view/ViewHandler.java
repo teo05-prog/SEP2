@@ -242,13 +242,15 @@ public class ViewHandler
 
   private static void showChooseConfirmTicketView() throws IOException
   {
-    ConfirmTicketController controller = new ConfirmTicketController();
-    ConfirmTicketVM confirmTicketVM = new ConfirmTicketVM();
+//    ConfirmTicketController controller = new ConfirmTicketController();
+//    ConfirmTicketVM confirmTicketVM = new ConfirmTicketVM();
     FXMLLoader fxmlLoader = new FXMLLoader(
         ViewHandler.class.getResource("/view/traveller/confirm/ConfirmTicketView.fxml"));
 
-    fxmlLoader.setControllerFactory(ignore -> controller);
+//    fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
+    ConfirmTicketController controller = fxmlLoader.getController();
+    ConfirmTicketVM confirmTicketVM = new ConfirmTicketVM();
     controller.init(confirmTicketVM);
     stage.setTitle("VIArail App");
     stage.setScene(scene);
