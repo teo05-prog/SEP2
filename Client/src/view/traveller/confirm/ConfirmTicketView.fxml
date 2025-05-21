@@ -77,12 +77,20 @@
                   <Insets bottom="10.0" left="10.0" top="10.0" />
                </VBox.margin>
             </Label>
+            <Label fx:id="noReservationLabel" layoutX="20.0" layoutY="208.0" text="No reservation:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" top="10.0" />
+               </VBox.margin>
+            </Label>
          </children>
          <VBox.margin>
             <Insets top="40.0" />
          </VBox.margin>
       </VBox>
-      <Button mnemonicParsing="false" style="-fx-background-color: #40798c; -fx-text-fill: white; -fx-padding: 8 16; -fx-background-radius: 6;" text="BUY">
+      <Button fx:id="buyButton" mnemonicParsing="false" onAction="#onBuyButton" style="-fx-background-color: #40798c; -fx-text-fill: white; -fx-padding: 8 16; -fx-background-radius: 6;" text="BUY">
          <VBox.margin>
             <Insets left="450.0" top="14.0" />
          </VBox.margin>

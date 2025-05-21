@@ -84,12 +84,12 @@ public class SeatSelectionController
     }
 
     continueButton.setOnAction(e -> {
-      if (viewModel.getSelectedSeats().isEmpty())
-      {
-        showAlert("No seat selected",
-            "Please select at least one seat before continuing.");
-        return;
-      }
+//      if (viewModel.getSelectedSeats().isEmpty())
+//      {
+//        showAlert("No seat selected",
+//            "Please select at least one seat before continuing.");
+//        return;
+//      }
 
 
       //prepare booking
@@ -132,6 +132,7 @@ public class SeatSelectionController
         }else {
           ClientSocket.sendRequest("ticket","createTicket", ticket);
         }
+        Session.getInstance().setCurrentTicket(ticket);
         System.out.println("Booking ticket: "+ new Gson().toJson(ticket));
 
 
