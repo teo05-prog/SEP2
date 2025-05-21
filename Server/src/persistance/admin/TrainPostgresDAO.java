@@ -29,8 +29,8 @@ public class TrainPostgresDAO implements TrainDAO
 
   private static java.sql.Connection getConnection() throws SQLException
   {
-    return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail", "postgres",
-        "14012004");
+    //return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail", "postgres", "14012004");
+    return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail", "postgres", "141220");
   }
 
   @Override public void createTrain(int trainId)

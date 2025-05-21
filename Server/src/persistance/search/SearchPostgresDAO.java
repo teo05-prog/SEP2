@@ -35,8 +35,8 @@ public class SearchPostgresDAO implements SearchDAO{
   }
 
   private Connection getConnection() throws SQLException{
-    return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail",
-        "postgres", "14012004");
+    //return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail", "postgres", "14012004");
+    return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail", "postgres", "141220");
   }
 
   @Override
