@@ -29,6 +29,7 @@ import services.user.UserService;
 import services.user.UserServiceImpl;
 import utilities.LogLevel;
 import utilities.Logger;
+import viewmodel.ModifyTrainVM;
 
 import java.sql.SQLException;
 
@@ -65,8 +66,8 @@ public class ServiceProvider
   private final UserDetailsRequestHandler userDetailsRequestHandler;
   private final SeatRequestHandler seatRequestHandler;
   private final TicketsRequestHandler ticketsRequestHandler;
+  private final ModifyRequestHandler modifyRequestHandler;
 
-  // Constructor
   private ServiceProvider() throws SQLException
   {
     // Initialize Logger
@@ -97,11 +98,12 @@ public class ServiceProvider
     this.registerRequestHandler = new RegisterRequestHandler(authService);
     this.loginRequestHandler = new LoginRequestHandler(authService,logger);
     this.searchRequestHandler = new SearchRequestHandler(searchService,logger);
-    this.trainsRequestHandler = new TrainsRequestHandler(trainService);
+    this.trainsRequestHandler = new TrainsRequestHandler(trainService, logger);
     this.schedulesRequestHandler = new SchedulesRequestHandler(scheduleService);
     this.userDetailsRequestHandler = new UserDetailsRequestHandler(userDAO);
     this.seatRequestHandler = new SeatRequestHandler(seatService,logger);
     this.ticketsRequestHandler = new TicketsRequestHandler(ticketService);
+    this.modifyRequestHandler = new ModifyRequestHandler(trainService, scheduleService, logger);
   }
 
   public static synchronized ServiceProvider getInstance() throws SQLException
@@ -173,24 +175,19 @@ public class ServiceProvider
     return seatRequestHandler;
   }
 
-
   public RequestHandler getTicketRequestHandler()
   {
     return ticketsRequestHandler;
   }
+
+  public RequestHandler getModifyRequestHandler()
+  {
+    return modifyRequestHandler;
+  }
+
   // Stub methods for other handlers that may be implemented later
   public RequestHandler getAddRequestHandler()
   {
     throw new UnsupportedOperationException("Add handler not implemented yet");
-  }
-
-  public RequestHandler getMainAdminRequestHandler()
-  {
-    throw new UnsupportedOperationException("MainAdmin handler not implemented yet");
-  }
-
-  public RequestHandler getModifyRequestHandler()
-  {
-    throw new UnsupportedOperationException("Modify handler not implemented yet");
   }
 }
