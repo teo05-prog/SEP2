@@ -29,7 +29,6 @@ import services.user.UserService;
 import services.user.UserServiceImpl;
 import utilities.LogLevel;
 import utilities.Logger;
-import viewmodel.ModifyTrainVM;
 
 import java.sql.SQLException;
 
@@ -67,6 +66,8 @@ public class ServiceProvider
   private final SeatRequestHandler seatRequestHandler;
   private final TicketsRequestHandler ticketsRequestHandler;
   private final ModifyRequestHandler modifyRequestHandler;
+  private final AddTrainRequestHandler addTrainRequestHandler;
+  private final AddScheduleRequestHandler addScheduleRequestHandler;
 
   private ServiceProvider() throws SQLException
   {
@@ -104,6 +105,8 @@ public class ServiceProvider
     this.seatRequestHandler = new SeatRequestHandler(seatService,logger);
     this.ticketsRequestHandler = new TicketsRequestHandler(ticketService);
     this.modifyRequestHandler = new ModifyRequestHandler(trainService, scheduleService, logger);
+    this.addTrainRequestHandler = new AddTrainRequestHandler(trainService, logger);
+    this.addScheduleRequestHandler = new AddScheduleRequestHandler(trainService, scheduleService, logger);
   }
 
   public static synchronized ServiceProvider getInstance() throws SQLException
@@ -136,6 +139,31 @@ public class ServiceProvider
   public AuthenticationService getAuthService()
   {
     return authService;
+  }
+
+  public SearchService getSearchService()
+  {
+    return searchService;
+  }
+
+  public TrainService getTrainService()
+  {
+    return trainService;
+  }
+
+  public ScheduleService getScheduleService()
+  {
+    return scheduleService;
+  }
+
+  public SeatService getSeatService()
+  {
+    return seatService;
+  }
+
+  public TicketService getTicketService()
+  {
+    return ticketService;
   }
 
   // Getters for Request Handlers
@@ -185,9 +213,13 @@ public class ServiceProvider
     return modifyRequestHandler;
   }
 
-  // Stub methods for other handlers that may be implemented later
-  public RequestHandler getAddRequestHandler()
+  public RequestHandler getAddTrainRequestHandler()
   {
-    throw new UnsupportedOperationException("Add handler not implemented yet");
+    return addTrainRequestHandler;
+  }
+
+  public RequestHandler getAddScheduleRequestHandler()
+  {
+    return schedulesRequestHandler;
   }
 }

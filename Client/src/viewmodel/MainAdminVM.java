@@ -3,6 +3,7 @@ package viewmodel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import dtos.AddTrainDTO;
 import model.deserializer.ScheduleDeserializer;
 import dtos.Request;
 import dtos.Response;
@@ -25,7 +26,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.net.Socket;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class MainAdminVM
@@ -34,13 +37,13 @@ public class MainAdminVM
   private final BooleanProperty disableRemoveButton = new SimpleBooleanProperty(true);
   private final BooleanProperty disableModifyButton = new SimpleBooleanProperty(true);
   private final BooleanProperty trainSelected = new SimpleBooleanProperty(false);
-  private final BooleanProperty scheduleSelected = new SimpleBooleanProperty(false);
 
   private final ObservableList<Train> observableTrains = FXCollections.observableArrayList();
   private final ObservableList<Schedule> observableSchedules = FXCollections.observableArrayList();
   private final ObservableList<Object> displayItems = FXCollections.observableArrayList();
 
   private Train selectedTrain;
+  private TrainList trainList;
 
   private final Gson gson = new GsonBuilder().registerTypeAdapter(Schedule.class, new ScheduleDeserializer()).create();
   private static final String HOST = "localhost";
@@ -106,21 +109,6 @@ public class MainAdminVM
   public Train getSelectedTrain()
   {
     return selectedTrain;
-  }
-
-  public String formatTrainDisplay(Train train)
-  {
-    if (train.getSchedule() != null && train.getSchedule().getDepartureStation() != null
-        && train.getSchedule().getArrivalStation() != null)
-    {
-
-      return String.format("Train ID: %d, From: %s, To: %s", train.getTrainId(),
-          train.getSchedule().getDepartureStation().getName(), train.getSchedule().getArrivalStation().getName());
-    }
-    else
-    {
-      return String.format("Train ID: %d, No schedule", train.getTrainId());
-    }
   }
 
   public void createDisplayList()
@@ -193,30 +181,6 @@ public class MainAdminVM
     }
   }
 
-  public void removeSchedule(Schedule selectedItem)
-  {
-    if (selectedItem == null)
-    {
-      message.set("No schedule selected.");
-      return;
-    }
-    try
-    {
-      request("schedules", "deleteSchedule", selectedItem);
-      message.set(
-          "Schedule from " + selectedItem.getDepartureStation().getName() + " to " + selectedItem.getArrivalStation()
-              .getName() + " removed.");
-      scheduleSelected.set(false);
-      updateSchedulesList();
-      createDisplayList();
-    }
-    catch (Exception e)
-    {
-      message.set("Error removing schedule: " + e.getMessage());
-      e.printStackTrace();
-    }
-  }
-
   public void updateTrainsList()
   {
     try
@@ -282,44 +246,6 @@ public class MainAdminVM
     }
   }
 
-  public void modifyTrain(Train selectedItem)
-  {
-    if (selectedItem == null)
-    {
-      message.set("No train selected.");
-      return;
-    }
-    try
-    {
-      message.set("Preparing to modify train " + selectedItem.getTrainId() + ".");
-    }
-    catch (Exception e)
-    {
-      message.set("Error preparing train modification: " + e.getMessage());
-      e.printStackTrace();
-    }
-  }
-
-  public void modifySchedule(Schedule selectedItem)
-  {
-    if (selectedItem == null)
-    {
-      message.set("No schedule selected.");
-      return;
-    }
-    try
-    {
-      // Handle schedule modification logic here
-      message.set("Preparing to modify schedule from " + selectedItem.getDepartureStation().getName() + " to "
-          + selectedItem.getArrivalStation().getName() + ".");
-    }
-    catch (Exception e)
-    {
-      message.set("Error preparing schedule modification: " + e.getMessage());
-      e.printStackTrace();
-    }
-  }
-
   public boolean confirmDeleteDialog(Train train)
   {
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -338,5 +264,66 @@ public class MainAdminVM
     alert.setHeaderText(null);
     alert.setContentText(message);
     alert.showAndWait();
+  }
+
+  public boolean addNewTrain()
+  {
+    try
+    {
+      // Step 1: Get the next available train ID from the server
+      Object response = request("addTrain", "getNextTrainId", null);
+
+      if (response == null)
+      {
+        message.set("Error getting next train ID from server");
+        return false;
+      }
+
+      // Convert the response to a map to extract the nextTrainId
+      String jsonResponse = gson.toJson(response);
+      Map<String, Object> responseMap = gson.fromJson(jsonResponse, Map.class);
+
+      // Extract the nextTrainId from the response
+      Double nextTrainIdDouble = (Double) responseMap.get("nextTrainId");
+      if (nextTrainIdDouble == null)
+      {
+        message.set("Server returned invalid train ID");
+        return false;
+      }
+
+      int nextTrainId = nextTrainIdDouble.intValue();
+
+      // Step 2: Create default schedule data
+      // Get today's date and tomorrow's date for default values
+      LocalDate today = LocalDate.now();
+      LocalDate tomorrow = today.plusDays(1);
+
+      // Create the AddTrainDTO with the ID and default schedule
+      AddTrainDTO addRequest = new AddTrainDTO(nextTrainId);
+
+      // Step 3: Send the request to add the train with schedule
+      Object createResponse = request("addTrain", "train", addRequest);
+
+      if (createResponse != null)
+      {
+        message.set("Train " + nextTrainId + " added successfully");
+
+        // Only update the trains list and display
+        updateTrainsList();
+        createDisplayList();
+        return true;
+      }
+      else
+      {
+        message.set("Error creating train");
+        return false;
+      }
+    }
+    catch (Exception e)
+    {
+      message.set("Error creating train: " + e.getMessage());
+      e.printStackTrace();
+      return false;
+    }
   }
 }

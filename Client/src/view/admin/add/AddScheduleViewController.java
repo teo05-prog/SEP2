@@ -9,11 +9,13 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import view.ViewHandler;
-import viewmodel.AddTrainVM;
+import viewmodel.AddScheduleVM;
 
-public class AddTrainViewController
+import java.sql.SQLException;
+
+public class AddScheduleViewController
 {
-  private AddTrainVM viewModel;
+  private AddScheduleVM viewModel;
 
   @FXML private Label trainID;
   @FXML private Label messageLabel;
@@ -28,12 +30,12 @@ public class AddTrainViewController
   @FXML private Button addTrainButton;
   @FXML private Button backButton;
 
-  public AddTrainViewController()
+  public AddScheduleViewController()
   {
-    this.viewModel = new AddTrainVM();
+    this.viewModel = new AddScheduleVM();
   }
 
-  public void init(AddTrainVM viewModel)
+  public void init(AddScheduleVM viewModel)
   {
     if (viewModel != null)
     {
@@ -42,11 +44,11 @@ public class AddTrainViewController
     }
   }
 
-  public void initialize()
+  public void initialize() throws SQLException
   {
     if (viewModel == null)
     {
-      viewModel = new AddTrainVM();
+      viewModel = new AddScheduleVM();
     }
     setupUI();
     bindProperties();
@@ -57,25 +59,34 @@ public class AddTrainViewController
     messageLabel.textProperty().bind(viewModel.messageProperty());
     trainID.textProperty().bind(viewModel.trainIDProperty());
     addTrainButton.disableProperty().bind(viewModel.getAddTrainButtonDisabledProperty());
+
+    viewModel.departureStationProperty().bind(departureStation.valueProperty());
+    viewModel.arrivalStationProperty().bind(arrivalStation.valueProperty());
+    viewModel.departureTimeProperty().bind(departureTime.valueProperty());
+    viewModel.arrivalTimeProperty().bind(arrivalTime.valueProperty());
   }
 
-  private void setupUI()
+  private void setupUI() throws SQLException
   {
     ObservableList<String> stations = FXCollections.observableArrayList("Copenhagen", "Aarhus", "Odense", "Aalborg",
-        "Esbjerg");
+        "Esbjerg", "Randers", "Kolding", "Horsens", "Vejle", "Silkeborg", "Herning");
     departureStation.setItems(stations);
     arrivalStation.setItems(stations);
+
     ObservableList<String> times = FXCollections.observableArrayList();
     for (int hour = 6; hour <= 22; hour++)
     {
       times.add(String.format("%02d:00", hour));
       times.add(String.format("%02d:30", hour));
     }
-    viewModel.arrivalDateProperty().bindBidirectional(arrivalDate.valueProperty());
-    viewModel.departureDateProperty().bindBidirectional(departureDate.valueProperty());
 
     departureTime.setItems(times);
     arrivalTime.setItems(times);
+
+    viewModel.arrivalDateProperty().bindBidirectional(arrivalDate.valueProperty());
+    viewModel.departureDateProperty().bindBidirectional(departureDate.valueProperty());
+
+    viewModel.generateTrainID();
   }
 
   public void onAddTrainButton(ActionEvent e)
@@ -83,7 +94,10 @@ public class AddTrainViewController
     if (e.getSource() == addTrainButton)
     {
       viewModel.addTrain();
-      ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_ADMIN);
+      if (viewModel.isAddTrainSuccess())
+      {
+        ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_ADMIN);
+      }
     }
   }
 

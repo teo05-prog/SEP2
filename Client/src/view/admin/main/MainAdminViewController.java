@@ -9,7 +9,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.util.StringConverter;
-import model.entities.Schedule;
 import model.entities.Train;
 import view.ViewHandler;
 import viewmodel.MainAdminVM;
@@ -196,7 +195,15 @@ public class MainAdminViewController
   {
     if (e.getSource() == addButton)
     {
-      ViewHandler.showView(ViewHandler.ViewType.ADD_TRAIN);
+      boolean success = viewModel.addNewTrain();
+
+      if (success)
+      {
+        showAddTrainSuccess();
+
+        viewModel.updateTrainsList();
+        viewModel.createDisplayList();
+      }
     }
   }
 
@@ -204,7 +211,6 @@ public class MainAdminViewController
   {
     if (e.getSource() == removeButton)
     {
-      // Get the selected train from the viewModel, not directly from the listView
       Train selectedTrain = viewModel.getSelectedTrain();
       if (selectedTrain != null && viewModel.confirmDeleteDialog(selectedTrain))
       {
@@ -223,15 +229,12 @@ public class MainAdminViewController
   {
     if (e.getSource() == modifyButton)
     {
-      // Get the selected train from the viewModel, not directly from the listView
       Train selectedTrain = viewModel.getSelectedTrain();
       if (selectedTrain != null)
       {
-        // Create and initialize ModifyTrainVM with the selected train
         ModifyTrainVM modifyVM = new ModifyTrainVM();
         modifyVM.loadTrainData(selectedTrain);
 
-        // Store the viewmodel in the ViewHandler's data store
         ViewHandler.setData("modifyTrainVM", modifyVM);
         ViewHandler.showView(ViewHandler.ViewType.MODIFY_TRAIN);
       }

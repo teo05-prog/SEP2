@@ -4,7 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import session.Session;
-import view.admin.add.AddTrainViewController;
+import view.admin.add.AddScheduleViewController;
 import view.admin.main.MainAdminViewController;
 import view.admin.modify.ModifyViewController;
 import view.admin.myAccount.AdminMyAccountViewController;
@@ -28,12 +28,12 @@ public class ViewHandler
 {
   public enum ViewType
   {
-    FRONT, REGISTER, LOGIN, LOGGEDIN_ADMIN, LOGGEDIN_USER, ADMIN_ACCOUNT, USER_ACCOUNT, ADD_TRAIN, MODIFY_TRAIN, CHOOSE_TRAIN, SEAT_SELECTION, CONFIRM_TICKET, UPCOMING, PREVIOUS
+    FRONT, REGISTER, LOGIN, LOGGEDIN_ADMIN, LOGGEDIN_USER, ADMIN_ACCOUNT, USER_ACCOUNT, ADD_SCHEDULE, MODIFY_TRAIN, CHOOSE_TRAIN, SEAT_SELECTION, CONFIRM_TICKET, UPCOMING, PREVIOUS
   }
 
   private static Stage stage;
   private static ViewType previousView;
-  private static AddTrainVM addTrainVM;
+  private static AddScheduleVM addTrainVM;
   private static SearchTicketVM searchTicketVM; // do not delete this line, I need it to store and reuse the same SearchTicketVN when moving from Search -> ChooseTrain
 
   private static Map<String, Object> dataStore = new HashMap<>();
@@ -74,7 +74,7 @@ public class ViewHandler
         case LOGIN -> showLoginView();
         case LOGGEDIN_ADMIN -> showLoggedInAdminView();
         case ADMIN_ACCOUNT -> showAdminAccountView();
-        case ADD_TRAIN -> showAddTrainView();
+        case ADD_SCHEDULE -> showAddScehduleView();
         case MODIFY_TRAIN -> showModifyTrainView();
         case LOGGEDIN_USER -> showLoggedInUserView();
         case USER_ACCOUNT -> showUserAccountView();
@@ -137,7 +137,7 @@ public class ViewHandler
     Scene scene = new Scene(fxmlLoader.load());
     controller.init(viewModel);
 
-    if (previousView == ViewType.ADD_TRAIN && addTrainVM != null && addTrainVM.isAddTrainSuccess())
+    if (previousView == ViewType.ADD_SCHEDULE && addTrainVM != null && addTrainVM.isAddTrainSuccess())
     {
       controller.showAddTrainSuccess();
       addTrainVM = null;
@@ -160,11 +160,11 @@ public class ViewHandler
     stage.setScene(scene);
   }
 
-  private static void showAddTrainView() throws IOException
+  private static void showAddScehduleView() throws IOException
   {
-    AddTrainViewController controller = new AddTrainViewController();
-    AddTrainVM addTrainVM = new AddTrainVM();
-    FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/admin/add/AddTrainView.fxml"));
+    AddScheduleViewController controller = new AddScheduleViewController();
+    AddScheduleVM addTrainVM = new AddScheduleVM();
+    FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/admin/add/AddScheduleView.fxml"));
 
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
