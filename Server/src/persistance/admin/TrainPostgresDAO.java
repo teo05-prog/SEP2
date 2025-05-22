@@ -136,7 +136,7 @@ public class TrainPostgresDAO implements TrainDAO
     try (var connection = getConnection())
     {
       // Delete tickets associated with the train
-      String deleteTicketsSQL = "DELETE FROM ticket WHERE train_id = ?";
+      String deleteTicketsSQL = "DELETE FROM ticket WHERE schedule_id IN (SELECT schedule_id FROM schedule WHERE train_id = ?)";
       var ticketStatement = connection.prepareStatement(deleteTicketsSQL);
       ticketStatement.setInt(1, trainId);
       ticketStatement.executeUpdate();

@@ -27,11 +27,11 @@
                 <HBox alignment="CENTER" maxWidth="125.0" minWidth="125.0" style="-fx-padding: 0;" HBox.hgrow="ALWAYS">
                     <Label style="-fx-text-fill: #2c3e50; -fx-font-weight: bold;" text="To" />
                 </HBox>
-                <HBox alignment="CENTER" maxWidth="125.0" minWidth="125.0" style="-fx-padding: 0;" HBox.hgrow="ALWAYS">
-                    <Label style="-fx-text-fill: #2c3e50; -fx-font-weight: bold;" text="Arrival" />
-                </HBox>
                 <HBox alignment="CENTER" maxWidth="130.0" minWidth="135.0" style="-fx-padding: 0;" HBox.hgrow="ALWAYS">
                     <Label style="-fx-text-fill: #2c3e50; -fx-font-weight: bold;" text="Departure" />
+                </HBox>
+                <HBox alignment="CENTER" maxWidth="125.0" minWidth="125.0" style="-fx-padding: 0;" HBox.hgrow="ALWAYS">
+                    <Label style="-fx-text-fill: #2c3e50; -fx-font-weight: bold;" text="Arrival" />
                 </HBox>
             </HBox>
 
@@ -40,8 +40,8 @@
                     <columns>
                         <TableColumn fx:id="fromColumn" maxWidth="-1.0" minWidth="130.0" prefWidth="-1.0" text="From" />
                         <TableColumn fx:id="toColumn" maxWidth="-1.0" minWidth="130.0" prefWidth="-1.0" text="To" />
-                        <TableColumn fx:id="arrivalColumn" maxWidth="-1.0" minWidth="130.0" prefWidth="-1.0" text="Arrival" />
                         <TableColumn fx:id="departureColumn" maxWidth="-1.0" minWidth="130.0" prefWidth="-1.0" text="Departure" />
+                        <TableColumn fx:id="arrivalColumn" maxWidth="-1.0" minWidth="130.0" prefWidth="-1.0" text="Arrival" />
                     </columns>
                     <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

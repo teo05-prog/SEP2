@@ -109,7 +109,6 @@ public class ClientHandler implements Runnable
       case "seat" -> serviceProvider.getSeatRequestHandler();
       case "ticket" -> serviceProvider.getTicketRequestHandler();
       case "add" -> serviceProvider.getAddRequestHandler();
-      case "mainAdmin" -> serviceProvider.getMainAdminRequestHandler();
       case "modify" -> serviceProvider.getModifyRequestHandler();
       case "user" -> serviceProvider.getUserDetailsRequestHandler();
       default -> throw new IllegalStateException("Unexpected value: " + request.handler());
