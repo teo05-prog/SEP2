@@ -54,6 +54,7 @@
     <ButtonBar prefHeight="40.0" prefWidth="480.0" style="-fx-background-color: transparent; -fx-padding: 10;">
         <buttons>
             <Button fx:id="backButton" mnemonicParsing="false" onAction="#onBack" style="-fx-background-color: #40798c; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 6 20;" text="Back" />
+         <Button fx:id="addButton" mnemonicParsing="false" onAction="#onAdd" style="-fx-background-color: #40798c; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 6 20;" text="Add" />
             <Button fx:id="saveButton" mnemonicParsing="false" onAction="#onSave" style="-fx-background-color: #40798c; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 6 20;" text="Save" />
         </buttons>
     </ButtonBar>

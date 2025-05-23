@@ -20,15 +20,7 @@ public class UserServiceImpl implements UserService
     MyDate birthday = request.getBirthday();
     Traveller traveller = new Traveller(request.getName(), request.getEmail(), request.getPassword(), birthday);
 
-    userDao.createTraveller(traveller.getName(), traveller.getEmail(), traveller.getPassword(),
-        birthday);
+    userDao.createTraveller(traveller.getName(), traveller.getEmail(), traveller.getPassword(), birthday);
     return traveller;
-  }
-
-  @Override public void deleteTraveller(RegisterDTO request) throws Exception
-  {
-    Traveller traveller = new Traveller(request.getName(), request.getEmail(), request.getPassword(), request.getBirthday());
-
-    userDao.deleteUser(traveller.getEmail());
   }
 }

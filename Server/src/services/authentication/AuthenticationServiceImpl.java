@@ -95,9 +95,4 @@ public class AuthenticationServiceImpl implements AuthenticationService
     }
     return null;
   }
-
-  public String getLoggedInUserEmail()
-  {
-    return currentUser != null ? currentUser.getEmail() : null;
-  }
 }

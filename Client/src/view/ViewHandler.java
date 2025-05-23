@@ -4,20 +4,20 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import session.Session;
-import view.admin.add.AddTrainViewController;
+import view.admin.add.AddScheduleViewController;
 import view.admin.main.MainAdminViewController;
 import view.admin.modify.ModifyViewController;
 import view.admin.myAccount.AdminMyAccountViewController;
-import view.traveller.confirm.ConfirmTicketController;
-import view.traveller.search.SearchTicketController;
-import view.traveller.seat.SeatSelectionController;
-import view.traveller.trains.ChooseTrainController;
+import view.traveller.confirm.ConfirmTicketViewController;
+import view.traveller.search.SearchTicketViewController;
+import view.traveller.seat.SeatSelectionViewController;
+import view.traveller.trains.ChooseTrainViewController;
 import view.front.FrontViewController;
 import view.login.LoginViewController;
 import view.register.RegisterViewController;
 import view.traveller.myAccount.TravellerMyAccountViewController;
-import view.traveller.upcomingDepartures.UpcomingDepartureController;
-import view.traveller.previousDepartures.PreviousDeparturesController;
+import view.traveller.upcomingDepartures.UpcomingDepartureViewController;
+import view.traveller.previousDepartures.PreviousDeparturesViewController;
 import viewmodel.*;
 
 import java.io.IOException;
@@ -28,13 +28,12 @@ public class ViewHandler
 {
   public enum ViewType
   {
-    FRONT, REGISTER, LOGIN, LOGGEDIN_ADMIN, LOGGEDIN_USER, ADMIN_ACCOUNT, USER_ACCOUNT, ADD_TRAIN, MODIFY_TRAIN, CHOOSE_TRAIN, SEAT_SELECTION, CONFIRM_TICKET, UPCOMING, PREVIOUS
+    FRONT, REGISTER, LOGIN, LOGGEDIN_ADMIN, LOGGEDIN_USER, ADMIN_ACCOUNT, USER_ACCOUNT, ADD_SCHEDULE, MODIFY_TRAIN, CHOOSE_TRAIN, SEAT_SELECTION, CONFIRM_TICKET, UPCOMING, PREVIOUS
   }
 
   private static Stage stage;
   private static ViewType previousView;
-  private static AddTrainVM addTrainVM;
-  private static SearchTicketVM searchTicketVM; // do not delete this line, I need it to store and reuse the same SearchTicketVN when moving from Search -> ChooseTrain
+  private static SearchTicketVM searchTicketVM;
 
   private static Map<String, Object> dataStore = new HashMap<>();
 
@@ -64,7 +63,6 @@ public class ViewHandler
   {
     try
     {
-      System.out.println("Attempting to show view: " + view);
       previousView = view;
 
       switch (view)
@@ -74,7 +72,7 @@ public class ViewHandler
         case LOGIN -> showLoginView();
         case LOGGEDIN_ADMIN -> showLoggedInAdminView();
         case ADMIN_ACCOUNT -> showAdminAccountView();
-        case ADD_TRAIN -> showAddTrainView();
+        case ADD_SCHEDULE -> showAddScheduleView();
         case MODIFY_TRAIN -> showModifyTrainView();
         case LOGGEDIN_USER -> showLoggedInUserView();
         case USER_ACCOUNT -> showUserAccountView();
@@ -137,12 +135,6 @@ public class ViewHandler
     Scene scene = new Scene(fxmlLoader.load());
     controller.init(viewModel);
 
-    if (previousView == ViewType.ADD_TRAIN && addTrainVM != null && addTrainVM.isAddTrainSuccess())
-    {
-      controller.showAddTrainSuccess();
-      addTrainVM = null;
-    }
-
     stage.setTitle("VIArail App");
     stage.setScene(scene);
   }
@@ -160,17 +152,25 @@ public class ViewHandler
     stage.setScene(scene);
   }
 
-  private static void showAddTrainView() throws IOException
+  private static void showAddScheduleView() throws IOException
   {
-    AddTrainViewController controller = new AddTrainViewController();
-    AddTrainVM addTrainVM = new AddTrainVM();
-    FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/admin/add/AddTrainView.fxml"));
+    AddScheduleViewController controller = new AddScheduleViewController();
+    FXMLLoader fxmlLoader = new FXMLLoader(ViewHandler.class.getResource("/view/admin/add/AddScheduleView.fxml"));
 
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
 
-    controller.init(addTrainVM);
+    if (dataStore.containsKey("addScheduleVM"))
+    {
+      AddScheduleVM viewModel = (AddScheduleVM) dataStore.get("addScheduleVM");
 
+      controller.init(viewModel);
+    }
+    else
+    {
+      AddScheduleVM newViewModel = new AddScheduleVM();
+      controller.init(newViewModel);
+    }
     stage.setTitle("VIArail App");
     stage.setScene(scene);
   }
@@ -183,7 +183,7 @@ public class ViewHandler
     fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
 
-    if(dataStore.containsKey("modifyTrainVM"))
+    if (dataStore.containsKey("modifyTrainVM"))
     {
       ModifyTrainVM viewModel = (ModifyTrainVM) dataStore.get("modifyTrainVM");
       controller.init(viewModel);
@@ -197,7 +197,7 @@ public class ViewHandler
   {
     String email = Session.getInstance().getUserEmail();
     searchTicketVM = new SearchTicketVM(email);
-    SearchTicketController controller = new SearchTicketController();
+    SearchTicketViewController controller = new SearchTicketViewController();
     FXMLLoader fxmlLoader = new FXMLLoader(
         ViewHandler.class.getResource("/view/traveller/search/SearchTicketView.fxml"));
 
@@ -212,7 +212,7 @@ public class ViewHandler
 
   private static void showChooseTrainView() throws IOException
   {
-    ChooseTrainController controller = new ChooseTrainController();
+    ChooseTrainViewController controller = new ChooseTrainViewController();
     FXMLLoader fxmlLoader = new FXMLLoader(
         ViewHandler.class.getResource("/view/traveller/trains/ChooseTrainView.fxml"));
 
@@ -228,7 +228,7 @@ public class ViewHandler
 
   private static void showChooseSeatSelectionView() throws IOException
   {
-    SeatSelectionController controller = new SeatSelectionController();
+    SeatSelectionViewController controller = new SeatSelectionViewController();
     SeatSelectionVM seatSelectionVM = new SeatSelectionVM();
     FXMLLoader fxmlLoader = new FXMLLoader(
         ViewHandler.class.getResource("/view/traveller/seat/SeatSelectionView.fxml"));
@@ -242,14 +242,11 @@ public class ViewHandler
 
   private static void showChooseConfirmTicketView() throws IOException
   {
-//    ConfirmTicketController controller = new ConfirmTicketController();
-//    ConfirmTicketVM confirmTicketVM = new ConfirmTicketVM();
     FXMLLoader fxmlLoader = new FXMLLoader(
         ViewHandler.class.getResource("/view/traveller/confirm/ConfirmTicketView.fxml"));
 
-//    fxmlLoader.setControllerFactory(ignore -> controller);
     Scene scene = new Scene(fxmlLoader.load());
-    ConfirmTicketController controller = fxmlLoader.getController();
+    ConfirmTicketViewController controller = fxmlLoader.getController();
     ConfirmTicketVM confirmTicketVM = new ConfirmTicketVM();
     controller.init(confirmTicketVM);
     stage.setTitle("VIArail App");
@@ -271,7 +268,7 @@ public class ViewHandler
 
   private static void showPreviousDeparturesView() throws IOException
   {
-    PreviousDeparturesController controller = new PreviousDeparturesController();
+    PreviousDeparturesViewController controller = new PreviousDeparturesViewController();
     PreviousDeparturesVM previousDeparturesVM = new PreviousDeparturesVM();
     FXMLLoader fxmlLoader = new FXMLLoader(
         ViewHandler.class.getResource("/view/traveller/previousDepartures/PreviousDeparturesView.fxml"));
@@ -284,7 +281,7 @@ public class ViewHandler
 
   private static void showUpcomingDeparturesView() throws IOException
   {
-    UpcomingDepartureController controller = new UpcomingDepartureController();
+    UpcomingDepartureViewController controller = new UpcomingDepartureViewController();
     UpcomingDeparturesVM upcomingDeparturesVM = new UpcomingDeparturesVM();
     FXMLLoader fxmlLoader = new FXMLLoader(
         ViewHandler.class.getResource("/view/traveller/upcomingDepartures/UpcomingDeparturesView.fxml"));
@@ -294,5 +291,4 @@ public class ViewHandler
     stage.setTitle("VIArail App");
     stage.setScene(scene);
   }
-
 }

@@ -6,6 +6,4 @@ import model.entities.User;
 public interface UserService
 {
   User createTraveller(RegisterDTO request) throws Exception;
-
-  void deleteTraveller(RegisterDTO request) throws Exception;
 }
