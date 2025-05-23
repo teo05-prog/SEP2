@@ -33,14 +33,12 @@ public class SeatSelectionVM
 
     boolean isSeat = seatNumber >= 1 && seatNumber <= 16;
     boolean isBicycle = seatNumber >= 17 && seatNumber <= 18;
-
     // deselect if already selected
     if (selectedSeats.contains(seatNumber))
     {
       selectedSeats.remove(seatNumber);
       return;
     }
-
     //enforce single seat selection
     if (isSeat)
     {
@@ -51,7 +49,6 @@ public class SeatSelectionVM
     {
       selectedSeats.removeIf(n -> n >= 17 && n <= 18);
     }
-
     selectedSeats.add(seatNumber);
   }
 
@@ -61,24 +58,26 @@ public class SeatSelectionVM
     selectedSeats.clear();
   }
 
-  public void loadBookedSeatsForSelectedTrain(){
+  public void loadBookedSeatsForSelectedTrain()
+  {
     TrainDTO selectedTrain = Session.getInstance().getSelectedTrainDTO();
-    if (selectedTrain == null) return;
-
+    if (selectedTrain == null)
+      return;
     int trainId = selectedTrain.trainId;
-
-    try {
+    try
+    {
       Object response = ClientSocket.sendRequest("seat", "getBookedSeats", trainId);
-
       // Gson turns numbers into Double by default, so cast carefully
       List<Double> bookedList = new Gson().fromJson(response.toString(), List.class);
-
       bookedSeats.clear();
-      for (Double seat : bookedList) {
+      for (Double seat : bookedList)
+      {
         bookedSeats.add(seat.intValue());// safely convert to Integer
-        System.out.println("Booked seats: "+bookedSeats);
+        System.out.println("Booked seats: " + bookedSeats);
       }
-    } catch (Exception e) {
+    }
+    catch (Exception e)
+    {
       e.printStackTrace(); // optionally replace with logger
     }
   }

@@ -3,7 +3,7 @@ package network.requestHandlers;
 import com.google.gson.Gson;
 import model.entities.Schedule;
 import model.entities.Train;
-import model.exceptions.ValidationException;
+import exceptions.ValidationException;
 import services.admin.ScheduleService;
 import services.admin.TrainService;
 import utilities.Logger;
@@ -40,13 +40,11 @@ public class ModifyRequestHandler implements RequestHandler
     }
     catch (ValidationException e)
     {
-      // These are "expected" errors that should be shown to the user
       logger.log("ModifyRequestHandler: Validation error: " + e.getMessage(), LogLevel.WARNING);
       throw e;
     }
     catch (Exception e)
     {
-      // These are unexpected errors that need more investigation
       logger.log("ModifyRequestHandler: Exception handling request: " + e.getMessage(), LogLevel.ERROR);
       e.printStackTrace();
       throw new Exception("Failed to update train schedule. Please try again.");
@@ -56,17 +54,14 @@ public class ModifyRequestHandler implements RequestHandler
   private Object handleUpdateTrain(Object payload) throws Exception
   {
     logger.log("ModifyRequestHandler: Handling updateTrain request", LogLevel.INFO);
-
     // Validate payload
     if (payload == null)
     {
       throw new ValidationException("No train data provided");
     }
-
     Train train;
     try
     {
-      // Try to convert from payload if it's not already a Train object
       if (payload instanceof Train)
       {
         train = (Train) payload;
@@ -76,7 +71,6 @@ public class ModifyRequestHandler implements RequestHandler
         String json = gson.toJson(payload);
         train = gson.fromJson(json, Train.class);
       }
-
       if (train == null || train.getTrainId() <= 0)
       {
         throw new ValidationException("Invalid train data");
@@ -87,10 +81,8 @@ public class ModifyRequestHandler implements RequestHandler
       logger.log("Error parsing train data: " + e.getMessage(), LogLevel.ERROR);
       throw new ValidationException("Invalid train data format");
     }
-
     // Validate train data before updating
     validateTrain(train);
-
     try
     {
       logger.log("Updating train with ID: " + train.getTrainId(), LogLevel.INFO);
@@ -108,17 +100,14 @@ public class ModifyRequestHandler implements RequestHandler
   private Object handleUpdateSchedule(Object payload) throws Exception
   {
     logger.log("ModifyRequestHandler: Handling updateSchedule request", LogLevel.INFO);
-
     // Validate payload
     if (payload == null)
     {
       throw new ValidationException("No schedule data provided");
     }
-
     Schedule schedule;
     try
     {
-      // Try to convert from payload if it's not already a Schedule object
       if (payload instanceof Schedule)
       {
         schedule = (Schedule) payload;
@@ -128,7 +117,6 @@ public class ModifyRequestHandler implements RequestHandler
         String json = gson.toJson(payload);
         schedule = gson.fromJson(json, Schedule.class);
       }
-
       if (schedule == null || schedule.getScheduleId() <= 0)
       {
         throw new ValidationException("Invalid schedule data");
@@ -139,10 +127,8 @@ public class ModifyRequestHandler implements RequestHandler
       logger.log("Error parsing schedule data: " + e.getMessage(), LogLevel.ERROR);
       throw new ValidationException("Invalid schedule data format");
     }
-
     // Validate schedule data before updating
     validateSchedule(schedule);
-
     try
     {
       logger.log("Updating schedule with ID: " + schedule.getScheduleId(), LogLevel.INFO);
@@ -159,37 +145,25 @@ public class ModifyRequestHandler implements RequestHandler
 
   private void validateTrain(Train train) throws ValidationException
   {
-    // Validate train - add validation rules based on your business requirements
     if (train.getTrainId() <= 0)
     {
       throw new ValidationException("Invalid train ID");
     }
-
-    // Add more validation as needed for train attributes
   }
 
   private void validateSchedule(Schedule schedule) throws ValidationException
   {
-    // Validate schedule - add validation rules based on your business requirements
     if (schedule.getScheduleId() <= 0)
     {
       throw new ValidationException("Invalid schedule ID");
     }
-
     if (schedule.getDepartureStation() == null || schedule.getArrivalStation() == null)
     {
       throw new ValidationException("Departure and arrival stations must be specified");
     }
-
     if (schedule.getDepartureDate() == null || schedule.getArrivalDate() == null)
     {
       throw new ValidationException("Departure and arrival dates must be specified");
     }
-
-    // You could add more validation logic here:
-    // - Check that departure is before arrival
-    // - Check that stations are different
-    // - Verify the stations exist in database
-    // - etc.
   }
 }

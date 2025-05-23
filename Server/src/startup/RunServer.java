@@ -1,6 +1,7 @@
 package startup;
 
 import network.SocketServer;
+
 import java.sql.SQLException;
 
 public class RunServer
@@ -11,10 +12,8 @@ public class RunServer
     {
       // Get service provider
       ServiceProvider serviceProvider = ServiceProvider.getInstance();
-
       // Initialize and start the socket server
       SocketServer server = new SocketServer(serviceProvider);
-
       // Start the server
       server.start();
     }

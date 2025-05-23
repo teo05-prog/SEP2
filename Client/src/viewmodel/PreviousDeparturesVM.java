@@ -40,27 +40,22 @@ public class PreviousDeparturesVM
   {
     try
     {
-      // Get the current user's email from the session
+      // get the current user's email from the session
       String userEmail = session.getUserEmail();
-
       if (userEmail != null && !userEmail.isEmpty())
       {
-        // Get tickets for the current user
+        // get tickets for the current user
         List<Ticket> userTickets = ticketService.getTicketsByEmail(userEmail);
-
-        // Get current date for comparison
+        // get current date for comparison
         MyDate today = MyDate.today();
-
-        // Filter tickets to include only those with departure dates in the past
+        // filter tickets to include only those with departure dates in the past
         List<Ticket> pastTickets = userTickets.stream().filter(ticket -> {
-          // Check if ticket's departure date exists and is in the past
           if (ticket.getScheduleId().getDepartureDate() != null)
           {
             return ticket.getScheduleId().getDepartureDate().isBefore(today);
           }
           return false;
         }).collect(Collectors.toList());
-
         // Clear and add to the observable list
         previousDepartures.clear();
         previousDepartures.addAll(pastTickets);
@@ -76,11 +71,5 @@ public class PreviousDeparturesVM
   public ObservableList<Ticket> getPreviousDepartures()
   {
     return previousDepartures;
-  }
-
-  // refresh data when needed
-  public void refreshData()
-  {
-    loadPreviousDepartures();
   }
 }

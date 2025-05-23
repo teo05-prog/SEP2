@@ -14,31 +14,35 @@ public class SeatRequestHandler implements RequestHandler
   private final SeatService seatService;
   private final Logger logger;
 
-  public SeatRequestHandler(SeatService seatService, Logger logger){
+  public SeatRequestHandler(SeatService seatService, Logger logger)
+  {
     this.seatService = seatService;
     this.logger = logger;
   }
 
-  @Override
-  public Object handler(String action, Object payload){
-    return switch (action){
-      case "getBookedSeats"-> handleGetBookedSeats(payload);
-      default -> throw new IllegalArgumentException("Unknown action: "+action);
+  @Override public Object handler(String action, Object payload)
+  {
+    return switch (action)
+    {
+      case "getBookedSeats" -> handleGetBookedSeats(payload);
+      default -> throw new IllegalArgumentException("Unknown action: " + action);
     };
   }
 
-  private Object handleGetBookedSeats(Object payload){
-    try{
-      int trainId = ((Double) gson.fromJson(gson.toJson(payload),Double.class)).intValue();
+  private Object handleGetBookedSeats(Object payload)
+  {
+    try
+    {
+      int trainId = gson.fromJson(gson.toJson(payload), Double.class).intValue();
       List<Integer> bookedSeats = seatService.getBookedSeatsForTrain(trainId);
 
-      logger.log("Returned booked seats for train ID: "+trainId, LogLevel.INFO);
+      logger.log("Returned booked seats for train ID: " + trainId, LogLevel.INFO);
       return bookedSeats;
-    }catch (Exception e){
-      logger.log("Failed to fetch booked seats: "+e.getMessage(), LogLevel.ERROR);
+    }
+    catch (Exception e)
+    {
+      logger.log("Failed to fetch booked seats: " + e.getMessage(), LogLevel.ERROR);
       throw new RuntimeException("Failed to fetch booked seats", e);
     }
   }
-
-
 }

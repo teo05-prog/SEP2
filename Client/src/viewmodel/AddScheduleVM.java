@@ -1,46 +1,56 @@
 package viewmodel;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import dtos.AddScheduleDTO;
+import dtos.Request;
+import dtos.Response;
+import dtos.error.ErrorResponse;
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableValue;
-import model.entities.TrainList;
-import persistance.admin.TrainDAO;
-import persistance.admin.TrainPostgresDAO;
 
-import java.sql.SQLException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.time.LocalDate;
+import java.util.Map;
 
 public class AddScheduleVM
 {
   private final StringProperty message = new SimpleStringProperty();
-  private final StringProperty trainID = new SimpleStringProperty();
-  private final StringProperty departureStation = new SimpleStringProperty();
-  private final StringProperty arrivalStation = new SimpleStringProperty();
-  private final StringProperty departureTime = new SimpleStringProperty();
-  private final StringProperty arrivalTime = new SimpleStringProperty();
+
+  private final StringProperty departureStation = new SimpleStringProperty("");
+  private final StringProperty arrivalStation = new SimpleStringProperty("");
+
+  private final StringProperty departureTime = new SimpleStringProperty("");
+  private final StringProperty arrivalTime = new SimpleStringProperty("");
+
   private final ObjectProperty<LocalDate> departureDate = new SimpleObjectProperty<>();
   private final ObjectProperty<LocalDate> arrivalDate = new SimpleObjectProperty<>();
+
   private final BooleanProperty addButtonDisabled = new SimpleBooleanProperty(true);
-  private final BooleanProperty addTrainSuccess = new SimpleBooleanProperty(false);
+  private final BooleanProperty addScheduleSuccess = new SimpleBooleanProperty(false);
+
+  private final Gson gson = new GsonBuilder().create();
+  private static final String HOST = "localhost";
+  private static final int PORT = 4892;
+
+  private int trainId;
 
   public AddScheduleVM()
   {
-    addButtonDisabled.bind(trainID.isEmpty()
-        .or(departureStation.isEmpty())
-        .or(arrivalStation.isEmpty())
-        .or(departureTime.isEmpty())
-        .or(arrivalTime.isEmpty())
-        .or(departureDate.isNull())
-        .or(arrivalDate.isNull()));
+    LocalDate today = LocalDate.now();
+    departureDate.set(today);
+    arrivalDate.set(today);
+
+    addButtonDisabled.bind(
+        departureStation.isEmpty().or(arrivalStation.isEmpty()).or(departureTime.isEmpty()).or(arrivalTime.isEmpty())
+            .or(departureDate.isNull()).or(arrivalDate.isNull()));
   }
 
   public StringProperty messageProperty()
   {
     return message;
-  }
-
-  public StringProperty trainIDProperty()
-  {
-    return trainID;
   }
 
   public StringProperty departureStationProperty()
@@ -73,200 +83,138 @@ public class AddScheduleVM
     return departureDate;
   }
 
-  public ObservableValue<Boolean> getAddTrainButtonDisabledProperty()
+  public BooleanProperty getAddButtonDisabledProperty()
   {
     return addButtonDisabled;
   }
 
-  public boolean isAddTrainSuccess()
+  public int getTrainId()
   {
-    return addTrainSuccess.get();
+    return this.trainId;
   }
 
-  public void generateTrainID() throws SQLException
+  public void setTrainId(int trainId)
   {
-    try
+    this.trainId = trainId;
+    if (trainId <= 0)
     {
-      TrainDAO trainDAO = TrainPostgresDAO.getInstance();
-      TrainList allTrains = trainDAO.allTrains();
-      int nextId = allTrains.size() + 1;
-      trainID.set(String.valueOf(nextId));
-    }
-    catch (Exception e)
-    {
-      System.err.println("Error generating train ID: " + e.getMessage());
-      trainID.set("1");
+      System.err.println("WARNING: Train ID is zero or negative: " + trainId);
     }
   }
 
-  public void addTrain()
+  private Object request(String handler, String action, Object payload) throws Exception
   {
-    // Clear any previous messages
-    message.set("");
-    addTrainSuccess.set(false);
+    try (Socket socket = new Socket(HOST, PORT);
+        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())))
+    {
+      Request request = new Request(handler, action, payload);
+      String jsonRequest = gson.toJson(request);
+      out.println(jsonRequest);
 
-    // Validate all fields (though button should be disabled if any are empty)
-    if (departureStation.get() == null || departureStation.get().isEmpty())
-    {
-      message.set("Departure station cannot be empty.");
-      return;
-    }
-    if (arrivalStation.get() == null || arrivalStation.get().isEmpty())
-    {
-      message.set("Arrival station cannot be empty.");
-      return;
-    }
-    if (departureTime.get() == null || departureTime.get().isEmpty())
-    {
-      message.set("Departure time cannot be empty.");
-      return;
-    }
-    if (arrivalTime.get() == null || arrivalTime.get().isEmpty())
-    {
-      message.set("Arrival time cannot be empty.");
-      return;
-    }
-    if (departureDate.get() == null)
-    {
-      message.set("Departure date cannot be empty.");
-      return;
-    }
-    if (arrivalDate.get() == null)
-    {
-      message.set("Arrival date cannot be empty.");
-      return;
-    }
-    if (arrivalDate.get().isBefore(departureDate.get()))
-    {
-      message.set("Arrival date cannot be before departure date.");
-      return;
-    }
-    if (arrivalDate.get().equals(departureDate.get()))
-    {
-      if (isTimeAfterOrEqual(departureTime.get(), arrivalTime.get()))
+      String jsonResponse = in.readLine();
+      Response response = gson.fromJson(jsonResponse, Response.class);
+
+      if (response.status().equals("SUCCESS"))
       {
-        message.set("Arrival time must be after departure time on the same date.");
-        return;
+        return response.payload();
+      }
+      else if (response.status().equals("ERROR"))
+      {
+        ErrorResponse error = gson.fromJson(gson.toJson(response.payload()), ErrorResponse.class);
+        throw new Exception(error.errorMessage());
+      }
+      else
+      {
+        ErrorResponse error = gson.fromJson(gson.toJson(response.payload()), ErrorResponse.class);
+        throw new Exception("Server failure: " + error.errorMessage());
       }
     }
-    if (departureStation.get().equals(arrivalStation.get()))
-    {
-      message.set("Departure and arrival stations cannot be the same.");
-      return;
-    }
-
-    try
-    {
-      addTrainToDatabase();
-      addTrainSuccess.set(true);
-      message.set("Train added successfully!");
-    }
     catch (Exception e)
     {
-      message.set("Error adding train: " + e.getMessage());
+      throw new Exception("Network error: " + e.getMessage());
     }
   }
 
-  private boolean isTimeAfterOrEqual(String time1, String time2)
-  {
-    // Convert times to minutes for comparison
-    String[] time1Parts = time1.split(":");
-    String[] time2Parts = time2.split(":");
-
-    int time1Minutes = Integer.parseInt(time1Parts[0]) * 60 + Integer.parseInt(time1Parts[1]);
-    int time2Minutes = Integer.parseInt(time2Parts[0]) * 60 + Integer.parseInt(time2Parts[1]);
-
-    return time1Minutes >= time2Minutes;
-  }
-
-  private void addTrainToDatabase()
+  public boolean addSchedule()
   {
     try
     {
-      // Use services instead of DAOs directly for better architecture
-      var trainService = getTrainService();
-      var scheduleService = getScheduleService();
+      if (this.trainId <= 0)
+      {
+        System.err.println("ERROR: Invalid train ID (0 or negative). Cannot proceed with adding schedule.");
+        message.set("Invalid train ID: " + this.trainId + ". Please try again.");
+        return false;
+      }
 
-      int trainIdInt = Integer.parseInt(trainID.get());
+      Object response = request("addSchedule", "getNextScheduleId", null);
 
-      // First create the train
-      trainService.createTrain(trainIdInt);
+      if (response == null)
+      {
+        message.set("Error getting next schedule ID from server");
+        return false;
+      }
 
-      // Convert LocalDate and time strings to MyDate objects
-      model.entities.MyDate departureMyDate = convertToMyDate(departureDate.get(), departureTime.get());
-      model.entities.MyDate arrivalMyDate = convertToMyDate(arrivalDate.get(), arrivalTime.get());
+      String jsonResponse = gson.toJson(response);
+      Map<String, Object> responseMap = gson.fromJson(jsonResponse, Map.class);
 
-      // Create Station objects
-      model.entities.Station depStation = new model.entities.Station(departureStation.get());
-      model.entities.Station arrStation = new model.entities.Station(arrivalStation.get());
+      Double nextScheduleIdDouble = (Double) responseMap.get("nextScheduleId");
+      if (nextScheduleIdDouble == null)
+      {
+        message.set("Server returned invalid schedule ID");
+        return false;
+      }
+      int nextScheduleId = nextScheduleIdDouble.intValue();
 
-      // Create schedule
-      model.entities.Schedule schedule = new model.entities.Schedule(
-          0, // schedule ID will be auto-generated by database
-          depStation,
-          arrStation,
-          departureMyDate,
-          arrivalMyDate
-      );
+      String departureStationString = departureStation.get();
+      String arrivalStationString = arrivalStation.get();
+      String departureTimeString = departureTime.get();
+      String arrivalTimeString = arrivalTime.get();
+      LocalDate departureDateValue = departureDate.get();
+      LocalDate arrivalDateValue = arrivalDate.get();
 
-      // Create the schedule
-      scheduleService.createSchedule(schedule);
+      String departureDateString = String.format("%d-%02d-%02d", departureDateValue.getYear(),
+          departureDateValue.getMonthValue(), departureDateValue.getDayOfMonth());
 
-      System.out.println("Successfully added train to database:");
-      System.out.println("Train ID: " + trainID.get());
-      System.out.println("From: " + departureStation.get() + " at " + departureTime.get() + " on " + departureDate.get());
-      System.out.println("To: " + arrivalStation.get() + " at " + arrivalTime.get() + " on " + arrivalDate.get());
+      String arrivalDateString = String.format("%d-%02d-%02d", arrivalDateValue.getYear(),
+          arrivalDateValue.getMonthValue(), arrivalDateValue.getDayOfMonth());
+
+      AddScheduleDTO scheduleDTO = new AddScheduleDTO(nextScheduleId, this.trainId, departureStationString,
+          arrivalStationString, departureDateString, departureTimeString, arrivalDateString, arrivalTimeString);
+
+      Object addResponse = request("addSchedule", "schedule", scheduleDTO);
+
+      if (addResponse != null)
+      {
+        String addJsonResponse = gson.toJson(addResponse);
+        Map<String, Object> addResponseMap = gson.fromJson(addJsonResponse, Map.class);
+
+        Boolean success = (Boolean) addResponseMap.get("success");
+        if (success != null && success)
+        {
+          message.set("Schedule added successfully!");
+          addScheduleSuccess.set(true);
+          return true;
+        }
+        else
+        {
+          String errorMessage = (String) addResponseMap.get("message");
+          message.set(errorMessage != null ? errorMessage : "Failed to add schedule");
+          return false;
+        }
+      }
+      else
+      {
+        message.set("No response received from server");
+        return false;
+      }
     }
     catch (Exception e)
     {
-      System.err.println("Error adding train to database: " + e.getMessage());
+      System.err.println("Exception in addSchedule: " + e.getMessage());
       e.printStackTrace();
-      throw new RuntimeException("Failed to add train to database: " + e.getMessage());
+      message.set("Error adding schedule: " + e.getMessage());
+      return false;
     }
-  }
-
-  // Helper methods to get services - you might need to adjust this based on your architecture
-  private services.admin.TrainService getTrainService()
-  {
-    try
-    {
-      return new services.admin.TrainServiceImpl(persistance.admin.TrainPostgresDAO.getInstance());
-    }
-    catch (Exception e)
-    {
-      throw new RuntimeException("Failed to get TrainService", e);
-    }
-  }
-
-  private services.admin.ScheduleService getScheduleService()
-  {
-    try
-    {
-      return new services.admin.ScheduleServiceImpl(persistance.admin.SchedulePostgresDAO.getInstance());
-    }
-    catch (Exception e)
-    {
-      throw new RuntimeException("Failed to get ScheduleService", e);
-    }
-  }
-
-  private model.entities.MyDate convertToMyDate(java.time.LocalDate date, String timeString)
-  {
-    // Create MyDate from LocalDate
-    model.entities.MyDate myDate = new model.entities.MyDate(
-        date.getDayOfMonth(),
-        date.getMonthValue(),
-        date.getYear()
-    );
-
-    // Parse and set time
-    String[] timeParts = timeString.split(":");
-    int hour = Integer.parseInt(timeParts[0]);
-    int minute = Integer.parseInt(timeParts[1]);
-
-    myDate.setHour(hour);
-    myDate.setMinute(minute);
-
-    return myDate;
   }
 }

@@ -42,23 +42,23 @@ public class TicketsRequestHandler implements RequestHandler
   private Ticket handleCreateSeatTicket(Object payload)
   {
     Ticket ticket = gson.fromJson(gson.toJson(payload), Ticket.class);
-    ticketService.createSeatTicket(ticket.getTicketID(), ticket.getSeatId(),
-        ticket.getScheduleId(), ticket.getEmail());
+    ticketService.createSeatTicket(ticket.getTicketID(), ticket.getSeatId(), ticket.getScheduleId(), ticket.getEmail());
     return ticket;
   }
 
   private Ticket handleCreateBicycleTicket(Object payload)
   {
     Ticket ticket = gson.fromJson(gson.toJson(payload), Ticket.class);
-    ticketService.createBicycleTicket(ticket.getTicketID(), ticket.getBicycleSeat(),
-        ticket.getScheduleId(), ticket.getEmail());
+    ticketService.createBicycleTicket(ticket.getTicketID(), ticket.getBicycleSeat(), ticket.getScheduleId(),
+        ticket.getEmail());
     return ticket;
   }
 
   private Ticket handleCreateSeatAndBicycleTicket(Object payload)
   {
     Ticket ticket = gson.fromJson(gson.toJson(payload), Ticket.class);
-    ticketService.createSeatAndBicycleTicket(ticket.getTicketID(), ticket.getBicycleSeat(), ticket.getSeatId(), ticket.getScheduleId(), ticket.getEmail());
+    ticketService.createSeatAndBicycleTicket(ticket.getTicketID(), ticket.getBicycleSeat(), ticket.getSeatId(),
+        ticket.getScheduleId(), ticket.getEmail());
     return ticket;
   }
 

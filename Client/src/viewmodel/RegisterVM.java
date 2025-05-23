@@ -33,7 +33,6 @@ public class RegisterVM
   private void validate()
   {
     List<String> errors = new ArrayList<>();
-
     // name validation
     if (name.get() == null || name.get().trim().isEmpty())
     {
@@ -50,13 +49,11 @@ public class RegisterVM
         errors.add("Name cannot be longer than 70 characters.");
       }
     }
-
     // birthDate validation
     if (birthDate.get() == null)
     {
       errors.add("Birthday is required");
     }
-
     // email validation
     String emailValue = email.get();
     if (emailValue == null || emailValue.trim().isEmpty())
@@ -73,7 +70,6 @@ public class RegisterVM
         errors.add("Email must contain '@' and a domain (e.g. 'user@domain.com').");
       }
     }
-
     //password validation
     String pwd = password.get();
     if (pwd == null)
@@ -98,7 +94,6 @@ public class RegisterVM
           else if (!Character.isLetter(c))
             hasSymbol = true;
         }
-
         if (!hasNumber)
         {
           errors.add("Password must contain at least one number.");
@@ -109,13 +104,11 @@ public class RegisterVM
         }
       }
     }
-
     // repeat password validation
     if (repeatPassword.get() == null || !repeatPassword.get().equals(password.get()))
     {
       errors.add("Repeat password must match the password.");
     }
-
     // final validation result
     disableRegisterButton.set(!errors.isEmpty());
     message.set(String.join("\n", errors));
@@ -161,23 +154,12 @@ public class RegisterVM
     return registrationSucceeded;
   }
 
-  public void setBirthDate(int day, int month, int year)
-  {
-    MyDate date = new MyDate(year, month, day);
-    birthDate.set(date);
-  }
-
   public void registerUser()
   {
     if (!disableRegisterButton.get())
     {
-      MyDate date = birthDate.get();
-
-      // Fixed order of parameters to match the constructor
       RegisterDTO registerRequest = new RegisterDTO(name.get(), email.get(), password.get(), birthDate.get());
-
       Request request = new Request("register", "create", registerRequest);
-
       try
       {
         Object response = ClientSocket.sentRequest(request);

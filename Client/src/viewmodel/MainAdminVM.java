@@ -26,7 +26,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.net.Socket;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -43,7 +42,6 @@ public class MainAdminVM
   private final ObservableList<Object> displayItems = FXCollections.observableArrayList();
 
   private Train selectedTrain;
-  private TrainList trainList;
 
   private final Gson gson = new GsonBuilder().registerTypeAdapter(Schedule.class, new ScheduleDeserializer()).create();
   private static final String HOST = "localhost";
@@ -189,8 +187,6 @@ public class MainAdminVM
       if (response != null)
       {
         observableTrains.clear();
-
-        // Handle different response types correctly
         if (response instanceof TrainList)
         {
           observableTrains.addAll(((TrainList) response).getTrains());
@@ -221,16 +217,10 @@ public class MainAdminVM
       if (response != null)
       {
         observableSchedules.clear();
-
-        // Convert the response to JSON string
         String jsonResponse = gson.toJson(response);
-
-        // Define the proper type token for Schedule list
         Type scheduleListType = new TypeToken<List<Schedule>>()
         {
         }.getType();
-
-        // Deserialize properly with type information
         List<Schedule> schedules = gson.fromJson(jsonResponse, scheduleListType);
 
         if (schedules != null)
@@ -270,45 +260,26 @@ public class MainAdminVM
   {
     try
     {
-      // Step 1: Get the next available train ID from the server
       Object response = request("addTrain", "getNextTrainId", null);
-
       if (response == null)
       {
         message.set("Error getting next train ID from server");
         return false;
       }
-
-      // Convert the response to a map to extract the nextTrainId
       String jsonResponse = gson.toJson(response);
       Map<String, Object> responseMap = gson.fromJson(jsonResponse, Map.class);
-
-      // Extract the nextTrainId from the response
       Double nextTrainIdDouble = (Double) responseMap.get("nextTrainId");
       if (nextTrainIdDouble == null)
       {
         message.set("Server returned invalid train ID");
         return false;
       }
-
       int nextTrainId = nextTrainIdDouble.intValue();
-
-      // Step 2: Create default schedule data
-      // Get today's date and tomorrow's date for default values
-      LocalDate today = LocalDate.now();
-      LocalDate tomorrow = today.plusDays(1);
-
-      // Create the AddTrainDTO with the ID and default schedule
       AddTrainDTO addRequest = new AddTrainDTO(nextTrainId);
-
-      // Step 3: Send the request to add the train with schedule
       Object createResponse = request("addTrain", "train", addRequest);
-
       if (createResponse != null)
       {
         message.set("Train " + nextTrainId + " added successfully");
-
-        // Only update the trains list and display
         updateTrainsList();
         createDisplayList();
         return true;

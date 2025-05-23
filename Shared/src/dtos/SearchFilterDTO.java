@@ -1,6 +1,6 @@
 package dtos;
 
-import model.MyDate;
+import model.entities.MyDate;
 
 import java.io.Serializable;
 
@@ -13,8 +13,8 @@ public class SearchFilterDTO implements Serializable
   public boolean seat;
   public boolean bicycle;
 
-  public SearchFilterDTO(String userEmail,String from, String to, MyDate myDate,
-      boolean seat, boolean bicycle){
+  public SearchFilterDTO(String userEmail, String from, String to, MyDate myDate, boolean seat, boolean bicycle)
+  {
     this.userEmail = userEmail;
     this.from = from;
     this.to = to;

@@ -63,6 +63,6 @@ public class TravellerMyAccountViewController
 
   @FXML private void onMyAccountButton()
   {
-    //do nothing because we are already on MyAccount page
+    //do nothing because we are already on this page
   }
 }

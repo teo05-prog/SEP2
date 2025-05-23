@@ -20,7 +20,6 @@ public class ChooseTrainVM
 
   public ChooseTrainVM()
   {
-    //will call the service here
   }
 
   public StringProperty messageProperty()
@@ -44,24 +43,25 @@ public class ChooseTrainVM
     {
       message.set("Please select a train before continuing.");
     }
-    else {
-      //save selected train in session
+    else
+    {
       Session.getInstance().setSelectedTrainDTO(selectedTrain.get());
     }
   }
 
-  public void loadFilteredTrains(){
-    try{
-      //get user email from the session
+  public void loadFilteredTrains()
+  {
+    try
+    {
       String email = Session.getInstance().getUserEmail();
       Object response = ClientSocket.sendRequest("search", "getFilteredTrains", email);
       TrainDTO[] trains = new Gson().fromJson(response.toString(), TrainDTO[].class);
 
-      trainList.setAll(trains); //update observable list
+      trainList.setAll(trains);
     }
     catch (Exception e)
     {
-      message.set("Failed to load trains: "+e.getMessage());
+      message.set("Failed to load trains: " + e.getMessage());
     }
   }
 }

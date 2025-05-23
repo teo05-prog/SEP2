@@ -35,10 +35,8 @@ import java.sql.SQLException;
 public class ServiceProvider
 {
   private static ServiceProvider instance;
-
   // Logger
   private final Logger logger;
-
   // DAOs
   private final UserDAO userDAO;
   private final SearchDAO searchDAO;
@@ -46,7 +44,6 @@ public class ServiceProvider
   private final ScheduleDAO scheduleDAO;
   private final SeatDAO seatDAO;
   private final TicketDAO ticketDAO;
-
   // Services
   private final UserService userService;
   private final AuthenticationService authService;
@@ -55,7 +52,6 @@ public class ServiceProvider
   private final ScheduleService scheduleService;
   private final SeatService seatService;
   private final TicketService ticketService;
-
   // Request Handlers
   private final RegisterRequestHandler registerRequestHandler;
   private final LoginRequestHandler loginRequestHandler;
@@ -73,11 +69,9 @@ public class ServiceProvider
   {
     // Initialize Logger
     this.logger = new Logger(LogLevel.DEBUG);
-
     //initialize DAO singleton before using it
     SearchPostgresDAO.init(logger);
     SeatPostgresDAO.init(logger);
-
     // Initialize DAOs
     this.userDAO = UserPostgresDAO.getInstance();
     this.searchDAO = SearchPostgresDAO.getInstance();
@@ -85,7 +79,6 @@ public class ServiceProvider
     this.scheduleDAO = SchedulePostgresDAO.getInstance();
     this.seatDAO = SeatPostgresDAO.getInstance();
     this.ticketDAO = TicketPostgresDAO.getInstance();
-
     // Initialize Services
     this.userService = new UserServiceImpl(userDAO);
     this.authService = new AuthenticationServiceImpl(userDAO, userService);
@@ -94,19 +87,18 @@ public class ServiceProvider
     this.scheduleService = new ScheduleServiceImpl(scheduleDAO);
     this.seatService = new SeatServiceImpl(seatDAO);
     this.ticketService = new TicketServiceImpl();
-
     // Initialize Request Handlers
     this.registerRequestHandler = new RegisterRequestHandler(authService);
-    this.loginRequestHandler = new LoginRequestHandler(authService,logger);
-    this.searchRequestHandler = new SearchRequestHandler(searchService,logger);
+    this.loginRequestHandler = new LoginRequestHandler(authService, logger);
+    this.searchRequestHandler = new SearchRequestHandler(searchService, logger);
     this.trainsRequestHandler = new TrainsRequestHandler(trainService, logger);
     this.schedulesRequestHandler = new SchedulesRequestHandler(scheduleService);
     this.userDetailsRequestHandler = new UserDetailsRequestHandler(userDAO);
-    this.seatRequestHandler = new SeatRequestHandler(seatService,logger);
+    this.seatRequestHandler = new SeatRequestHandler(seatService, logger);
     this.ticketsRequestHandler = new TicketsRequestHandler(ticketService);
     this.modifyRequestHandler = new ModifyRequestHandler(trainService, scheduleService, logger);
     this.addTrainRequestHandler = new AddTrainRequestHandler(trainService, logger);
-    this.addScheduleRequestHandler = new AddScheduleRequestHandler(trainService, scheduleService, logger);
+    this.addScheduleRequestHandler = new AddScheduleRequestHandler(scheduleService, logger);
   }
 
   public static synchronized ServiceProvider getInstance() throws SQLException
@@ -197,7 +189,6 @@ public class ServiceProvider
     return userDetailsRequestHandler;
   }
 
-
   public RequestHandler getSeatRequestHandler()
   {
     return seatRequestHandler;
@@ -220,6 +211,6 @@ public class ServiceProvider
 
   public RequestHandler getAddScheduleRequestHandler()
   {
-    return schedulesRequestHandler;
+    return addScheduleRequestHandler;
   }
 }

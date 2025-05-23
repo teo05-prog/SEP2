@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import model.entities.Schedule;
 import view.ViewHandler;
+import viewmodel.AddScheduleVM;
 import viewmodel.ModifyTrainVM;
 
 import java.time.LocalDateTime;
@@ -18,7 +19,6 @@ public class ModifyViewController
   private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
   @FXML private Label trainIDLabel;
-  @FXML private Label errorMessageLabel;
 
   @FXML private TableView<Schedule> trainTable;
   @FXML private TableColumn<Schedule, String> fromColumn;
@@ -27,6 +27,7 @@ public class ModifyViewController
   @FXML private TableColumn<Schedule, String> departureColumn;
 
   @FXML private Button backButton;
+  @FXML private Button addButton;
   @FXML private Button saveButton;
 
   public void init(ModifyTrainVM viewModel)
@@ -101,10 +102,6 @@ public class ModifyViewController
   private void bindData()
   {
     trainIDLabel.textProperty().bind(viewModel.getTrainIDProperty());
-    if (errorMessageLabel != null)
-    {
-      errorMessageLabel.textProperty().bind(viewModel.getErrorMessageProperty());
-    }
     trainTable.setItems(viewModel.getTrainSchedules());
     saveButton.disableProperty().bind(viewModel.getSaveButtonDisabledProperty());
   }
@@ -150,6 +147,35 @@ public class ModifyViewController
     }
   }
 
+  @FXML private void onAdd(ActionEvent e)
+  {
+    if (e.getSource() == addButton)
+    {
+      String trainIdString = viewModel.getTrainIDProperty().get();
+      int trainId;
+      try
+      {
+        if (trainIdString.contains("ID: "))
+        {
+          trainId = Integer.parseInt(trainIdString.substring(trainIdString.indexOf("ID: ") + 4).trim());
+        }
+        else
+        {
+          trainId = Integer.parseInt(trainIdString.trim());
+        }
+        AddScheduleVM addScheduleVM = new AddScheduleVM();
+        addScheduleVM.setTrainId(trainId);
+
+        ViewHandler.setData("addScheduleVM", addScheduleVM);
+        ViewHandler.showView(ViewHandler.ViewType.ADD_SCHEDULE);
+      }
+      catch (NumberFormatException ex)
+      {
+        showErrorAlert("Invalid train ID format: " + trainIdString);
+      }
+    }
+  }
+
   @FXML private void onSave(ActionEvent e)
   {
     if (e.getSource() == saveButton)
@@ -171,7 +197,6 @@ public class ModifyViewController
         alert.setTitle("Error");
         alert.setHeaderText(null);
 
-        // Get the specific error message from the view model
         String errorMsg = viewModel.getErrorMessageProperty().get();
         if (errorMsg == null || errorMsg.isEmpty())
         {

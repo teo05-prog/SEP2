@@ -2,10 +2,7 @@ package persistance.admin;
 
 import model.entities.*;
 
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Time;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,15 +27,16 @@ public class TrainPostgresDAO implements TrainDAO
   private static java.sql.Connection getConnection() throws SQLException
   {
     //return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail", "postgres", "14012004");
-    return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail", "postgres", "141220");
+    return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail", "postgres",
+        "141220");
   }
 
   @Override public void createTrain(int trainId)
   {
-    try (var connection = getConnection())
+    try (Connection connection = getConnection())
     {
       String sql = "INSERT INTO train (train_id) VALUES (?)";
-      var statement = connection.prepareStatement(sql);
+      PreparedStatement statement = connection.prepareStatement(sql);
       statement.setInt(1, trainId);
       statement.executeUpdate();
     }
@@ -50,13 +48,13 @@ public class TrainPostgresDAO implements TrainDAO
 
   @Override public Train readTrainById(int trainId)
   {
-    try (var connection = getConnection())
+    try (Connection connection = getConnection())
     {
       String sql = "SELECT t.train_id, s.schedule_id, s.departureStation, s.arrivalStation, "
           + "s.departureDate, s.departureTime, s.arrivalDate, s.arrivalTime " + "FROM train t "
           + "LEFT JOIN schedule s ON t.train_id = s.train_id " + "WHERE t.train_id = ?";
 
-      var statement = connection.prepareStatement(sql);
+      PreparedStatement statement = connection.prepareStatement(sql);
       statement.setInt(1, trainId);
 
       ResultSet resultSet = statement.executeQuery();
@@ -88,7 +86,7 @@ public class TrainPostgresDAO implements TrainDAO
           }
           else
           {
-            departureDate = MyDate.today(); // Fallback
+            departureDate = MyDate.today();
           }
 
           if (resultSet.getDate("arrivalDate") != null)
@@ -103,7 +101,7 @@ public class TrainPostgresDAO implements TrainDAO
           }
           else
           {
-            arrivalDate = MyDate.today(); // Fallback
+            arrivalDate = MyDate.today();
           }
 
           // Create the schedule with the new implementation
@@ -133,29 +131,29 @@ public class TrainPostgresDAO implements TrainDAO
 
   @Override public void deleteTrain(int trainId)
   {
-    try (var connection = getConnection())
+    try (Connection connection = getConnection())
     {
       // Delete tickets associated with the train
       String deleteTicketsSQL = "DELETE FROM ticket WHERE schedule_id IN (SELECT schedule_id FROM schedule WHERE train_id = ?)";
-      var ticketStatement = connection.prepareStatement(deleteTicketsSQL);
+      PreparedStatement ticketStatement = connection.prepareStatement(deleteTicketsSQL);
       ticketStatement.setInt(1, trainId);
       ticketStatement.executeUpdate();
 
       // Delete schedule entries associated with the train
       String deleteScheduleSQL = "DELETE FROM schedule WHERE train_id = ?";
-      var scheduleStatement = connection.prepareStatement(deleteScheduleSQL);
+      PreparedStatement scheduleStatement = connection.prepareStatement(deleteScheduleSQL);
       scheduleStatement.setInt(1, trainId);
       scheduleStatement.executeUpdate();
 
       // Delete carriages associated with the train
       String deleteCarriagesSQL = "DELETE FROM carriage WHERE train_id = ?";
-      var carriageStatement = connection.prepareStatement(deleteCarriagesSQL);
+      PreparedStatement carriageStatement = connection.prepareStatement(deleteCarriagesSQL);
       carriageStatement.setInt(1, trainId);
       carriageStatement.executeUpdate();
 
       // Finally delete the train itself
       String deleteTrainSQL = "DELETE FROM train WHERE train_id = ?";
-      var trainStatement = connection.prepareStatement(deleteTrainSQL);
+      PreparedStatement trainStatement = connection.prepareStatement(deleteTrainSQL);
       trainStatement.setInt(1, trainId);
       trainStatement.executeUpdate();
     }
@@ -167,10 +165,10 @@ public class TrainPostgresDAO implements TrainDAO
 
   @Override public void updateTrain(Train train)
   {
-    try (var connection = getConnection())
+    try (Connection connection = getConnection())
     {
       String sql = "UPDATE train SET train_id = ? WHERE train_id = ?";
-      var statement = connection.prepareStatement(sql);
+      PreparedStatement statement = connection.prepareStatement(sql);
       statement.setInt(1, train.getTrainId());
       statement.setInt(2, train.getTrainId());
       statement.executeUpdate();
@@ -185,13 +183,13 @@ public class TrainPostgresDAO implements TrainDAO
   {
     TrainList trainList = new TrainList();
 
-    try (var connection = getConnection())
+    try (Connection connection = getConnection())
     {
       String sql = "SELECT t.train_id, s.schedule_id, s.departureStation, s.arrivalStation, "
           + "s.departureDate, s.departureTime, s.arrivalDate, s.arrivalTime " + "FROM train t "
           + "LEFT JOIN schedule s ON t.train_id = s.train_id " + "ORDER BY t.train_id";
 
-      var statement = connection.prepareStatement(sql);
+      PreparedStatement statement = connection.prepareStatement(sql);
       ResultSet resultSet = statement.executeQuery();
 
       // Keep track of which trains we've already added
@@ -200,8 +198,6 @@ public class TrainPostgresDAO implements TrainDAO
       while (resultSet.next())
       {
         int trainId = resultSet.getInt("train_id");
-
-        // Skip if we've already processed this train
         if (processedTrainIds.contains(trainId))
         {
           continue;
@@ -234,7 +230,7 @@ public class TrainPostgresDAO implements TrainDAO
           }
           else
           {
-            departureDate = MyDate.today(); // Fallback
+            departureDate = MyDate.today();
           }
 
           if (resultSet.getDate("arrivalDate") != null)
@@ -249,12 +245,10 @@ public class TrainPostgresDAO implements TrainDAO
           }
           else
           {
-            arrivalDate = MyDate.today(); // Fallback
+            arrivalDate = MyDate.today();
           }
-
           // Create the schedule with the new implementation
           Schedule schedule = new Schedule(scheduleId, departureStation, arrivalStation, departureDate, arrivalDate);
-
           // Use reflection to set the schedule since the field might be private
           try
           {

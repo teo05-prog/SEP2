@@ -38,7 +38,6 @@ public class AddTrainRequestHandler implements RequestHandler
   {
     try
     {
-      // Convert payload to AddTrainRequest
       String jsonPayload = gson.toJson(payload);
       AddTrainDTO request = gson.fromJson(jsonPayload, AddTrainDTO.class);
 

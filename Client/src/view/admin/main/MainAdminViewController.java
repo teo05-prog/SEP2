@@ -18,7 +18,7 @@ public class MainAdminViewController
 {
   private MainAdminVM viewModel;
 
-  @FXML private ListView<Object> trainsListView; // Changed from Train to Object to handle both Train and Schedule items
+  @FXML private ListView<Object> trainsListView;
   @FXML private Label messageLabel;
 
   @FXML private Button trainsButton;
@@ -90,30 +90,25 @@ public class MainAdminViewController
 
       @Override public Object fromString(String string)
       {
-        // Not needed for non-editable cells
         return null;
       }
     }));
 
-    // Add listener to handle selection changes
     trainsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
       boolean isTrainSelected = newValue instanceof Train;
       viewModel.trainSelectedProperty().set(isTrainSelected);
 
       if (isTrainSelected)
       {
-        // If a train is selected, store it in the viewModel
         viewModel.setSelectedTrain((Train) newValue);
       }
     });
 
-    // Add listener to handle list changes
     viewModel.getDisplayItems().addListener((ListChangeListener<Object>) change -> {
       while (change.next())
       {
         if (change.wasAdded() || change.wasRemoved())
         {
-          // If list is empty, disable buttons
           if (viewModel.getDisplayItems().isEmpty())
           {
             viewModel.trainSelectedProperty().set(false);
