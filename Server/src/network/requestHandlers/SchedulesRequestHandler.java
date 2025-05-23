@@ -87,9 +87,7 @@ public class SchedulesRequestHandler implements RequestHandler
   {
     try
     {
-      // Extract train ID from payload
       Integer trainId = null;
-      // Handle both direct Integer and string JSON representation
       if (payload instanceof Integer)
       {
         trainId = (Integer) payload;
@@ -102,20 +100,13 @@ public class SchedulesRequestHandler implements RequestHandler
       {
         throw new IllegalArgumentException("Invalid train ID: null");
       }
-      // Log for debugging
-      System.out.println("Handling getSchedulesByTrainId request for trainId: " + trainId);
-      // Call service layer
       List<Schedule> schedules = scheduleService.getSchedulesByTrainId(trainId);
-      // Log response for debugging
-      System.out.println("Found " + (schedules != null ? schedules.size() : 0) + " schedules");
-      // Return empty list instead of null to avoid null pointer exceptions
       return schedules != null ? schedules : new ArrayList<>();
     }
     catch (Exception e)
     {
       System.err.println("Error in handleGetSchedulesByTrainId: " + e.getMessage());
       e.printStackTrace();
-      // Return empty list instead of throwing to allow the client to continue
       return new ArrayList<>();
     }
   }

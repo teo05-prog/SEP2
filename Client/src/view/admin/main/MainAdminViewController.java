@@ -9,7 +9,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.util.StringConverter;
-import model.entities.Schedule;
 import model.entities.Train;
 import view.ViewHandler;
 import viewmodel.MainAdminVM;
@@ -19,7 +18,7 @@ public class MainAdminViewController
 {
   private MainAdminVM viewModel;
 
-  @FXML private ListView<Object> trainsListView; // Changed from Train to Object to handle both Train and Schedule items
+  @FXML private ListView<Object> trainsListView;
   @FXML private Label messageLabel;
 
   @FXML private Button trainsButton;
@@ -91,30 +90,25 @@ public class MainAdminViewController
 
       @Override public Object fromString(String string)
       {
-        // Not needed for non-editable cells
         return null;
       }
     }));
 
-    // Add listener to handle selection changes
     trainsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
       boolean isTrainSelected = newValue instanceof Train;
       viewModel.trainSelectedProperty().set(isTrainSelected);
 
       if (isTrainSelected)
       {
-        // If a train is selected, store it in the viewModel
         viewModel.setSelectedTrain((Train) newValue);
       }
     });
 
-    // Add listener to handle list changes
     viewModel.getDisplayItems().addListener((ListChangeListener<Object>) change -> {
       while (change.next())
       {
         if (change.wasAdded() || change.wasRemoved())
         {
-          // If list is empty, disable buttons
           if (viewModel.getDisplayItems().isEmpty())
           {
             viewModel.trainSelectedProperty().set(false);
@@ -196,7 +190,15 @@ public class MainAdminViewController
   {
     if (e.getSource() == addButton)
     {
-      ViewHandler.showView(ViewHandler.ViewType.ADD_TRAIN);
+      boolean success = viewModel.addNewTrain();
+
+      if (success)
+      {
+        showAddTrainSuccess();
+
+        viewModel.updateTrainsList();
+        viewModel.createDisplayList();
+      }
     }
   }
 
@@ -204,7 +206,6 @@ public class MainAdminViewController
   {
     if (e.getSource() == removeButton)
     {
-      // Get the selected train from the viewModel, not directly from the listView
       Train selectedTrain = viewModel.getSelectedTrain();
       if (selectedTrain != null && viewModel.confirmDeleteDialog(selectedTrain))
       {
@@ -223,15 +224,12 @@ public class MainAdminViewController
   {
     if (e.getSource() == modifyButton)
     {
-      // Get the selected train from the viewModel, not directly from the listView
       Train selectedTrain = viewModel.getSelectedTrain();
       if (selectedTrain != null)
       {
-        // Create and initialize ModifyTrainVM with the selected train
         ModifyTrainVM modifyVM = new ModifyTrainVM();
         modifyVM.loadTrainData(selectedTrain);
 
-        // Store the viewmodel in the ViewHandler's data store
         ViewHandler.setData("modifyTrainVM", modifyVM);
         ViewHandler.showView(ViewHandler.ViewType.MODIFY_TRAIN);
       }

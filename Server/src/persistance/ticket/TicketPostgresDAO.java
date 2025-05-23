@@ -2,10 +2,9 @@ package persistance.ticket;
 
 import model.entities.*;
 
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class TicketPostgresDAO implements TicketDAO
@@ -29,16 +28,17 @@ public class TicketPostgresDAO implements TicketDAO
   private static java.sql.Connection getConnection() throws SQLException
   {
     //return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail", "postgres", "14012004");
-    return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail", "postgres", "141220");
+    return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail", "postgres",
+        "141220");
   }
 
-  @Override public void createSeatAndBicycleTicket(int ticketID, Bicycle bicycleSeat, Seat seatId,
-      Schedule scheduleId, String email)
+  @Override public void createSeatAndBicycleTicket(int ticketID, Bicycle bicycleSeat, Seat seatId, Schedule scheduleId,
+      String email)
   {
-    try (var connection = getConnection())
+    try (Connection connection = getConnection())
     {
       String sql = "INSERT INTO ticket (ticket_id, schedule_id, bicycle_number, seat_number, user_email) VALUES (?, ?, ?, ?, ?)";
-      var statement = connection.prepareStatement(sql);
+      PreparedStatement statement = connection.prepareStatement(sql);
       statement.setInt(1, ticketID);
       statement.setInt(2, scheduleId.getScheduleId());
       statement.setInt(3, bicycleSeat.getBicycleSeatId());
@@ -55,10 +55,10 @@ public class TicketPostgresDAO implements TicketDAO
 
   @Override public void createSeatTicket(int ticketID, Seat seatId, Schedule scheduleId, String email)
   {
-    try (var connection = getConnection())
+    try (Connection connection = getConnection())
     {
       String sql = "INSERT INTO ticket (ticket_id, schedule_id, seat_number, user_email) VALUES (?, ?, ?, ?)";
-      var statement = connection.prepareStatement(sql);
+      PreparedStatement statement = connection.prepareStatement(sql);
       statement.setInt(1, ticketID);
       statement.setInt(2, scheduleId.getScheduleId());
       statement.setInt(3, seatId.getSeatId());
@@ -72,13 +72,12 @@ public class TicketPostgresDAO implements TicketDAO
     }
   }
 
-  @Override public void createBicycleTicket(int ticketID, Bicycle bicycleSeat, Schedule scheduleId,
-      String email)
+  @Override public void createBicycleTicket(int ticketID, Bicycle bicycleSeat, Schedule scheduleId, String email)
   {
-    try (var connection = getConnection())
+    try (Connection connection = getConnection())
     {
       String sql = "INSERT INTO ticket (ticket_id, schedule_id, bicycle_number, user_email) VALUES (?, ?, ?, ?)";
-      var statement = connection.prepareStatement(sql);
+      PreparedStatement statement = connection.prepareStatement(sql);
       statement.setInt(1, ticketID);
       statement.setInt(2, scheduleId.getScheduleId());
       statement.setInt(3, bicycleSeat.getBicycleSeatId());
@@ -94,10 +93,10 @@ public class TicketPostgresDAO implements TicketDAO
 
   @Override public void createTicket(int ticketID, Schedule scheduleId, String email)
   {
-    try (var connection = getConnection())
+    try (Connection connection = getConnection())
     {
       String sql = "INSERT INTO ticket (ticket_id, schedule_id, user_email) VALUES (?, ?, ?)";
-      var statement = connection.prepareStatement(sql);
+      PreparedStatement statement = connection.prepareStatement(sql);
       statement.setInt(1, ticketID);
       statement.setInt(2, scheduleId.getScheduleId());
       statement.setString(3, email);
@@ -112,7 +111,7 @@ public class TicketPostgresDAO implements TicketDAO
 
   @Override public void updateTicket(Ticket ticket)
   {
-    try (var connection = getConnection())
+    try (Connection connection = getConnection())
     {
       StringBuilder sqlBuilder = new StringBuilder("UPDATE ticket SET schedule_id = ?, user_email = ?");
 
@@ -128,7 +127,7 @@ public class TicketPostgresDAO implements TicketDAO
       }
       sqlBuilder.append(" WHERE ticket_id = ?");
 
-      var statement = connection.prepareStatement(sqlBuilder.toString());
+      PreparedStatement statement = connection.prepareStatement(sqlBuilder.toString());
       statement.setInt(1, ticket.getScheduleId().getScheduleId());
       statement.setString(2, ticket.getEmail());
 
@@ -155,10 +154,10 @@ public class TicketPostgresDAO implements TicketDAO
 
   @Override public void deleteTicket(int ticketId)
   {
-    try (var connection = getConnection())
+    try (Connection connection = getConnection())
     {
       String sql = "DELETE FROM ticket WHERE ticket_id = ?";
-      var statement = connection.prepareStatement(sql);
+      PreparedStatement statement = connection.prepareStatement(sql);
       statement.setInt(1, ticketId);
       statement.executeUpdate();
     }
@@ -171,15 +170,16 @@ public class TicketPostgresDAO implements TicketDAO
 
   @Override public List<Ticket> getAllTickets()
   {
-    try (var connection = getConnection())
+    try (Connection connection = getConnection())
     {
-      String sql = "SELECT t.*, "
-          + "s.departureStation, s.arrivalStation, s.departureDate, s.departureTime, s.arrivalDate, s.arrivalTime, "
-          + "s.train_id "
-          + "FROM ticket t "
-          + "JOIN schedule s ON t.schedule_id = s.schedule_id";
-      var statement = connection.prepareStatement(sql);
-      var resultSet = statement.executeQuery();
+      String sql = """
+          SELECT t.*,  s.departureStation, s.arrivalStation, s.departureDate, s.departureTime, s.arrivalDate, s.arrivalTime, s.train_id
+          FROM ticket t
+          JOIN schedule s
+          ON t.schedule_id = s.schedule_id
+          """;
+      PreparedStatement statement = connection.prepareStatement(sql);
+      ResultSet resultSet = statement.executeQuery();
       List<Ticket> tickets = new ArrayList<>();
 
       while (resultSet.next())
@@ -197,17 +197,18 @@ public class TicketPostgresDAO implements TicketDAO
 
   @Override public Ticket getTicketById(int ticketId)
   {
-    try (var connection = getConnection())
+    try (Connection connection = getConnection())
     {
-      String sql = "SELECT t.*, "
-          + "s.departureStation, s.arrivalStation, s.departureDate, s.departureTime, s.arrivalDate, s.arrivalTime, "
-          + "s.train_id "
-          + "FROM ticket t "
-          + "JOIN schedule s ON t.schedule_id = s.schedule_id "
-          + "WHERE t.ticket_id = ?";
-      var statement = connection.prepareStatement(sql);
+      String sql = """
+          SELECT t.*, s.departureStation, s.arrivalStation, s.departureDate, s.departureTime, s.arrivalDate, s.arrivalTime, s.train_id
+          FROM ticket t
+          JOIN schedule s
+          ON t.schedule_id = s.schedule_id
+          WHERE t.ticket_id = ?
+          """;
+      PreparedStatement statement = connection.prepareStatement(sql);
       statement.setInt(1, ticketId);
-      var resultSet = statement.executeQuery();
+      ResultSet resultSet = statement.executeQuery();
 
       if (resultSet.next())
       {
@@ -224,19 +225,19 @@ public class TicketPostgresDAO implements TicketDAO
 
   @Override public List<Ticket> getTicketsByEmail(String email)
   {
-    try (var connection = getConnection())
+    try (Connection connection = getConnection())
     {
-      String sql = "SELECT t.*, "
-          + "s.departureStation, s.arrivalStation, s.departureDate, s.departureTime, s.arrivalDate, s.arrivalTime, "
-          + "s.train_id "
-          + "FROM ticket t "
-          + "JOIN schedule s ON t.schedule_id = s.schedule_id "
-          + "WHERE t.user_email = ?";
-      var statement = connection.prepareStatement(sql);
+      String sql = """
+          SELECT t.*, s.departureStation, s.arrivalStation, s.departureDate, s.departureTime, s.arrivalDate, s.arrivalTime, s.train_id
+          FROM ticket t
+          JOIN schedule s
+          ON t.schedule_id = s.schedule_id
+          WHERE t.user_email = ?
+          """;
+      PreparedStatement statement = connection.prepareStatement(sql);
       statement.setString(1, email);
-      var resultSet = statement.executeQuery();
+      ResultSet resultSet = statement.executeQuery();
       List<Ticket> tickets = new ArrayList<>();
-
       while (resultSet.next())
       {
         tickets.add(extractTicketFromResultSet(resultSet));
@@ -256,78 +257,63 @@ public class TicketPostgresDAO implements TicketDAO
     int scheduleId = resultSet.getInt("schedule_id");
     String email = resultSet.getString("user_email");
     int trainId = resultSet.getInt("train_id");
-
     // Create a proper Schedule object with all required information
     String departureStationName = resultSet.getString("departureStation");
     String arrivalStationName = resultSet.getString("arrivalStation");
-
     // Create stations
     Station departureStation = new Station(departureStationName);
     Station arrivalStation = new Station(arrivalStationName);
-
     // Create dates with both date and time components
     java.sql.Date depDate = resultSet.getDate("departureDate");
     java.sql.Time depTime = resultSet.getTime("departureTime");
     java.sql.Date arrDate = resultSet.getDate("arrivalDate");
     java.sql.Time arrTime = resultSet.getTime("arrivalTime");
-
     // Convert to application's MyDate objects
     MyDate departureDate = convertToMyDate(depDate, depTime);
     MyDate arrivalDate = convertToMyDate(arrDate, arrTime);
 
     Schedule schedule = new Schedule(scheduleId, departureStation, arrivalStation, departureDate, arrivalDate);
-
     // Create train and set its schedule
     Train train = new Train(trainId);
     train.setSchedule(schedule);
-
     // Create basic ticket
     Ticket ticket = new Ticket(ticketId, train, schedule, email);
-
     // Add seat if present
     int seatNumber = resultSet.getInt("seat_number");
     if (!resultSet.wasNull())
     {
       ticket.setSeatId(new Seat(seatNumber));
     }
-
     // Add bicycle if present
     int bicycleNumber = resultSet.getInt("bicycle_number");
     if (!resultSet.wasNull())
     {
       ticket.setBicycleSeat(new Bicycle(bicycleNumber));
     }
-
     return ticket;
   }
 
-  private MyDate convertToMyDate(java.sql.Date date, java.sql.Time time)
+  private MyDate convertToMyDate(Date date, Time time)
   {
     if (date == null)
     {
       return null;
     }
-
-    java.util.Calendar cal = java.util.Calendar.getInstance();
-
+    Calendar cal = Calendar.getInstance();
     // Set date components
     cal.setTime(date);
-    int year = cal.get(java.util.Calendar.YEAR);
-    int month = cal.get(java.util.Calendar.MONTH) + 1; // Calendar months are 0-based
-    int day = cal.get(java.util.Calendar.DAY_OF_MONTH);
-
-    // Set time components if time is available
+    int year = cal.get(Calendar.YEAR);
+    int month = cal.get(Calendar.MONTH) + 1;
+    int day = cal.get(Calendar.DAY_OF_MONTH);
     int hour = 0;
     int minute = 0;
     if (time != null)
     {
-      java.util.Calendar timeCal = java.util.Calendar.getInstance();
+      Calendar timeCal = Calendar.getInstance();
       timeCal.setTime(time);
-      hour = timeCal.get(java.util.Calendar.HOUR_OF_DAY);
-      minute = timeCal.get(java.util.Calendar.MINUTE);
+      hour = timeCal.get(Calendar.HOUR_OF_DAY);
+      minute = timeCal.get(Calendar.MINUTE);
     }
-
-    // Create MyDate object with correct parameter order: day, month, year, hour, minute
     return new MyDate(day, month, year, hour, minute);
   }
 }

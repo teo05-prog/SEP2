@@ -15,7 +15,7 @@ import viewmodel.SeatSelectionVM;
 import java.util.List;
 import java.util.Random;
 
-public class SeatSelectionController
+public class SeatSelectionViewController
 {
   private SeatSelectionVM viewModel;
   private List<Button> allSeatButtons;
@@ -44,9 +44,8 @@ public class SeatSelectionController
 
   private SearchTicketVM searchTicketVM;
 
-  public SeatSelectionController()
+  public SeatSelectionViewController()
   {
-    this.viewModel = new SeatSelectionVM();
   }
 
   public void init(SeatSelectionVM viewModel, SearchTicketVM searchTicketVM)
@@ -60,22 +59,18 @@ public class SeatSelectionController
 
   public void initialize()
   {
-    //    if (viewModel == null)
-    //    {
-    //      viewModel = new SeatSelectionVM();
-    //    }
-    //    bindProperties();
+    if (viewModel == null)
+    {
+      viewModel = new SeatSelectionVM();
+    }
   }
 
   private void bindProperties()
   {
-    // collect all seat buttons into a list to avoid repeating code
-    allSeatButtons = List.of(seatNumber1, seatNumber2, seatNumber3, seatNumber4,
-        seatNumber5, seatNumber6, seatNumber7, seatNumber8, seatNumber9,
-        seatNumber10, seatNumber11, seatNumber12, seatNumber13, seatNumber14,
-        seatNumber15, seatNumber16, bicycleSeatNumber17, bicycleSeatNumber18);
+    allSeatButtons = List.of(seatNumber1, seatNumber2, seatNumber3, seatNumber4, seatNumber5, seatNumber6, seatNumber7,
+        seatNumber8, seatNumber9, seatNumber10, seatNumber11, seatNumber12, seatNumber13, seatNumber14, seatNumber15,
+        seatNumber16, bicycleSeatNumber17, bicycleSeatNumber18);
 
-    // for each button assign logic for click
     for (int i = 0; i < allSeatButtons.size(); i++)
     {
       int seatNumber = i + 1;
@@ -84,62 +79,57 @@ public class SeatSelectionController
     }
 
     continueButton.setOnAction(e -> {
-//      if (viewModel.getSelectedSeats().isEmpty())
-//      {
-//        showAlert("No seat selected",
-//            "Please select at least one seat before continuing.");
-//        return;
-//      }
-
-
-      //prepare booking
       TrainDTO trainDTO = Session.getInstance().getSelectedTrainDTO();
       String email = Session.getInstance().getUserEmail();
       int ticketID = new Random().nextInt(1000000);
 
-      Schedule schedule = new Schedule(trainDTO.scheduleId,new Station(trainDTO.from),new Station(trainDTO.to),trainDTO.departureDate,trainDTO.arrivalDate);
+      Schedule schedule = new Schedule(trainDTO.scheduleId, new Station(trainDTO.from), new Station(trainDTO.to),
+          trainDTO.departureDate, trainDTO.arrivalDate);
 
-      Ticket ticket = new Ticket(ticketID, new Train(trainDTO.trainId),
-          schedule, email);
+      Ticket ticket = new Ticket(ticketID, new Train(trainDTO.trainId), schedule, email);
 
-
-      // set selected seat
       Integer seat = viewModel.getSelectedSeats().stream().findFirst().orElse(null);
 
-      if (seat != null && seat >= 1 && seat <=16){
+      if (seat != null && seat >= 1 && seat <= 16)
+      {
         ticket.setSeatId(new Seat(seat));
         System.out.println("Set seat on ticket: " + seat);
-      }else if(seat != null && seat >=17 && seat<=18){
+      }
+      else if (seat != null && seat >= 17 && seat <= 18)
+      {
         ticket.setBicycleSeat(new Bicycle(seat));
       }
-      System.out.println("Ticket before saving to session: "+ new Gson().toJson(ticket));
-      //save for confirmation page
+      System.out.println("Ticket before saving to session: " + new Gson().toJson(ticket));
       Session.getInstance().setCurrentTicket(ticket);
-      viewModel.confirmBooking(); //finalize in ViewModel
-      //send to server
-      try{
-        if (ticket.getSeatId() !=null && ticket.getBicycleSeat() !=null){
-          System.out.println("Booking ticket: "+new Gson().toJson(ticket));
-          ClientSocket.sendRequest("ticket","createSeatAndBicycleTicket",ticket);
+      viewModel.confirmBooking();
+      try
+      {
+        if (ticket.getSeatId() != null && ticket.getBicycleSeat() != null)
+        {
+          System.out.println("Booking ticket: " + new Gson().toJson(ticket));
+          ClientSocket.sendRequest("ticket", "createSeatAndBicycleTicket", ticket);
         }
         else if (ticket.getSeatId() != null)
         {
-          ClientSocket.sendRequest("ticket","createSeatTicket", ticket);
+          ClientSocket.sendRequest("ticket", "createSeatTicket", ticket);
         }
-        else if (ticket.getBicycleSeat() !=null)
+        else if (ticket.getBicycleSeat() != null)
         {
-          ClientSocket.sendRequest("ticket","createBicycleTicket", ticket);
-        }else {
-          ClientSocket.sendRequest("ticket","createTicket", ticket);
+          ClientSocket.sendRequest("ticket", "createBicycleTicket", ticket);
+        }
+        else
+        {
+          ClientSocket.sendRequest("ticket", "createTicket", ticket);
         }
         Session.getInstance().setCurrentTicket(ticket);
-        System.out.println("Booking ticket: "+ new Gson().toJson(ticket));
-
+        System.out.println("Booking ticket: " + new Gson().toJson(ticket));
 
         ViewHandler.showView(ViewHandler.ViewType.CONFIRM_TICKET);
-      }catch (Exception ex){
+      }
+      catch (Exception ex)
+      {
         ex.printStackTrace();
-        showAlert("Booking failed", "Could not complete booking: "+ex.getMessage());
+        showAlert("Booking failed", "Could not complete booking: " + ex.getMessage());
       }
       refreshSeatButtons();
     });
@@ -156,17 +146,15 @@ public class SeatSelectionController
     boolean isSeat = seatNumber >= 1 && seatNumber <= 16;
     boolean isBicycle = seatNumber >= 17 && seatNumber <= 18;
 
-    // restrict based on what user chose
     boolean seatAllowed = searchTicketVM.seatProperty().get();
     boolean bicycleAllowed = searchTicketVM.bicycleProperty().get();
 
     if ((isSeat && !seatAllowed) || (isBicycle && !bicycleAllowed))
     {
-      button.setDisable(true); //not allowed based on traveller choice
+      button.setDisable(true);
       return;
     }
 
-    // click toggles selection if seat is available
     button.setOnAction(e -> {
       viewModel.toggleSeatSelection(seatNumber);
       refreshSeatButtons();
@@ -191,8 +179,7 @@ public class SeatSelectionController
     else
     {
       // available
-      button.setStyle(
-          "-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 2px;");
+      button.setStyle("-fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 2px;");
     }
   }
 
@@ -212,5 +199,4 @@ public class SeatSelectionController
     alert.setContentText(message);
     alert.showAndWait();
   }
-
 }

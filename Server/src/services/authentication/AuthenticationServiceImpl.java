@@ -22,10 +22,7 @@ public class AuthenticationServiceImpl implements AuthenticationService
 
   @Override public String login(LoginDTO request)
   {
-    System.out.println("Login attempt for: " + request.getEmail());
-
     User user = userDAO.readByEmail(request.getEmail());
-    System.out.println("Retrieved user: " + (user != null ? user.getClass().getSimpleName() : "null"));
 
     if (user == null)
     {
@@ -38,8 +35,6 @@ public class AuthenticationServiceImpl implements AuthenticationService
     // Set admin status based on user role
     this.isAdmin = (user instanceof Admin);
     this.currentUser = user;
-    System.out.println("Setting isAdmin to: " + this.isAdmin);
-
     return "Ok";
   }
 
@@ -94,10 +89,5 @@ public class AuthenticationServiceImpl implements AuthenticationService
       return (user instanceof Admin) ? "ADMIN" : "USER";
     }
     return null;
-  }
-
-  public String getLoggedInUserEmail()
-  {
-    return currentUser != null ? currentUser.getEmail() : null;
   }
 }

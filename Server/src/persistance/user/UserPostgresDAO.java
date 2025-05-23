@@ -28,7 +28,8 @@ public class UserPostgresDAO implements UserDAO
   private static Connection getConnection() throws SQLException
   {
     //return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail", "postgres", "14012004");
-    return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail", "postgres", "141220");
+    return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail", "postgres",
+        "141220");
   }
 
   @Override public void createTraveller(String name, String email, String password, MyDate birthDate)
@@ -56,9 +57,7 @@ public class UserPostgresDAO implements UserDAO
       String sql = "SELECT * FROM users WHERE email = ?";
       PreparedStatement statement = connection.prepareStatement(sql);
       statement.setString(1, email);
-      var resultSet = statement.executeQuery();
-
-      System.out.println("Searching for user: " + email);
+      ResultSet resultSet = statement.executeQuery();
 
       if (resultSet.next())
       {
@@ -66,13 +65,9 @@ public class UserPostgresDAO implements UserDAO
         String password = resultSet.getString("password");
         boolean isAdmin = resultSet.getBoolean("isAdmin");
 
-        System.out.println("Found user: " + name);
-        System.out.println("IsAdmin flag: " + isAdmin);
-
         if (isAdmin)
         {
           Admin admin = new Admin(name, email, password);
-          System.out.println("Created Admin object: " + admin.getClass().getSimpleName());
           return admin;
         }
         else
@@ -82,7 +77,6 @@ public class UserPostgresDAO implements UserDAO
           return new Traveller(name, email, password, birthDate);
         }
       }
-      System.out.println("No user found with email: " + email);
     }
     catch (SQLException e)
     {
@@ -99,41 +93,6 @@ public class UserPostgresDAO implements UserDAO
       String sql = "DELETE FROM users WHERE email = ?";
       PreparedStatement statement = connection.prepareStatement(sql);
       statement.setString(1, email);
-      statement.executeUpdate();
-    }
-    catch (SQLException e)
-    {
-      e.printStackTrace();
-    }
-  }
-
-  @Override public void updateAdmin(String name, String email, String password)
-  {
-    try (Connection connection = getConnection())
-    {
-      String sql = "UPDATE users SET name = ?, password = ? WHERE email = ?";
-      PreparedStatement statement = connection.prepareStatement(sql);
-      statement.setString(1, name);
-      statement.setString(2, password);
-      statement.setString(3, email);
-      statement.executeUpdate();
-    }
-    catch (SQLException e)
-    {
-      e.printStackTrace();
-    }
-  }
-
-  @Override public void updateTraveller(String name, String email, String password, MyDate birthDate)
-  {
-    try (Connection connection = getConnection())
-    {
-      String sql = "UPDATE users SET name = ?, password = ?, birthday = ? WHERE email = ?";
-      PreparedStatement statement = connection.prepareStatement(sql);
-      statement.setString(1, name);
-      statement.setString(2, password);
-      statement.setDate(3, birthDate.toSqlDate());
-      statement.setString(4, email);
       statement.executeUpdate();
     }
     catch (SQLException e)

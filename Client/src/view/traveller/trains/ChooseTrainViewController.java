@@ -16,9 +16,10 @@ import viewmodel.ChooseTrainVM;
 import viewmodel.SearchTicketVM;
 
 import javafx.event.ActionEvent;
+
 import java.util.Random;
 
-public class ChooseTrainController
+public class ChooseTrainViewController
 {
   private ChooseTrainVM viewModel;
   private SearchTicketVM searchTicketVM;
@@ -28,9 +29,8 @@ public class ChooseTrainController
   @FXML private Button continueButton;
   @FXML private Button backButton;
 
-  public ChooseTrainController()
+  public ChooseTrainViewController()
   {
-    this.viewModel = new ChooseTrainVM();
   }
 
   public void init(ChooseTrainVM viewModel, SearchTicketVM searchTicketVM)
@@ -50,7 +50,6 @@ public class ChooseTrainController
     {
       viewModel = new ChooseTrainVM();
     }
-    //    bindProperties();
   }
 
   private void bindProperties()
@@ -65,14 +64,11 @@ public class ChooseTrainController
 
   public void onContinueButton()
   {
-    viewModel.continueWithSelectedTrain(); // record selected train
-
-    //    if (viewModel.selectedTrainProperty().get() == null){
-    //      return;
-    //    }
+    viewModel.continueWithSelectedTrain();
 
     TrainDTO selectedTrain = viewModel.selectedTrainProperty().get();
-    if (selectedTrain==null) return;
+    if (selectedTrain == null)
+      return;
 
     if (searchTicketVM != null && searchTicketVM.isSeatOrBicycleSelected())
     {
@@ -83,18 +79,21 @@ public class ChooseTrainController
       String email = Session.getInstance().getUserEmail();
       int ticketID = new Random().nextInt(1000000);
 
-      Schedule schedule = new Schedule(selectedTrain.scheduleId,new Station(selectedTrain.from),new Station(selectedTrain.to),selectedTrain.departureDate,selectedTrain.arrivalDate);
+      Schedule schedule = new Schedule(selectedTrain.scheduleId, new Station(selectedTrain.from),
+          new Station(selectedTrain.to), selectedTrain.departureDate, selectedTrain.arrivalDate);
 
-      Ticket ticket = new Ticket(ticketID, new Train(selectedTrain.trainId),
-          schedule, email);
+      Ticket ticket = new Ticket(ticketID, new Train(selectedTrain.trainId), schedule, email);
 
-      System.out.println("Direct ticket creation: "+ new Gson().toJson(ticket));
+      System.out.println("Direct ticket creation: " + new Gson().toJson(ticket));
       Session.getInstance().setCurrentTicket(ticket);
       ViewHandler.showView(ViewHandler.ViewType.CONFIRM_TICKET);
     }
   }
-  @FXML public void onBackButton(ActionEvent actionEvent){
-    if (actionEvent.getSource()== backButton){
+
+  @FXML public void onBackButton(ActionEvent actionEvent)
+  {
+    if (actionEvent.getSource() == backButton)
+    {
       ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_USER);
     }
   }

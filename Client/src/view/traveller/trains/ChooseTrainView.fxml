@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #cee0dc; -fx-padding: 40;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.traveller.trains.ChooseTrainController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #cee0dc; -fx-padding: 40;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.traveller.trains.ChooseTrainViewController">
    <children>
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
@@ -25,11 +25,22 @@
          </children>
       </HBox>
       <ListView fx:id="trainListView" prefHeight="340.0" prefWidth="480.0" style="-fx-background-color: white; -fx-background-radius: 10;" />
-      <Button fx:id="continueButton" mnemonicParsing="false" onAction="#onContinueButton" style="-fx-background-color: #40798c; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 8 16;" text="Continue">
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#onBackButton" style="-fx-background-color: #40798c; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 8 16;" text="Back">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="continueButton" mnemonicParsing="false" onAction="#onContinueButton" style="-fx-background-color: #40798c; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 8 16;" text="Continue">
+               <HBox.margin>
+                  <Insets left="375.0" />
+               </HBox.margin>
+            </Button>
+         </children>
          <VBox.margin>
-            <Insets left="400.0" top="10.0" />
+            <Insets top="20.0" />
          </VBox.margin>
-      </Button>
-      <Button fx:id="backButton" layoutX="450.0" layoutY="437.0" mnemonicParsing="false" onAction="#onBackButton" style="-fx-background-color: #40798c; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 8 16;" text="Back" />
+      </HBox>
    </children>
 </VBox>

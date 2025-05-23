@@ -1,0 +1,162 @@
+// this is the database code for the VIArail project
+
+create schema viarail;
+
+set schema 'viarail';
+
+create table users
+(
+    name     varchar(70),
+    email    varchar(60) primary key,
+    password varchar(25),
+    isAdmin  boolean,
+    birthday date
+);
+
+create table train
+(
+    train_id serial primary key
+);
+
+create table stations
+(
+    station_name varchar(20) primary key
+);
+
+create table schedule
+(
+    schedule_id      serial primary key,
+    train_id         integer,
+    departureStation varchar(20),
+    departureDate    date,
+    departureTime    time,
+    arrivalStation   varchar(20),
+    arrivalDate      date,
+    arrivalTime      time,
+    foreign key (train_id) references train (train_id),
+    foreign key (departureStation) references stations (station_name),
+    foreign key (arrivalStation) references stations (station_name)
+);
+
+create table ticket
+(
+    ticket_id      serial primary key,
+    schedule_id    integer,
+    user_email     varchar(60),
+    seat_number    integer,
+    bicycle_number integer,
+    foreign key (schedule_id) references schedule (schedule_id),
+    foreign key (user_email) references users (email)
+);
+
+create table search_filter
+(
+    filter_id      serial primary key,
+    user_email     varchar(60),
+    from_station   varchar(20),
+    to_station     varchar(20),
+    departureDate  date,
+    departureTime  time,
+    seat_needed    boolean,
+    bicycle_needed boolean,
+    created_at     timestamp default current_timestamp,
+    foreign key (user_email) references users (email)
+);
+
+INSERT INTO stations (station_name)
+VALUES ('Copenhagen'),
+       ('Aarhus'),
+       ('Odense'),
+       ('Aalborg'),
+       ('Esbjerg'),
+       ('Randers'),
+       ('Kolding'),
+       ('Horsens'),
+       ('Vejle'),
+       ('Silkeborg'),
+       ('Herning');
+
+INSERT INTO train DEFAULT
+VALUES;
+INSERT INTO train DEFAULT
+VALUES;
+INSERT INTO train DEFAULT
+VALUES;
+
+INSERT INTO users (name, email, password, isAdmin, birthday)
+VALUES ('Lars Mikkelsen', 'lars@example.com', 'secure123', false, '1985-04-10'),
+       ('Teodora Stoicescu', 'test@example.com', 'password123_', true,
+        '2004-10-05'),
+       ('Sofie Jensen', 'sofie@example.com', 'password_456', false,
+        '1990-09-23'),
+       ('Niels Andersen', 'niels@example.com', 'niels_789', false,
+        '1978-12-05'),
+       ('Yelyzaveta Tkachenko', 'yetk@example.com', 'password123_', true,
+        '2004-01-14'),
+       ('Bianca Buzdugan', 'bibu@example.com', 'password123_', true,
+        '2005-03-02'),
+       ('Jan Lewek', 'jale@example.com', 'password123_', true, '2005-03-14');
+
+INSERT INTO schedule (train_id, departureStation, departureDate, departureTime,
+                      arrivalStation, arrivalDate, arrivalTime)
+VALUES (1, 'Copenhagen', '2025-05-10', '08:00', 'Aarhus', '2025-05-10',
+        '11:30'),
+       (1, 'Aarhus', '2025-05-10', '12:00', 'Aalborg', '2025-05-10', '14:00'),
+       (2, 'Odense', '2025-05-11', '09:15', 'Esbjerg', '2025-05-11', '11:45'),
+       (3, 'Kolding', '2025-05-12', '07:00', 'Copenhagen', '2025-05-12',
+        '10:00'),
+-- June 2025
+       (1, 'Randers', '2025-06-01', '08:00', 'Odense', '2025-06-01', '10:45'),
+       (2, 'Aalborg', '2025-06-02', '13:00', 'Herning', '2025-06-02', '15:30'),
+       (3, 'Vejle', '2025-06-03', '09:00', 'Silkeborg', '2025-06-03', '10:30'),
+       (1, 'Horsens', '2025-06-04', '07:30', 'Copenhagen', '2025-06-04',
+        '10:45'),
+       (2, 'Esbjerg', '2025-06-05', '12:30', 'Aarhus', '2025-06-05', '15:00'),
+       (3, 'Silkeborg', '2025-06-06', '10:00', 'Odense', '2025-06-06', '12:30'),
+       (1, 'Copenhagen', '2025-06-07', '14:00', 'Herning', '2025-06-07',
+        '17:45'),
+       (2, 'Aarhus', '2025-06-08', '09:00', 'Vejle', '2025-06-08', '10:15'),
+-- July 2025
+       (3, 'Randers', '2025-07-01', '09:30', 'Kolding', '2025-07-01', '12:00'),
+       (1, 'Odense', '2025-07-02', '13:00', 'Aarhus', '2025-07-02', '15:30'),
+       (2, 'Aalborg', '2025-07-03', '10:00', 'Randers', '2025-07-03', '12:00'),
+       (3, 'Herning', '2025-07-04', '08:30', 'Vejle', '2025-07-04', '10:45'),
+       (1, 'Copenhagen', '2025-07-05', '07:30', 'Esbjerg', '2025-07-05',
+        '11:00'),
+       (2, 'Silkeborg', '2025-07-06', '11:00', 'Aalborg', '2025-07-06',
+        '13:30'),
+       (3, 'Odense', '2025-07-07', '15:30', 'Horsens', '2025-07-07', '17:45'),
+       (1, 'Esbjerg', '2025-07-08', '09:00', 'Kolding', '2025-07-08', '11:00'),
+-- August 2025
+       (2, 'Vejle', '2025-08-01', '08:00', 'Aarhus', '2025-08-01', '09:45'),
+       (3, 'Randers', '2025-08-02', '10:30', 'Copenhagen', '2025-08-02',
+        '14:00'),
+       (1, 'Horsens', '2025-08-03', '07:30', 'Silkeborg', '2025-08-03',
+        '09:30'),
+       (2, 'Aarhus', '2025-08-04', '12:00', 'Herning', '2025-08-04', '14:30'),
+       (3, 'Aalborg', '2025-08-05', '10:00', 'Esbjerg', '2025-08-05', '13:15'),
+       (1, 'Kolding', '2025-08-06', '15:00', 'Odense', '2025-08-06', '17:00'),
+       (2, 'Herning', '2025-08-07', '09:00', 'Vejle', '2025-08-07', '11:30'),
+       (3, 'Silkeborg', '2025-08-08', '13:30', 'Randers', '2025-08-08',
+        '15:00');
+
+INSERT INTO ticket (schedule_id, user_email, seat_number, bicycle_number)
+VALUES (1, 'lars@example.com', '12', null),
+       (1, 'sofie@example.com', '13', 18),
+       (3, 'niels@example.com', '8', null),
+       (4, 'lars@example.com', '5', 17),
+       (1, 'teodora_st@gmail.com', 1, 17),
+       (3, 'teodora_st@gmail.com', 2, null),
+       (4, 'teodora_st@gmail.com', 3, 17),
+       (2, 'teodora_st@gmail.com', 4, null),
+       (1, 'teodora_st@gmail.com', 5, null),
+       (3, 'teodora_st@gmail.com', 6, 18),
+       (4, 'teodora_st@gmail.com', 7, null),
+       (2, 'teodora_st@gmail.com', 8, null),
+       (1, 'teodora_st@gmail.com', 9, 18),
+       (3, 'teodora_st@gmail.com', 10, null),
+       (5, 'teodora_st@gmail.com', 14, null),
+       (6, 'teodora_st@gmail.com', 15, 17),
+       (8, 'teodora_st@gmail.com', 9, null),
+       (10, 'teodora_st@gmail.com', 7, null),
+       (12, 'teodora_st@gmail.com', 16, 18);

@@ -10,27 +10,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="500.0" prefWidth="600.0" spacing="15.0" style="-fx-background-color: #cee0dc; -fx-padding: 40;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.admin.add.AddTrainViewController">
+<VBox alignment="CENTER" prefHeight="500.0" prefWidth="600.0" spacing="15.0" style="-fx-background-color: #cee0dc; -fx-padding: 40;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.admin.add.AddScheduleViewController">
 
     <children>
-        <Label style="-fx-text-fill: #2c3e50; -fx-font-size: 24px; -fx-font-weight: bold;" text="Add Train" />
+        <Label style="-fx-text-fill: #2c3e50; -fx-font-size: 24px; -fx-font-weight: bold;" text="Add Schedule" />
 
-        <VBox prefHeight="300.0" spacing="10.0" style="-fx-padding: 20; -fx-background-color: white; -fx-background-radius: 10;">
+        <VBox prefHeight="275.0" spacing="10.0" style="-fx-padding: 20; -fx-background-color: white; -fx-background-radius: 10;">
             <children>
-                <HBox prefHeight="30.0" spacing="10.0">
-                    <children>
-                        <Label style="-fx-text-fill: #2c3e50;" text="Train ID:">
-                            <font>
-                                <Font name="System Bold" size="12.0" />
-                            </font>
-                        </Label>
-                        <Label fx:id="trainID" style="-fx-text-fill: #2c3e50;" text="[train ID]" />
-                  <Label fx:id="messageLabel" alignment="CENTER" prefHeight="18.0" prefWidth="363.0" text="&lt;message&gt;" />
-                    </children>
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
-                </HBox>
 
                 <HBox spacing="20.0" style="-fx-padding: 10;">
                     <children>
@@ -54,6 +40,9 @@
                             </HBox.margin>
                         </ComboBox>
                     </children>
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
                 </HBox>
             <HBox layoutX="30.0" layoutY="58.0" spacing="20.0" style="-fx-padding: 10;">
                <children>
@@ -79,13 +68,24 @@
                   </ComboBox>
                </children>
             </HBox>
+                <HBox prefHeight="30.0" spacing="10.0">
+                    <children>
+                  <Label fx:id="messageLabel" alignment="CENTER" prefHeight="18.0" prefWidth="480.0" text="&lt;message&gt;">
+                     <HBox.margin>
+                        <Insets top="5.0" />
+                     </HBox.margin></Label>
+                    </children>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+                </HBox>
             </children>
         </VBox>
 
         <ButtonBar prefHeight="40.0" prefWidth="200.0" style="-fx-padding: 10;">
             <buttons>
                 <Button fx:id="backButton" mnemonicParsing="false" onAction="#onBackButton" style="-fx-background-color: #40798c; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 6 12;" text="Back" />
-                <Button fx:id="addTrainButton" mnemonicParsing="false" onAction="#onAddTrainButton" style="-fx-background-color: #40798c; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 6 12;" text="Save" />
+                <Button fx:id="addButton" mnemonicParsing="false" onAction="#onAddButton" style="-fx-background-color: #40798c; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 6 12;" text="Save" />
             </buttons>
         </ButtonBar>
     </children>
