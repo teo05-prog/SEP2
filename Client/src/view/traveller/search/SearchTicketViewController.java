@@ -8,7 +8,7 @@ import javafx.scene.control.*;
 import view.ViewHandler;
 import viewmodel.SearchTicketVM;
 
-public class SearchTicketController
+public class SearchTicketViewController
 {
   private SearchTicketVM viewModel;
 
@@ -25,7 +25,7 @@ public class SearchTicketController
   @FXML private CheckBox bicycleCheckBox;
   @FXML private Button searchButton;
 
-  public SearchTicketController()
+  public SearchTicketViewController()
   {
     this.viewModel = new SearchTicketVM();
   }
@@ -37,7 +37,6 @@ public class SearchTicketController
       this.viewModel = viewModel;
     }
     setupUI();
-    // No need to call setupUI() here as it's already called in initialize()
   }
 
   @FXML public void initialize()
@@ -46,20 +45,16 @@ public class SearchTicketController
     {
       viewModel = new SearchTicketVM();
     }
-    //    setupUI();
   }
 
   private void setupUI()
   {
     startButton.setDisable(true);
-    // disable the button until all required fields are filled
     searchButton.disableProperty().bind(viewModel.inputValidProperty().not());
-    // should be changed
     ObservableList<String> stations = FXCollections.observableArrayList("Copenhagen", "Aarhus", "Odense", "Aalborg",
         "Esbjerg", "Randers", "Horsens", "Vejle", "Kolding", "Silkeborg", "Herning");
     fromComboBox.setItems(stations);
     toComboBox.setItems(stations);
-    // bind from and to stations
     viewModel.fromProperty().bindBidirectional(fromComboBox.valueProperty());
     viewModel.toProperty().bindBidirectional(toComboBox.valueProperty());
 
@@ -67,18 +62,14 @@ public class SearchTicketController
     for (int hour = 6; hour <= 22; hour++)
     {
       times.add(String.format("%02d:00", hour));
-      times.add(String.format("%02d:30", hour)); // Fixed: This was "%02d:00" twice
+      times.add(String.format("%02d:30", hour));
     }
     timeComboBox.setItems(times);
-    //bind time
     viewModel.timeProperty().bindBidirectional(timeComboBox.valueProperty());
-
-    //bind date
     dateInput.valueProperty().addListener((obs, oldDate, newDate) -> {
       viewModel.dateProperty().set(newDate);
     });
 
-    //bind seat and bicycle
     viewModel.seatProperty().bindBidirectional(seatCheckBox.selectedProperty());
     viewModel.bicycleProperty().bindBidirectional(bicycleCheckBox.selectedProperty());
 
@@ -95,7 +86,7 @@ public class SearchTicketController
 
   @FXML private void onStartButton()
   {
-    // do nothing because we are already on Start page
+    // do nothing because we are already on this view
   }
 
   @FXML private void onPreviousButton(ActionEvent e)
@@ -112,7 +103,6 @@ public class SearchTicketController
     {
       ViewHandler.showView(ViewHandler.ViewType.UPCOMING);
     }
-
   }
 
   @FXML private void onMyAccountButton(ActionEvent e)

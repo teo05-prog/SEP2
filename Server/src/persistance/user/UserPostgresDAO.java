@@ -28,7 +28,8 @@ public class UserPostgresDAO implements UserDAO
   private static Connection getConnection() throws SQLException
   {
     //return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail", "postgres", "14012004");
-    return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail", "postgres", "141220");
+    return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail", "postgres",
+        "141220");
   }
 
   @Override public void createTraveller(String name, String email, String password, MyDate birthDate)
@@ -56,7 +57,7 @@ public class UserPostgresDAO implements UserDAO
       String sql = "SELECT * FROM users WHERE email = ?";
       PreparedStatement statement = connection.prepareStatement(sql);
       statement.setString(1, email);
-      var resultSet = statement.executeQuery();
+      ResultSet resultSet = statement.executeQuery();
 
       System.out.println("Searching for user: " + email);
 
@@ -99,41 +100,6 @@ public class UserPostgresDAO implements UserDAO
       String sql = "DELETE FROM users WHERE email = ?";
       PreparedStatement statement = connection.prepareStatement(sql);
       statement.setString(1, email);
-      statement.executeUpdate();
-    }
-    catch (SQLException e)
-    {
-      e.printStackTrace();
-    }
-  }
-
-  @Override public void updateAdmin(String name, String email, String password)
-  {
-    try (Connection connection = getConnection())
-    {
-      String sql = "UPDATE users SET name = ?, password = ? WHERE email = ?";
-      PreparedStatement statement = connection.prepareStatement(sql);
-      statement.setString(1, name);
-      statement.setString(2, password);
-      statement.setString(3, email);
-      statement.executeUpdate();
-    }
-    catch (SQLException e)
-    {
-      e.printStackTrace();
-    }
-  }
-
-  @Override public void updateTraveller(String name, String email, String password, MyDate birthDate)
-  {
-    try (Connection connection = getConnection())
-    {
-      String sql = "UPDATE users SET name = ?, password = ?, birthday = ? WHERE email = ?";
-      PreparedStatement statement = connection.prepareStatement(sql);
-      statement.setString(1, name);
-      statement.setString(2, password);
-      statement.setDate(3, birthDate.toSqlDate());
-      statement.setString(4, email);
       statement.executeUpdate();
     }
     catch (SQLException e)

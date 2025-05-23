@@ -3,7 +3,7 @@ package viewmodel;
 import dtos.SearchFilterDTO;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
-import model.MyDate;
+import model.entities.MyDate;
 import network.ClientSocket;
 import view.ViewHandler;
 
@@ -25,16 +25,17 @@ public class SearchTicketVM
   public SearchTicketVM(String userEmail)
   {
     this.userEmail = userEmail;
-    inputValid = from.isNotEmpty().and(to.isNotEmpty()).and(date.isNotNull())
-        .and(time.isNotEmpty());
+    inputValid = from.isNotEmpty().and(to.isNotEmpty()).and(date.isNotNull()).and(time.isNotEmpty());
   }
 
-  public SearchTicketVM() {
+  public SearchTicketVM()
+  {
     this.userEmail = null;
     inputValid = from.isNotEmpty().and(to.isNotEmpty()).and(date.isNotNull()).and(time.isNotEmpty());
   }
 
-  public String getUserEmail(){
+  public String getUserEmail()
+  {
     return userEmail;
   }
 
@@ -42,17 +43,15 @@ public class SearchTicketVM
   {
     //create and send a request to the server
     LocalDate localDate = date.get();
-    String [] split = time.get().split(":");
+    String[] split = time.get().split(":");
     int hour = Integer.parseInt(split[0]);
     int minute = Integer.parseInt(split[1]);
-    MyDate myDate = new MyDate(localDate.getDayOfMonth(),
-        localDate.getMonthValue(), localDate.getYear(), hour, minute);
+    MyDate myDate = new MyDate(localDate.getDayOfMonth(), localDate.getMonthValue(), localDate.getYear(), hour, minute);
 
     String email = getUserEmail(); // from ViewModel
-    SearchFilterDTO filterDTO = new SearchFilterDTO(email, from.get(), to.get(),
-        myDate, seat.get(), bicycle.get());
+    SearchFilterDTO filterDTO = new SearchFilterDTO(email, from.get(), to.get(), myDate, seat.get(), bicycle.get());
 
-    ClientSocket.sendRequest("search","storeFilter",filterDTO);
+    ClientSocket.sendRequest("search", "storeFilter", filterDTO);
     //navigate to the next page
     ViewHandler.showView(ViewHandler.ViewType.CHOOSE_TRAIN);
   }

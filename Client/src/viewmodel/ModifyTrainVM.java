@@ -9,7 +9,6 @@ import dtos.error.ErrorResponse;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.util.StringConverter;
 import model.entities.MyDate;
 import model.entities.Schedule;
 import model.entities.Station;
@@ -23,6 +22,7 @@ import java.net.Socket;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 
 public class ModifyTrainVM
 {
@@ -97,7 +97,6 @@ public class ModifyTrainVM
       {
         trainID.set("ID: " + train.getTrainId());
         originalSchedule = train.getSchedule();
-
         if (originalSchedule != null)
         {
           currentSchedule.set(originalSchedule);
@@ -111,7 +110,6 @@ public class ModifyTrainVM
       }
       else
       {
-        System.out.println("Warning: Attempted to load null train");
         trainID.set("Error: No train selected");
       }
     }
@@ -126,7 +124,6 @@ public class ModifyTrainVM
   {
     try
     {
-      System.out.println("Loading all available schedules...");
       Object response = request("schedules", "getAllSchedules", null);
       availableSchedules.clear();
       if (response != null)
@@ -142,7 +139,6 @@ public class ModifyTrainVM
           availableSchedules.addAll(schedules);
         }
       }
-      System.out.println("Loaded " + availableSchedules.size() + " available schedules.");
     }
     catch (Exception e)
     {
@@ -160,7 +156,6 @@ public class ModifyTrainVM
         return;
       }
       int trainId = selectedTrain.getTrainId();
-      System.out.println("Loading schedules for train ID: " + trainId);
       try
       {
         Object response = request("schedules", "getSchedulesByTrainId", trainId);
@@ -183,7 +178,6 @@ public class ModifyTrainVM
         e.printStackTrace();
         trainSchedules.clear();
       }
-      System.out.println("Loaded " + trainSchedules.size() + " schedules for train " + selectedTrain.getTrainId());
     }
     catch (Exception e)
     {
@@ -202,73 +196,49 @@ public class ModifyTrainVM
     }
     try
     {
-      // Log the current state before saving
-      System.out.println("Saving changes for train ID: " + selectedTrain.getTrainId());
-      System.out.println(
-          "Original schedule: " + (originalSchedule != null ? originalSchedule.getScheduleId() : "null"));
-      System.out.println(
-          "Current schedule: " + (currentSchedule.get() != null ? currentSchedule.get().getScheduleId() : "null"));
-
-      // First update individual schedules to ensure they're valid
       if (schedulesModified)
       {
-        System.out.println("Updating " + trainSchedules.size() + " schedules for train " + selectedTrain.getTrainId());
         for (Schedule schedule : trainSchedules)
         {
-          System.out.println("Updating schedule ID: " + schedule.getScheduleId());
           try
           {
-            // Validate schedule data before sending
             if (!validateSchedule(schedule))
             {
               errorMessage.set("Invalid schedule data for ID: " + schedule.getScheduleId());
               return false;
             }
-
             request("schedules", "updateSchedule", schedule);
-            System.out.println("Schedule " + schedule.getScheduleId() + " updated successfully.");
           }
           catch (Exception e)
           {
             String errorMsg = "Error updating schedule " + schedule.getScheduleId() + ": " + e.getMessage();
-            System.out.println(errorMsg);
             errorMessage.set(errorMsg);
             e.printStackTrace();
             return false;
           }
         }
-        System.out.println("All schedules updated successfully.");
         schedulesModified = false;
       }
-
-      // Only after schedules are updated, update the train's current schedule
       if (currentSchedule.get() != originalSchedule)
       {
         selectedTrain.setSchedule(currentSchedule.get());
-        System.out.println("Updating train with current schedule: " + (currentSchedule.get() != null ?
-            currentSchedule.get().getScheduleId() :
-            "null"));
         try
         {
           request("trains", "updateTrain", selectedTrain);
-          System.out.println("Train " + selectedTrain.getTrainId() + " current schedule updated successfully.");
         }
         catch (Exception e)
         {
           String errorMsg = "Error updating train: " + e.getMessage();
-          System.out.println(errorMsg);
           errorMessage.set(errorMsg);
           e.printStackTrace();
           return false;
         }
       }
-
       return true;
     }
     catch (Exception e)
     {
       String errorMsg = "Error saving changes: " + e.getMessage();
-      System.out.println(errorMsg);
       errorMessage.set(errorMsg);
       e.printStackTrace();
       return false;
@@ -277,37 +247,31 @@ public class ModifyTrainVM
 
   private boolean validateSchedule(Schedule schedule)
   {
-    // Check for null values
+    // check for null values
     if (schedule.getDepartureStation() == null)
     {
       errorMessage.set("Departure station cannot be empty");
       return false;
     }
-
     if (schedule.getArrivalStation() == null)
     {
       errorMessage.set("Arrival station cannot be empty");
       return false;
     }
-
     if (schedule.getDepartureDate() == null)
     {
       errorMessage.set("Departure time cannot be empty");
       return false;
     }
-
     if (schedule.getArrivalDate() == null)
     {
       errorMessage.set("Arrival time cannot be empty");
       return false;
     }
-
-    // Check if departure is before arrival
     try
     {
-      LocalDateTime departureTime = ((MyDate) schedule.getDepartureDate()).toLocalDateTime();
-      LocalDateTime arrivalTime = ((MyDate) schedule.getArrivalDate()).toLocalDateTime();
-
+      LocalDateTime departureTime = schedule.getDepartureDate().toLocalDateTime();
+      LocalDateTime arrivalTime = schedule.getArrivalDate().toLocalDateTime();
       if (departureTime.isAfter(arrivalTime) || departureTime.isEqual(arrivalTime))
       {
         errorMessage.set("Departure time must be before arrival time");
@@ -319,14 +283,11 @@ public class ModifyTrainVM
       errorMessage.set("Invalid date format in schedule");
       return false;
     }
-
-    // Verify stations are not the same
-    if (schedule.getDepartureStation().getName() == schedule.getArrivalStation().getName())
+    if (Objects.equals(schedule.getDepartureStation().getName(), schedule.getArrivalStation().getName()))
     {
       errorMessage.set("Departure and arrival stations cannot be the same");
       return false;
     }
-
     return true;
   }
 
@@ -365,7 +326,7 @@ public class ModifyTrainVM
     {
       if (schedule.getDepartureDate() instanceof MyDate)
       {
-        MyDate myDate = (MyDate) schedule.getDepartureDate();
+        MyDate myDate = schedule.getDepartureDate();
         LocalDateTime departureTime = myDate.toLocalDateTime();
         property.set(formatDateTime(departureTime));
       }
@@ -399,7 +360,7 @@ public class ModifyTrainVM
     {
       if (schedule.getArrivalDate() instanceof MyDate)
       {
-        MyDate myDate = (MyDate) schedule.getArrivalDate();
+        MyDate myDate = schedule.getArrivalDate();
         LocalDateTime arrivalTime = myDate.toLocalDateTime();
         property.set(formatDateTime(arrivalTime));
       }
@@ -467,7 +428,6 @@ public class ModifyTrainVM
     }
     catch (Exception e)
     {
-      System.out.println("Error updating departure station: " + e.getMessage());
       e.printStackTrace();
       errorMessage.set("Error updating departure station: " + e.getMessage());
       return false;
@@ -508,7 +468,6 @@ public class ModifyTrainVM
     }
     catch (Exception e)
     {
-      System.out.println("Error updating arrival station: " + e.getMessage());
       e.printStackTrace();
       errorMessage.set("Error updating arrival station: " + e.getMessage());
       return false;
@@ -561,23 +520,14 @@ public class ModifyTrainVM
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())))
     {
-
       Request request = new Request(handler, action, payload);
       String jsonRequest = gson.toJson(request);
-
-      // Debug the actual data being sent
-      System.out.println("Sending request: " + jsonRequest);
-
       out.println(jsonRequest);
       String jsonResponse = in.readLine();
-
       if (jsonResponse == null)
       {
         throw new IOException("No response received from server");
       }
-
-      System.out.println("Received response: " + jsonResponse);
-
       Response response = gson.fromJson(jsonResponse, Response.class);
       if (response.status().equals("SUCCESS"))
       {

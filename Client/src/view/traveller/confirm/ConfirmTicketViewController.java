@@ -10,7 +10,7 @@ import session.Session;
 import view.ViewHandler;
 import viewmodel.ConfirmTicketVM;
 
-public class ConfirmTicketController
+public class ConfirmTicketViewController
 {
   private ConfirmTicketVM viewModel;
 
@@ -22,16 +22,17 @@ public class ConfirmTicketController
   @FXML private Label noReservationLabel;
   @FXML private Button buyButton;
 
-  public void init(ConfirmTicketVM viewModel){
+  public void init(ConfirmTicketVM viewModel)
+  {
     this.viewModel = viewModel;
     bindData();
   }
 
-  private void bindData(){
+  private void bindData()
+  {
     Ticket ticket = Session.getInstance().getCurrentTicket();
-    System.out.println("Ticket in confirm page: "+new Gson().toJson(ticket));
-    if (ticket == null) {
-      System.out.println("Ticket is null");
+    if (ticket == null)
+    {
       return;
     }
 
@@ -40,30 +41,39 @@ public class ConfirmTicketController
 
     dateTimeLabel.setText(viewModel.getFormattedDateTime());
 
-    if (ticket.getSeatId() != null){
-      seatLabel.setText("Seat: "+ticket.getSeatId().getSeatId());
-    }else {
+    if (ticket.getSeatId() != null)
+    {
+      seatLabel.setText("Seat: " + ticket.getSeatId().getSeatId());
+    }
+    else
+    {
       seatLabel.setText("Seat: None");
     }
 
-    if (ticket.getBicycleSeat() != null){
-      bicycleLabel.setText("Bicycle: "+ticket.getBicycleSeat().getBicycleSeatId());
-    }else {
+    if (ticket.getBicycleSeat() != null)
+    {
+      bicycleLabel.setText("Bicycle: " + ticket.getBicycleSeat().getBicycleSeatId());
+    }
+    else
+    {
       bicycleLabel.setText("Bicycle: None");
     }
 
-    if (ticket.getSeatId() == null && ticket.getBicycleSeat() == null){
+    if (ticket.getSeatId() == null && ticket.getBicycleSeat() == null)
+    {
       noReservationLabel.setText("This ticket has no seat or bicycle reserved");
       noReservationLabel.setVisible(true);
-    }else {
+    }
+    else
+    {
       noReservationLabel.setVisible(false);
     }
-
   }
 
   public void onBuyButton(ActionEvent actionEvent)
   {
-    if (actionEvent.getSource()== buyButton){
+    if (actionEvent.getSource() == buyButton)
+    {
       ViewHandler.showView(ViewHandler.ViewType.LOGGEDIN_USER);
     }
   }

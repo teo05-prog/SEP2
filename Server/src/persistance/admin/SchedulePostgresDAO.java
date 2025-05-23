@@ -32,7 +32,7 @@ public class SchedulePostgresDAO implements ScheduleDAO
   {
     Connection connection = DriverManager.getConnection(
         "jdbc:postgresql://localhost:5432/postgres?currentSchema=viarail", "postgres", "141220");
-    connection.setAutoCommit(true); // Ensure auto-commit is enabled
+    connection.setAutoCommit(true);
     return connection;
   }
 
@@ -41,7 +41,7 @@ public class SchedulePostgresDAO implements ScheduleDAO
     List<Schedule> schedules = new ArrayList<>();
     String sql = "SELECT * FROM schedule";
 
-    try (var connection = getConnection(); var statement = connection.prepareStatement(sql))
+    try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql))
     {
       ResultSet rs = statement.executeQuery();
 
@@ -82,7 +82,7 @@ public class SchedulePostgresDAO implements ScheduleDAO
     String sql = "SELECT * FROM schedule WHERE schedule_id = ?";
     Schedule schedule = null;
 
-    try (var connection = getConnection(); var statement = connection.prepareStatement(sql))
+    try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql))
     {
       statement.setInt(1, scheduleId);
       ResultSet rs = statement.executeQuery();
@@ -132,7 +132,6 @@ public class SchedulePostgresDAO implements ScheduleDAO
       statement.setString(2, schedule.getArrivalStation().getName());
       statement.setDate(3, new java.sql.Date(schedule.getDepartureDate().getDate().getTime()));
 
-      // Fix time conversion
       LocalTime depTime = LocalTime.of(schedule.getDepartureDate().getHour(), schedule.getDepartureDate().getMinute());
       statement.setTime(4, Time.valueOf(depTime));
 
@@ -177,7 +176,6 @@ public class SchedulePostgresDAO implements ScheduleDAO
       statement.setString(2, schedule.getArrivalStation().getName());
       statement.setDate(3, new java.sql.Date(schedule.getDepartureDate().getDate().getTime()));
 
-      // Fix time conversion
       LocalTime depTime = LocalTime.of(schedule.getDepartureDate().getHour(), schedule.getDepartureDate().getMinute());
       statement.setTime(4, Time.valueOf(depTime));
 
@@ -318,7 +316,7 @@ public class SchedulePostgresDAO implements ScheduleDAO
     List<Schedule> schedules = new ArrayList<>();
     String sql = "SELECT * FROM schedule WHERE train_id = ?";
 
-    try (var connection = getConnection(); var statement = connection.prepareStatement(sql))
+    try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql))
     {
       statement.setInt(1, trainId);
       ResultSet rs = statement.executeQuery();
@@ -351,7 +349,6 @@ public class SchedulePostgresDAO implements ScheduleDAO
       System.err.println("Error getting schedules by train ID: " + e.getMessage());
       e.printStackTrace();
     }
-
     return schedules;
   }
 

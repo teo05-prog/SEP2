@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #cee0dc; -fx-padding: 40;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.traveller.confirm.ConfirmTicketController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #cee0dc; -fx-padding: 40;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.traveller.confirm.ConfirmTicketViewController">
    <children>
       <Label prefHeight="44.0" prefWidth="211.0" text="Your Ticket">
          <font>
@@ -24,7 +24,7 @@
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label text="Outbound: ">
+                        <Label minWidth="96.0" prefHeight="27.0" prefWidth="96.0" text="Outbound: ">
                            <font>
                               <Font size="18.0" />
                            </font>

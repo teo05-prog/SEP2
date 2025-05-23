@@ -9,7 +9,7 @@ import model.entities.Ticket;
 import view.ViewHandler;
 import viewmodel.PreviousDeparturesVM;
 
-public class PreviousDeparturesController
+public class PreviousDeparturesViewController
 {
   private PreviousDeparturesVM viewModel;
 
@@ -19,7 +19,7 @@ public class PreviousDeparturesController
   @FXML private Button myAccountButton;
   @FXML private ListView<Ticket> PreviousDeparturesListView;
 
-  public PreviousDeparturesController()
+  public PreviousDeparturesViewController()
   {
   }
 
@@ -46,47 +46,46 @@ public class PreviousDeparturesController
     }
   }
 
-  public void bindProperties() {
-    // Bind the ListView to the previous departures
+  public void bindProperties()
+  {
     PreviousDeparturesListView.setItems(viewModel.getPreviousDepartures());
 
-    PreviousDeparturesListView.setCellFactory(param -> new ListCell<Ticket>() {
-      @Override
-      protected void updateItem(Ticket ticket, boolean empty) {
+    PreviousDeparturesListView.setCellFactory(param -> new ListCell<Ticket>()
+    {
+      @Override protected void updateItem(Ticket ticket, boolean empty)
+      {
         super.updateItem(ticket, empty);
-
-        if (empty || ticket == null) {
+        if (empty || ticket == null)
+        {
           setText(null);
-        } else {
-          // Format train and departure/arrival information with explicit formatting
+        }
+        else
+        {
           StringBuilder sb = new StringBuilder();
           sb.append("Train ID: ").append(ticket.getTrainId().getTrainId());
           sb.append(", From: ").append(ticket.getScheduleId().getDepartureStation().getName());
           sb.append(", To: ").append(ticket.getScheduleId().getArrivalStation().getName());
           sb.append(" - Departure: ");
-
-          // Format date as DD/MM/YYYY
-          if (ticket.getScheduleId().getDepartureDate() != null) {
-            sb.append(String.format("%02d/%02d/%04d",
-                ticket.getScheduleId().getDepartureDate().getDay(),
+          if (ticket.getScheduleId().getDepartureDate() != null)
+          {
+            sb.append(String.format("%02d/%02d/%04d", ticket.getScheduleId().getDepartureDate().getDay(),
                 ticket.getScheduleId().getDepartureDate().getMonth(),
                 ticket.getScheduleId().getDepartureDate().getYear()));
-          } else {
+          }
+          else
+          {
             sb.append("N/A");
           }
-
           sb.append(" Arrival: ");
-
-          // Format arrival date as DD/MM/YYYY
-          if (ticket.getScheduleId().getArrivalDate() != null) {
-            sb.append(String.format("%02d/%02d/%04d",
-                ticket.getScheduleId().getArrivalDate().getDay(),
-                ticket.getScheduleId().getArrivalDate().getMonth(),
-                ticket.getScheduleId().getArrivalDate().getYear()));
-          } else {
+          if (ticket.getScheduleId().getArrivalDate() != null)
+          {
+            sb.append(String.format("%02d/%02d/%04d", ticket.getScheduleId().getArrivalDate().getDay(),
+                ticket.getScheduleId().getArrivalDate().getMonth(), ticket.getScheduleId().getArrivalDate().getYear()));
+          }
+          else
+          {
             sb.append("N/A");
           }
-
           setText(sb.toString());
         }
       }
@@ -109,7 +108,7 @@ public class PreviousDeparturesController
 
   @FXML public void onPreviousButton(ActionEvent e)
   {
-    // do nothing because we are already on Previous departures page
+    // do nothing because we are already on this view
   }
 
   public void onMyAccountButton(ActionEvent e)

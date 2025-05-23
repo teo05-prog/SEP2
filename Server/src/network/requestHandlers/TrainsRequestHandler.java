@@ -3,7 +3,7 @@ package network.requestHandlers;
 import com.google.gson.Gson;
 import model.entities.Train;
 import model.entities.TrainList;
-import model.exceptions.ValidationException;
+import exceptions.ValidationException;
 import services.admin.TrainService;
 import utilities.Logger;
 import utilities.LogLevel;
@@ -70,7 +70,6 @@ public class TrainsRequestHandler implements RequestHandler
     {
       throw new ValidationException("Train ID is required");
     }
-
     try
     {
       int trainId = gson.fromJson(gson.toJson(payload), Integer.class);

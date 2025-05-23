@@ -17,14 +17,11 @@ public class ClientSocket
   {
     try (Socket socket = new Socket("localhost", 4892);
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-        BufferedReader in = new BufferedReader(
-            new InputStreamReader(socket.getInputStream())))
+        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())))
     {
-      //convert request to JSON and send
       String jsonRequest = gson.toJson(request);
       out.println(jsonRequest);
 
-      //read JSON response
       String jsonResponse = in.readLine();
       Response response = gson.fromJson(jsonResponse, Response.class);
 
@@ -34,14 +31,14 @@ public class ClientSocket
         {
           return response.payload();
         }
-        case "ERROR" -> {
+        case "ERROR" ->
+        {
           ErrorResponse error = gson.fromJson(gson.toJson(response.payload()), ErrorResponse.class);
-        throw new RuntimeException(error.errorMessage());
+          throw new RuntimeException(error.errorMessage());
         }
-        case "SERVER_FAILURE" -> throw new RuntimeException(
-            "Server failed to process request. Please try again later.");
-        default -> throw new RuntimeException(
-            "Unknown server status: " + response.status());
+        case "SERVER_FAILURE" ->
+            throw new RuntimeException("Server failed to process request. Please try again later.");
+        default -> throw new RuntimeException("Unknown server status: " + response.status());
       }
     }
     catch (IOException e)
@@ -50,8 +47,7 @@ public class ClientSocket
     }
   }
 
-  public static Object sendRequest(String handler, String action,
-      Object payload)
+  public static Object sendRequest(String handler, String action, Object payload)
   {
     Request request = new Request(handler, action, payload);
     return sentRequest(request);

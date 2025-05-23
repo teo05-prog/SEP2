@@ -2,49 +2,65 @@ package dtos;
 
 public class AddScheduleDTO
 {
-    private final String scheduleId;
-    private final String departureStation;
-    private final String arrivalStation;
-    private final String departureDate;
-    private final String departureTime;
-    private final String arrivalDate;
-    private final String arrivalTime;
+  private final int scheduleId;
+  private final int trainId;
+  private final String departureStation;
+  private final String arrivalStation;
+  private final String departureDate;
+  private final String departureTime;
+  private final String arrivalDate;
+  private final String arrivalTime;
 
-    public AddScheduleDTO(String scheduleId, String departureStation, String arrivalStation, String departureDate, String departureTime, String arrivalDate, String arrivalTime) {
-        this.scheduleId = scheduleId;
-        this.departureStation = departureStation;
-        this.arrivalStation = arrivalStation;
-        this.departureDate = departureDate;
-        this.departureTime = departureTime;
-        this.arrivalDate = arrivalDate;
-        this.arrivalTime = arrivalTime;
-    }
+  public AddScheduleDTO(int scheduleId, int trainId, String departureStation, String arrivalStation,
+      String departureDate, String departureTime, String arrivalDate, String arrivalTime)
+  {
+    this.scheduleId = scheduleId;
+    this.trainId = trainId;
+    this.departureStation = departureStation;
+    this.arrivalStation = arrivalStation;
+    this.departureDate = departureDate;
+    this.departureTime = departureTime;
+    this.arrivalDate = arrivalDate;
+    this.arrivalTime = arrivalTime;
+  }
 
-    public String getScheduleId() {
-        return scheduleId;
-    }
+  public int getScheduleId()
+  {
+    return scheduleId;
+  }
 
-    public String getDepartureStation() {
-        return departureStation;
-    }
+  public int getTrainId()
+  {
+    return trainId;
+  }
 
-    public String getArrivalStation() {
-        return arrivalStation;
-    }
+  public String getDepartureStation()
+  {
+    return departureStation;
+  }
 
-    public String getDepartureDate() {
-        return departureDate;
-    }
+  public String getArrivalStation()
+  {
+    return arrivalStation;
+  }
 
-    public String getDepartureTime() {
-        return departureTime;
-    }
+  public String getDepartureDate()
+  {
+    return departureDate;
+  }
 
-    public String getArrivalDate() {
-        return arrivalDate;
-    }
+  public String getDepartureTime()
+  {
+    return departureTime;
+  }
 
-    public String getArrivalTime() {
-        return arrivalTime;
-    }
+  public String getArrivalDate()
+  {
+    return arrivalDate;
+  }
+
+  public String getArrivalTime()
+  {
+    return arrivalTime;
+  }
 }

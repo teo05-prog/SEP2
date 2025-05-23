@@ -26,8 +26,8 @@ public class TicketServiceImpl implements TicketService
     return instance;
   }
 
-  @Override public void createSeatAndBicycleTicket(int ticketID, Bicycle bicycleSeat, Seat seatId,
-      Schedule scheduleId, String email)
+  @Override public void createSeatAndBicycleTicket(int ticketID, Bicycle bicycleSeat, Seat seatId, Schedule scheduleId,
+      String email)
   {
     validateTicketData(ticketID, scheduleId, email);
     if (bicycleSeat == null || seatId == null)
@@ -49,8 +49,7 @@ public class TicketServiceImpl implements TicketService
     ticketDAO.createSeatTicket(ticketID, seatId, scheduleId, email);
   }
 
-  @Override public void createBicycleTicket(int ticketID, Bicycle bicycleSeat, Schedule scheduleId,
-      String email)
+  @Override public void createBicycleTicket(int ticketID, Bicycle bicycleSeat, Schedule scheduleId, String email)
   {
     validateTicketData(ticketID, scheduleId, email);
     if (bicycleSeat == null)
@@ -110,7 +109,7 @@ public class TicketServiceImpl implements TicketService
     List<Ticket> tickets = ticketDAO.getAllTickets();
     if (tickets == null)
     {
-      return List.of(); // Return empty list instead of null
+      return List.of();
     }
     return tickets;
   }

@@ -40,35 +40,24 @@ public class UpcomingDeparturesVM
     {
       // Get the current user's email from the session
       String userEmail = session.getUserEmail();
-
       if (userEmail != null && !userEmail.isEmpty())
       {
         // Get tickets for the current user
         List<Ticket> userTickets = ticketService.getTicketsByEmail(userEmail);
-
         // Get current date for comparison
         MyDate today = MyDate.today();
-
         // Filter tickets to include only those with upcoming departure dates
-        // (either today or in the future)
-        List<Ticket> futureTickets = userTickets.stream()
-            .filter(ticket -> {
-              // Check if ticket's departure date exists and is today or in the future
-              if (ticket.getScheduleId().getDepartureDate() != null) {
-                MyDate departureDate = ticket.getScheduleId().getDepartureDate();
-
-                // Keep the ticket if today's date is before or equal to the departure date
-                // (meaning the departure is today or in the future)
-                return today.isBefore(departureDate) ||
-                    // Check if dates are equal (same day)
-                    (today.getYear() == departureDate.getYear() &&
-                        today.getMonth() == departureDate.getMonth() &&
-                        today.getDay() == departureDate.getDay());
-              }
-              return false;
-            })
-            .collect(Collectors.toList());
-
+        List<Ticket> futureTickets = userTickets.stream().filter(ticket -> {
+          // Check if ticket's departure date exists and is today or in the future
+          if (ticket.getScheduleId().getDepartureDate() != null)
+          {
+            MyDate departureDate = ticket.getScheduleId().getDepartureDate();
+            // Keep the ticket if today's date is before or equal to the departure date
+            return today.isBefore(departureDate) || (today.getYear() == departureDate.getYear()
+                && today.getMonth() == departureDate.getMonth() && today.getDay() == departureDate.getDay());
+          }
+          return false;
+        }).collect(Collectors.toList());
         // Clear and add to the observable list
         upcomingDepartures.clear();
         upcomingDepartures.addAll(futureTickets);
@@ -84,11 +73,5 @@ public class UpcomingDeparturesVM
   public ObservableList<Ticket> getUpcomingDepartures()
   {
     return upcomingDepartures;
-  }
-
-  // refresh data when needed
-  public void refreshData()
-  {
-    loadUpcomingDepartures();
   }
 }

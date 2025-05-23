@@ -9,7 +9,7 @@ import model.entities.Ticket;
 import view.ViewHandler;
 import viewmodel.UpcomingDeparturesVM;
 
-public class UpcomingDepartureController
+public class UpcomingDepartureViewController
 {
   private UpcomingDeparturesVM viewModel;
 
@@ -19,7 +19,7 @@ public class UpcomingDepartureController
   @FXML private Button myAccountButton;
   @FXML private ListView<Ticket> upcomingDeparturesListView;
 
-  public UpcomingDepartureController()
+  public UpcomingDepartureViewController()
   {
   }
 
@@ -54,11 +54,7 @@ public class UpcomingDepartureController
 
   public void bindProperties()
   {
-    // Bind the ListView to the upcoming departures
     upcomingDeparturesListView.setItems(viewModel.getUpcomingDepartures());
-
-    // customize how tickets are displayed
-    //can be deleted if you want the departures to be displayed as default))
     upcomingDeparturesListView.setCellFactory(param -> new ListCell<Ticket>()
     {
       @Override protected void updateItem(Ticket ticket, boolean empty)
@@ -96,7 +92,7 @@ public class UpcomingDepartureController
 
   public void onUpcomingButton()
   {
-    // do nothing because we are already on Upcoming departures page
+    // do nothing because we are already on this view
   }
 
   public void onMyAccountButton(ActionEvent e)
