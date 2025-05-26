@@ -35,8 +35,8 @@ class AuthenticationServiceImplTest
 
   @Test void login_successful()
   {
-    LoginDTO request = new LoginDTO("test@example.com", "password123");
-    User mockUser = new User("Test User", "password123", "test@example.com");
+    LoginDTO request = new LoginDTO("test@example.com", "password123_");
+    User mockUser = new User("Test User", "test@example.com", "password123_");
     when(mockUserDAO.readByEmail("test@example.com")).thenReturn(mockUser);
 
     String result = authenticationService.login(request);
