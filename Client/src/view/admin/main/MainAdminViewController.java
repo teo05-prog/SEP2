@@ -207,15 +207,34 @@ public class MainAdminViewController
     if (e.getSource() == removeButton)
     {
       Train selectedTrain = viewModel.getSelectedTrain();
-      if (selectedTrain != null && viewModel.confirmDeleteDialog(selectedTrain))
+      if (selectedTrain != null)
       {
-        boolean deleted = viewModel.removeTrain(selectedTrain);
-        if (deleted)
+        if (viewModel.confirmDeleteDialog(selectedTrain))
         {
-          viewModel.showSuccessAlert("Train Deleted", "The train was successfully removed from the system.");
-          viewModel.updateTrainsList();
-          viewModel.createDisplayList();
+          int trainIdToDelete = selectedTrain.getTrainId();
+          boolean deleted = viewModel.removeTrain(selectedTrain);
+          if (deleted)
+          {
+            trainsListView.getSelectionModel().clearSelection();
+            javafx.application.Platform.runLater(() -> {
+              trainsListView.getItems()
+                  .removeIf(item -> item instanceof Train && ((Train) item).getTrainId() == trainIdToDelete);
+              trainsListView.refresh();
+              viewModel.updateTrainsList();
+              viewModel.createDisplayList();
+            });
+            viewModel.showSuccessAlert("Train Deleted",
+                "Train " + trainIdToDelete + " was successfully removed from the system.");
+          }
+          else
+          {
+            System.err.println("Failed to delete train");
+          }
         }
+      }
+      else
+      {
+        viewModel.messageProperty().set("No train selected for deletion!");
       }
     }
   }

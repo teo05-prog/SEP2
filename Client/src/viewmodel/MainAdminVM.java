@@ -111,11 +111,14 @@ public class MainAdminVM
 
   public void createDisplayList()
   {
+    System.out.println("Creating display list with " + observableTrains.size() + " trains");
     displayItems.clear();
     for (Train train : observableTrains)
     {
       displayItems.add(train);
     }
+
+    System.out.println("Display list now has " + displayItems.size() + " items");
   }
 
   private Object request(String handler, String action, Object payload) throws Exception
@@ -124,11 +127,9 @@ public class MainAdminVM
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())))
     {
-      // Create and send request
       Request request = new Request(handler, action, payload);
       String jsonRequest = gson.toJson(request);
       out.println(jsonRequest);
-      // Read and parse response
       String jsonResponse = in.readLine();
       Response response = gson.fromJson(jsonResponse, Response.class);
 
@@ -160,20 +161,42 @@ public class MainAdminVM
       message.set("No train selected.");
       return false;
     }
+
     try
     {
-      request("trains", "deleteTrain", selectedItem.getTrainId());
-      message.set("Train " + selectedItem.getTrainId() + " removed.");
-      trainSelected.set(false);
-      selectedTrain = null;
-      updateTrainsList();
-      updateSchedulesList();
-      createDisplayList();
-      return true;
+      int trainId = selectedItem.getTrainId();
+      System.out.println("Attempting to delete train with ID: " + trainId);
+
+      Object response = request("trains", "deleteTrain", trainId);
+      System.out.println("Server response: " + response);
+
+      if (response != null)
+      {
+        message.set("Train " + trainId + " removed successfully.");
+
+        trainSelected.set(false);
+        selectedTrain = null;
+
+        observableTrains.removeIf(train -> train.getTrainId() == trainId);
+        displayItems.removeIf(item -> item instanceof Train && ((Train) item).getTrainId() == trainId);
+
+        updateTrainsList();
+        updateSchedulesList();
+        createDisplayList();
+
+        System.out.println("Train deletion completed successfully");
+        return true;
+      }
+      else
+      {
+        message.set("Failed to remove train - no response from server");
+        return false;
+      }
     }
     catch (Exception e)
     {
       message.set("Error removing train: " + e.getMessage());
+      System.err.println("Error during train deletion: " + e.getMessage());
       e.printStackTrace();
       return false;
     }
@@ -187,18 +210,25 @@ public class MainAdminVM
       if (response != null)
       {
         observableTrains.clear();
+
         if (response instanceof TrainList)
         {
-          observableTrains.addAll(((TrainList) response).getTrains());
+          List<Train> newTrains = ((TrainList) response).getTrains();
+          System.out.println("Received " + newTrains.size() + " trains from server");
+          observableTrains.addAll(newTrains);
         }
         else
         {
           TrainList trainList = gson.fromJson(gson.toJson(response), TrainList.class);
           if (trainList != null)
           {
-            observableTrains.addAll(trainList.getTrains());
+            List<Train> newTrains = trainList.getTrains();
+            System.out.println("Parsed " + newTrains.size() + " trains from JSON");
+            observableTrains.addAll(newTrains);
           }
         }
+
+        System.out.println("Observable trains list now has " + observableTrains.size() + " items");
       }
     }
     catch (Exception e)

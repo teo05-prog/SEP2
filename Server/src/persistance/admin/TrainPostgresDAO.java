@@ -131,35 +131,89 @@ public class TrainPostgresDAO implements TrainDAO
 
   @Override public void deleteTrain(int trainId)
   {
-    try (Connection connection = getConnection())
+    Connection connection = null;
+    try
     {
+      connection = getConnection();
+      connection.setAutoCommit(false);
+
+      System.out.println("Starting deletion of train " + trainId);
+
+      // check if the train exists
+      String checkSQL = "SELECT COUNT(*) FROM train WHERE train_id = ?";
+      PreparedStatement checkStatement = connection.prepareStatement(checkSQL);
+      checkStatement.setInt(1, trainId);
+      ResultSet checkResult = checkStatement.executeQuery();
+      checkResult.next();
+      int trainCount = checkResult.getInt(1);
+
+      if (trainCount == 0)
+      {
+        connection.rollback();
+        return;
+      }
+
       // Delete tickets associated with the train
       String deleteTicketsSQL = "DELETE FROM ticket WHERE schedule_id IN (SELECT schedule_id FROM schedule WHERE train_id = ?)";
       PreparedStatement ticketStatement = connection.prepareStatement(deleteTicketsSQL);
       ticketStatement.setInt(1, trainId);
-      ticketStatement.executeUpdate();
+      int ticketsDeleted = ticketStatement.executeUpdate();
 
       // Delete schedule entries associated with the train
       String deleteScheduleSQL = "DELETE FROM schedule WHERE train_id = ?";
       PreparedStatement scheduleStatement = connection.prepareStatement(deleteScheduleSQL);
       scheduleStatement.setInt(1, trainId);
-      scheduleStatement.executeUpdate();
-
-      // Delete carriages associated with the train
-      String deleteCarriagesSQL = "DELETE FROM carriage WHERE train_id = ?";
-      PreparedStatement carriageStatement = connection.prepareStatement(deleteCarriagesSQL);
-      carriageStatement.setInt(1, trainId);
-      carriageStatement.executeUpdate();
+      int schedulesDeleted = scheduleStatement.executeUpdate();
 
       // Finally delete the train itself
       String deleteTrainSQL = "DELETE FROM train WHERE train_id = ?";
       PreparedStatement trainStatement = connection.prepareStatement(deleteTrainSQL);
       trainStatement.setInt(1, trainId);
-      trainStatement.executeUpdate();
+      int trainsDeleted = trainStatement.executeUpdate();
+
+      if (trainsDeleted > 0)
+      {
+        // COMMIT the transaction
+        connection.commit();
+      }
+      else
+      {
+        connection.rollback();
+        System.err.println("No train was deleted - rolling back");
+      }
     }
     catch (SQLException e)
     {
+      System.err.println("SQL Exception during train deletion: " + e.getMessage());
       e.printStackTrace();
+
+      // Rollback on error
+      if (connection != null)
+      {
+        try
+        {
+          connection.rollback();
+        }
+        catch (SQLException rollbackEx)
+        {
+          System.err.println("Failed to rollback transaction: " + rollbackEx.getMessage());
+        }
+      }
+    }
+    finally
+    {
+      if (connection != null)
+      {
+        try
+        {
+          connection.setAutoCommit(true);
+          connection.close();
+        }
+        catch (SQLException closeEx)
+        {
+          System.err.println("Failed to close connection: " + closeEx.getMessage());
+        }
+      }
     }
   }
 
